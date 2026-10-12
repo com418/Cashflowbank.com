@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#720d2c">
+<title>Cash Flow | Owner Admin</title>
+
+<style>
+:root{
+  --wine:#720d2c;--dark:#4d081d;--pale:#f8edf1;
+  --bg:#f6f7fb;--white:#fff;--text:#28242c;
+  --muted:#85818b;--border:#ece9ee;--green:#16875d;
+  --red:#d43c4c;--amber:#ad741c
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+button:disabled{opacity:.5;cursor:not-allowed}
+.login-screen{min-height:100vh;display:grid;place-items:center;padding:22px}
+.login-card{width:100%;max-width:410px;background:#fff;padding:30px;border:1px solid var(--border);border-radius:18px;box-shadow:0 15px 50px #30091b0d}
+.logo{display:flex;align-items:center;gap:11px;margin-bottom:28px}
+.logo-icon{width:46px;height:46px;background:var(--wine);color:white;display:grid;place-items:center;border-radius:13px;font-size:25px;font-weight:bold}
+.logo-name{font-size:22px;font-weight:800}.logo-name span{color:var(--wine)}
+.muted{color:var(--muted)}
+.login-card h1{font-size:24px;margin:0 0 9px}
+.login-card p{font-size:13px;line-height:1.6}
+label{display:block;font-size:12px;font-weight:bold;margin:18px 0 8px}
+input{width:100%;padding:13px;border:1px solid var(--border);border-radius:9px;outline:none;background:white;color:var(--text)}
+input:focus{border-color:var(--wine)}
+.btn{border:0;border-radius:9px;padding:12px 15px;font-size:12px;font-weight:bold}
+.primary{background:var(--wine);color:white}.primary:hover{background:var(--dark)}
+.secondary{background:var(--pale);color:var(--wine)}
+.outline{background:white;border:1px solid var(--border);color:var(--text)}
+.full{width:100%;margin-top:20px}
+.message{font-size:12px;line-height:1.6;margin-top:14px;color:var(--red);overflow-wrap:anywhere}
+.notice{padding:13px 15px;background:#fff5e3;color:#79571b;border-radius:10px;font-size:12px;line-height:1.7;margin-bottom:18px}
+.app{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:white;border-right:1px solid var(--border);padding:23px 15px;display:flex;flex-direction:column;z-index:20}
+.sidebar .logo{padding:0 7px 24px;margin-bottom:5px}
+.sidebar .logo-icon{width:39px;height:39px;font-size:21px}
+.sidebar .logo-name{font-size:19px}
+.nav-title{font-size:10px;letter-spacing:1.4px;color:#a09aa5;padding:15px 11px 9px;font-weight:bold}
+.nav{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 12px;border:0;border-radius:9px;background:transparent;color:#716c78;font-size:13px;margin:2px 0}
+.nav:hover,.nav.active{background:var(--pale);color:var(--wine)}
+.nav.active{font-weight:bold}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:15px}
+.owner{font-size:12px;font-weight:bold;padding:10px 9px}
+.owner small{display:block;color:var(--muted);font-size:11px;margin-top:5px;overflow-wrap:anywhere}
+.main{margin-left:245px;min-height:100vh}
+.topbar{height:76px;background:white;border-bottom:1px solid var(--border);padding:0 30px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10}
+.topbar h2{font-size:19px;margin:0}.topbar p{font-size:11px;margin:5px 0 0;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:9px}
+.content{max-width:1600px;margin:auto;padding:25px 30px 40px}
+.welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.welcome h1{font-size:22px;margin:0 0 7px}.welcome p{font-size:12px;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:20px}
+.card,.panel{background:white;border:1px solid var(--border);border-radius:13px;box-shadow:0 4px 18px #25122505}
+.card{padding:18px;min-width:0}
+.card-label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:7px}
+.card-icon{background:var(--pale);color:var(--wine);width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+.card-value{font-size:clamp(19px,2vw,27px);font-weight:800;margin:17px 0 8px;overflow-wrap:anywhere}
+.card-foot{font-size:10px;color:var(--muted)}
+.panel{padding:20px;margin-bottom:20px;min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.panel-head h3{font-size:15px;margin:0}.panel-head p{font-size:11px;color:var(--muted);margin:6px 0 0}
+.tools{display:flex;gap:9px;flex-wrap:wrap}
+.tools input{width:220px;padding:10px;font-size:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}
+th{text-align:left;background:#faf9fb;padding:13px 11px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+td{padding:14px 11px;border-bottom:1px solid #f0edf2}
+tbody tr:last-child td{border-bottom:0}
+.badge{display:inline-block;padding:6px 9px;border-radius:20px;background:#f0edf2;font-size:10px;font-weight:bold}
+.good{color:var(--green);background:#e9f8f0}
+.pending{color:var(--amber);background:#fff5e3}
+.bad{color:var(--red);background:#ffedef}
+.section{display:none}.section.active{display:block}
+.empty{padding:28px 10px;text-align:center;color:var(--muted);font-size:12px}
+.error-box{padding:14px;background:#fff0f1;color:#9d1e32;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:18px;overflow-wrap:anywhere}
+.ok-box{padding:14px;background:#e9f8f0;color:#176b4b;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:18px;overflow-wrap:anywhere}
+.mobile-toggle{display:none}
+footer{text-align:center;color:var(--muted);font-size:10px;padding:20px}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){
+ .sidebar{transform:translateX(-100%);transition:transform .2s;width:260px}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0}
+ .mobile-toggle{display:inline-block}
+ .topbar{height:68px;padding:0 14px}
+ .content{padding:20px 13px 30px}
+ .topbar h2{font-size:16px}
+ .welcome h1{font-size:19px}
+ .card{padding:14px}
+ .card-value{font-size:20px}
+ .panel{padding:14px}
+ .tools input{width:100%}
+ .tools{width:100%}
+ .tools>*{flex:1}
+}
+@media(max-width:360px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- SIGN IN -->
+<section class="login-screen" id="loginScreen">
+  <form class="login-card" id="loginForm">
+    <div class="logo">
+      <div class="logo-icon">C</div>
+      <div class="logo-name">Cash <span>Flow</span></div>
+    </div>
+    <h1>Owner sign in</h1>
+    <p class="muted">Sign in with your authorized Cash Flow administrator account.</p>
+    <label for="email">Administrator email</label>
+    <input id="email" type="email" autocomplete="username" required placeholder="you@example.com">
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+    <button class="btn primary full" id="loginButton" type="submit">Sign in securely</button>
+    <div class="message" id="loginMessage" role="alert"></div>
+    <p class="muted" style="font-size:11px;margin-top:22px">Access is restricted to accounts with a verified Firebase admin claim.</p>
+  </form>
+</section>
+
+<!-- ADMIN APPLICATION -->
+<div class="app hidden" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">C</div>
+      <div class="logo-name">Cash <span>Flow</span></div>
+    </div>
+    <div class="nav-title">WORKSPACE</div>
+    <button class="nav active" data-section="overview">▦ &nbsp; Overview</button>
+    <button class="nav" data-section="customers">♙ &nbsp; Customers</button>
+    <button class="nav" data-section="transactions">⇄ &nbsp; Transactions</button>
+    <button class="nav" data-section="deposits">↓ &nbsp; Deposits</button>
+    <div class="nav-title">SYSTEM</div>
+    <button class="nav" data-section="settings">⚙ &nbsp; Admin information</button>
+    <div class="sidebar-bottom">
+      <div class="owner">Owner administrator<small id="ownerEmail"></small></div>
+      <button class="nav" id="signOutButton">↪ &nbsp; Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn outline mobile-toggle" id="menuButton" type="button">☰</button>
+        <div>
+          <h2 id="pageTitle">Overview</h2>
+          <p>Cash Flow / <span id="breadcrumb">Overview</span></p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn outline" id="refreshButton" type="button">↻ Refresh</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div id="appMessage"></div>
+
+      <section class="section active" id="section-overview">
+        <div class="welcome">
+          <div><h1>Admin dashboard</h1><p>Live records from your Cash Flow Firestore database.</p></div>
+        </div>
+
+        <div class="stats">
+          <div class="card"><div class="card-label">Registered customers <span class="card-icon">♙</span></div><div class="card-value" id="customerCount">—</div><div class="card-foot">Documents in users</div></div>
+          <div class="card"><div class="card-label">Recorded transactions <span class="card-icon">⇄</span></div><div class="card-value" id="transactionCount">—</div><div class="card-foot">Documents in transactions</div></div>
+          <div class="card"><div class="card-label">Pending deposits <span class="card-icon">◷</span></div><div class="card-value" id="pendingDeposits">—</div><div class="card-foot">Requests awaiting review</div></div>
+          <div class="card"><div class="card-label">Total recorded balances <span class="card-icon">$</span></div><div class="card-value" id="totalBalance">—</div><div class="card-foot">Sum of users.balance in USD</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Latest transactions</h3><p>Read from Firestore; no sample records are inserted.</p></div>
+            <button class="btn secondary" data-goto="transactions">View transactions →</button>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Reference</th><th>Customer</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="recentRows"><tr><td colspan="5" class="empty">Loading records…</td></tr></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-customers">
+        <div class="welcome"><div><h1>Customers</h1><p>Registered user documents in Firestore.</p></div></div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Customer records</h3><p>This screen is read-only.</p></div><div class="tools"><input id="customerSearch" placeholder="Search name, email or ID"></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Customer ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Status</th></tr></thead><tbody id="customerRows"><tr><td colspan="5" class="empty">Loading records…</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-transactions">
+        <div class="welcome"><div><h1>Transactions</h1><p>Actual transaction documents from Firestore.</p></div></div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Transaction history</h3><p>Read-only view.</p></div><div class="tools"><input id="transactionSearch" placeholder="Search transactions"></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Customer</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="transactionRows"><tr><td colspan="5" class="empty">Loading records…</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-deposits">
+        <div class="welcome"><div><h1>Deposit requests</h1><p>Actual deposit request documents from Firestore.</p></div></div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Deposits</h3><p>This page does not approve or credit deposits.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Request ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Created</th></tr></thead><tbody id="depositRows"><tr><td colspan="5" class="empty">Loading records…</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-settings">
+        <div class="welcome"><div><h1>Admin information</h1><p>Signed-in account and application configuration.</p></div></div>
+        <div class="panel">
+          <h3>Current administrator</h3>
+          <p id="settingsEmail" style="font-size:13px;overflow-wrap:anywhere"></p>
+          <p id="claimStatus" style="font-size:12px;color:var(--muted)"></p>
+          <hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
+          <h3>Database collections</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.8">This panel expects <code>users</code>, <code>transactions</code>, and <code>deposits</code>. Firestore creates a collection when your application first writes a document to it. This dashboard does not create fake customers or transactions.</p>
+          <p style="font-size:12px;line-height:1.8">Currency display: USD. This code assumes user balances and transaction amounts are already denominated in US dollars. It does not convert currencies.</p>
+        </div>
+      </section>
+
+      <footer>Cash Flow · Owner Admin · Connected data only</footer>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {
+  getFirestore, collection, getDocs, query, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+/*
+  Cash Flow Firebase configuration supplied for your project.
+  Firebase web configuration is not a service-account secret.
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyCmEb3RK-lSdGlMQVVcjotkQ_orj1VnjAM",
+  authDomain: "cash-flow-banking-c708d.firebaseapp.com",
+  projectId: "cash-flow-banking-c708d",
+  storageBucket: "cash-flow-banking-c708d.firebasestorage.app",
+  messagingSenderId: "415852501810",
+  appId: "1:415852501810:web:91f293b7a4aec98858552b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let allUsers = [];
+let allTransactions = [];
+let allDeposits = [];
+let refreshInProgress = false;
+
+const usd = amount => new Intl.NumberFormat("en-US", {
+  style: "currency", currency: "USD"
+}).format(Number(amount) || 0);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+function badge(status) {
+  const value = String(status || "unknown");
+  const lower = value.toLowerCase();
+  const cls = ["success","completed","approved","active"].includes(lower) ? "good" :
+              ["pending","processing","under_review"].includes(lower) ? "pending" :
+              ["failed","declined","rejected","frozen","suspended"].includes(lower) ? "bad" : "";
+  return `<span class="badge ${cls}">${escapeHTML(value)}</span>`;
+}
+
+function amountValue(record) {
+  return Number(record.amount ?? record.value ?? 0) || 0;
+}
+
+function customerName(record) {
+  return record.name || record.fullName || record.displayName || record.email || record.userId || "—";
+}
+
+function customerId(record) {
+  return record.userId || record.uid || record.customerId || record.id || "—";
+}
+
+function errorMessage(error) {
+  const messages = {
+    "auth/invalid-credential": "The email or password is incorrect.",
+    "auth/user-not-found": "No account exists for this email.",
+    "auth/wrong-password": "The email or password is incorrect.",
+    "auth/too-many-requests": "Too many attempts. Please try again later.",
+    "permission-denied": "Firestore denied access. Check your security rules.",
+    "unavailable": "Firebase is temporarily unavailable. Try again."
+  };
+  return messages[error.code] || error.message || "An unexpected error occurred.";
+}
+
+function showAppMessage(message, type = "error") {
+  $("appMessage").innerHTML =
+    `<div class="${type === "success" ? "ok-box" : "error-box"}">${escapeHTML(message)}</div>`;
+}
+
+function clearAppMessage() {
+  $("appMessage").innerHTML = "";
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  $("loginMessage").textContent = "";
+  $("loginButton").disabled = true;
+  $("loginButton").textContent = "Signing in…";
+
+  try {
+    await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
+    // onAuthStateChanged checks the server-issued admin claim.
+  } catch (error) {
+    $("loginMessage").textContent = errorMessage(error);
+  } finally {
+    $("loginButton").disabled = false;
+    $("loginButton").textContent = "Sign in securely";
+  }
+});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+
+  if (!user) {
+    $("loginScreen").classList.remove("hidden");
+    $("app").classList.add("hidden");
+    return;
+  }
+
+  try {
+    const token = await user.getIdTokenResult(true);
+
+    if (token.claims.admin !== true) {
+      $("loginMessage").textContent =
+        "This account is signed in but is not authorized as the owner administrator. Ask your trusted Firebase administrator to assign the admin claim.";
+      await signOut(auth);
+      return;
+    }
+
+    $("loginScreen").classList.add("hidden");
+    $("app").classList.remove("hidden");
+    $("ownerEmail").textContent = user.email || user.uid;
+    $("settingsEmail").textContent = user.email || user.uid;
+    $("claimStatus").textContent = "Server-issued admin claim verified for this sign-in.";
+    await loadDashboard();
+  } catch (error) {
+    $("loginScreen").classList.remove("hidden");
+    $("app").classList.add("hidden");
+    $("loginMessage").textContent = "Unable to verify administrator access: " + errorMessage(error);
+  }
+});
+
+$("signOutButton").addEventListener("click", async () => {
+  await signOut(auth);
+});
+
+async function readCollection(name, maximum = 500) {
+  const ref = collection(db, name);
+  let snapshot;
+
+  try {
+    snapshot = await getDocs(query(ref, orderBy("createdAt", "desc"), limit(maximum)));
+  } catch (error) {
+    // Collections without createdAt can still be read without ordering.
+    if (error.code === "permission-denied") throw error;
+    snapshot = await getDocs(query(ref, limit(maximum)));
+  }
+
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+async function loadDashboard() {
+  if (!currentUser || refreshInProgress) return;
+  refreshInProgress = true;
+  $("refreshButton").disabled = true;
+  $("refreshButton").textContent = "Loading…";
+  clearAppMessage();
+
+  try {
+    const [users, transactions, deposits] = await Promise.all([
+      readCollection("users"),
+      readCollection("transactions"),
+      readCollection("deposits")
+    ]);
+
+    allUsers = users;
+    allTransactions = transactions;
+    allDeposits = deposits;
+
+    $("customerCount").textContent = users.length.toLocaleString();
+    $("transactionCount").textContent = transactions.length.toLocaleString();
+
+    const pending = deposits.filter(d =>
+      ["pending", "processing", "under_review"].includes(
+        String(d.status || "").toLowerCase()
+      )
+    ).length;
+    $("pendingDeposits").textContent = pending.toLocaleString();
+
+    const balance = users.reduce((sum, user) => sum + (Number(user.balance) || 0), 0);
+    $("totalBalance").textContent = usd(balance);
+
+    renderCustomers();
+    renderTransactions();
+    renderDeposits();
+    showAppMessage("Dashboard refreshed from Firestore. Counts reflect the records returned by your current database rules.", "success");
+  } catch (error) {
+    showAppMessage("Could not load live database records: " + errorMessage(error) +
+      " If your collections do not exist yet, create your data model first. Check Firestore rules before granting access.", "error");
+    $("customerCount").textContent = "—";
+    $("transactionCount").textContent = "—";
+    $("pendingDeposits").textContent = "—";
+    $("totalBalance").textContent = "—";
+  } finally {
+    refreshInProgress = false;
+    $("refreshButton").disabled = false;
+    $("refreshButton").textContent = "↻ Refresh";
+  }
+}
+
+function renderCustomers() {
+  const search = ($("customerSearch")?.value || "").trim().toLowerCase();
+  const rows = allUsers.filter(user =>
+    [user.id, user.uid, user.email, user.name, user.fullName, user.displayName, user.status]
+      .some(value => String(value || "").toLowerCase().includes(search))
+  );
+
+  $("customerRows").innerHTML = rows.length ? rows.map(user => `
+    <tr>
+      <td>${escapeHTML(user.id)}</td>
+      <td>${escapeHTML(customerName(user))}</td>
+      <td>${escapeHTML(user.email || "—")}</td>
+      <td>${usd(user.balance)}</td>
+      <td>${badge(user.status || "active")}</td>
+    </tr>`).join("") :
+    '<tr><td colspan="5" class="empty">No matching customer records found.</td></tr>';
+}
+
+function renderTransactions() {
+  const search = ($("transactionSearch")?.value || "").trim().toLowerCase();
+  const rows = allTransactions.filter(tx =>
+    [tx.id, tx.reference, tx.referenceId, tx.userId, tx.customerId, tx.type, tx.status, tx.email]
+      .some(value => String(value || "").toLowerCase().includes(search))
+  );
+
+  const html = rows.length ? rows.map(tx => `
+    <tr>
+      <td>${escapeHTML(tx.reference || tx.referenceId || tx.id)}</td>
+      <td>${escapeHTML(customerName(tx))}</td>
+      <td>${escapeHTML(tx.type || tx.transactionType || "—")}</td>
+      <td>${usd(amountValue(tx))}</td>
+      <td>${badge(tx.status)}</td>
+    </tr>`).join("") :
+    '<tr><td colspan="5" class="empty">No matching transaction records found.</td></tr>';
+
+  $("transactionRows").innerHTML = html;
+  $("recentRows").innerHTML = rows.slice(0, 8).map(tx => `
+    <tr>
+      <td>${escapeHTML(tx.reference || tx.referenceId || tx.id)}</td>
+      <td>${escapeHTML(customerName(tx))}</td>
+      <td>${escapeHTML(tx.type || tx.transactionType || "—")}</td>
+      <td>${usd(amountValue(tx))}</td>
+      <td>${badge(tx.status)}</td>
+    </tr>`).join("") || '<tr><td colspan="5" class="empty">No transaction records found.</td></tr>';
+}
+
+function renderDeposits() {
+  $("depositRows").innerHTML = allDeposits.map(deposit => `
+    <tr>
+      <td>${escapeHTML(deposit.id)}</td>
+      <td>${escapeHTML(customerName(deposit))}</td>
+      <td>${usd(amountValue(deposit))}</td>
+      <td>${badge(deposit.status)}</td>
+      <td>${escapeHTML(formatDate(deposit.createdAt))}</td>
+    </tr>`).join("") ||
+    '<tr><td colspan="5" class="empty">No deposit requests found.</td></tr>';
+}
+
+function formatDate(value) {
+  if (!value) return "—";
+  try {
+    const date = typeof value.toDate === "function" ? value.toDate() : new Date(value);
+    return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString();
+  } catch {
+    return "—";
+  }
+}
+
+document.querySelectorAll(".nav[data-section]").forEach(button => {
+  button.addEventListener("click", () => {
+    const name = button.dataset.section;
+    document.querySelectorAll(".section").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".nav[data-section]").forEach(el => el.classList.remove("active"));
+    $("section-" + name).classList.add("active");
+    button.classList.add("active");
+    $("pageTitle").textContent = ({
+      overview: "Overview",
+      customers: "Customers",
+      transactions: "Transactions",
+      deposits: "Deposits",
+      settings: "Admin information"
+    })[name];
+    $("breadcrumb").textContent = $("pageTitle").textContent;
+    $("sidebar").classList.remove("open");
+  });
+});
+
+document.querySelectorAll("[data-goto]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelector(`[data-section="${button.dataset.goto}"]`).click();
+  });
+});
+
+$("menuButton").addEventListener("click", () => {
+  $("sidebar").classList.toggle("open");
+});
+
+$("refreshButton").addEventListener("click", loadDashboard);
+$("customerSearch").addEventListener("input", renderCustomers);
+$("transactionSearch").addEventListener("input", renderTransactions);
+</script>
+</body>
+</html>
