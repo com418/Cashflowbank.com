@@ -1,1363 +1,1086 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07140f">
-  <meta name="description" content="Cashflowbank — a modern digital banking experience.">
-  <title>Cashflowbank — Banking, Reimagined</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07130f">
+<meta name="description" content="Cashflowbank — modern digital banking designed around your financial life.">
+<title>Cashflowbank — Banking Without Boundaries</title>
 
-  <style>
-    :root {
-      --bg: #07140f;
-      --bg-soft: #0b1d15;
-      --panel: #10251b;
-      --panel-light: #163326;
-      --lime: #c7ff5e;
-      --lime-dark: #a5df36;
-      --emerald: #14a66b;
-      --teal: #20d6a0;
-      --text: #f3f8f1;
-      --muted: #91a99a;
-      --line: rgba(207,255,218,.12);
-      --danger: #ff7777;
-      --radius: 22px;
-      --shadow: 0 24px 70px rgba(0,0,0,.28);
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 95px; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    button, input, select, textarea { font: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    button { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
-    img, svg { max-width: 100%; }
-    .hidden { display: none !important; }
-    .muted { color: var(--muted); }
-    .small { font-size: .84rem; }
-    .tiny { font-size: .75rem; }
-    .lime { color: var(--lime); }
-    .green { color: var(--teal); }
-    .container { width: min(1160px, calc(100% - 40px)); margin: auto; }
-    .section { padding: 92px 0; }
-    .section-heading { max-width: 680px; margin-bottom: 36px; }
-    .section-heading h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; letter-spacing: -.05em; margin: 12px 0; }
-    .section-heading p { color: var(--muted); }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 9px;
-      color: var(--lime); text-transform: uppercase; letter-spacing: .15em;
-      font-size: .72rem; font-weight: 800;
-    }
-    .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--lime); }
-    .btn {
-      border: 1px solid transparent; border-radius: 999px; padding: 13px 21px;
-      font-weight: 800; display: inline-flex; align-items: center; justify-content: center;
-      gap: 9px; transition: transform .2s, background .2s, border-color .2s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--lime); color: #10200d; }
-    .btn-primary:hover { background: #dcff9e; }
-    .btn-secondary { border-color: var(--line); background: rgba(255,255,255,.035); color: var(--text); }
-    .btn-secondary:hover { border-color: rgba(199,255,94,.5); }
-    .btn-block { width: 100%; }
-    .icon {
-      width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center;
-      color: var(--lime); background: rgba(199,255,94,.09); flex-shrink: 0;
-    }
-    .icon svg { width: 20px; height: 20px; }
-    .panel {
-      border: 1px solid var(--line); border-radius: var(--radius);
-      background: linear-gradient(145deg, rgba(20,48,34,.94), rgba(10,28,20,.96));
-      box-shadow: var(--shadow);
-    }
-
-    /* Navigation */
-    .site-header {
-      position: sticky; top: 0; z-index: 40;
-      background: rgba(7,20,15,.85); backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: -.04em; font-size: 1.2rem; }
-    .brand-mark {
-      width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center;
-      background: var(--lime); color: #10200d; font-weight: 1000; font-size: 1.25rem;
-      box-shadow: 0 0 28px rgba(199,255,94,.15);
-    }
-    .brand span span { color: var(--lime); }
-    .nav-links { display: flex; gap: 25px; align-items: center; color: #b8c8bd; font-size: .88rem; }
-    .nav-links a:hover { color: var(--lime); }
-    .nav-actions { display: flex; gap: 9px; align-items: center; }
-    .menu-toggle { display: none; color: white; border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 10px 12px; }
-
-    /* Hero */
-    .hero {
-      position: relative; padding: 76px 0 80px; overflow: hidden;
-      background:
-        radial-gradient(ellipse at 76% 34%, rgba(20,166,107,.18), transparent 36%),
-        radial-gradient(ellipse at 16% 5%, rgba(199,255,94,.055), transparent 32%);
-    }
-    .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; gap: 48px; align-items: center; }
-    .hero-copy h1 {
-      font-size: clamp(3rem, 6.1vw, 5.6rem); line-height: .99; letter-spacing: -.075em;
-      margin: 20px 0 24px; max-width: 720px;
-    }
-    .hero-copy h1 span {
-      color: var(--lime);
-      text-shadow: 0 0 40px rgba(199,255,94,.13);
-    }
-    .hero-copy > p { color: #a7bdb0; font-size: 1.06rem; max-width: 540px; }
-    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin: 28px 0 30px; }
-    .trust-row { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .82rem; }
-    .avatar-stack { display: flex; }
-    .avatar-stack span {
-      display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
-      margin-left: -7px; border: 2px solid var(--bg); background: #284a35; color: var(--lime);
-      font-size: .65rem; font-weight: 800;
-    }
-    .avatar-stack span:first-child { margin-left: 0; }
-
-    .hero-visual { min-height: 450px; position: relative; display: grid; place-items: center; }
-    .hero-glow {
-      position: absolute; width: 80%; aspect-ratio: 1; border-radius: 50%;
-      background: rgba(24,188,119,.12); filter: blur(75px);
-    }
-    .preview-card {
-      position: relative; z-index: 2; width: min(100%, 420px); padding: 27px;
-      border: 1px solid rgba(206,255,218,.22); border-radius: 28px;
-      background: linear-gradient(145deg, rgba(28,67,46,.91), rgba(9,28,19,.94));
-      box-shadow: 0 35px 100px rgba(0,0,0,.4);
-      transform: rotate(-2deg);
-      animation: cardFloat 6s ease-in-out infinite;
-    }
-    .preview-top { display: flex; align-items: center; justify-content: space-between; }
-    .preview-card-number { margin-top: 34px; letter-spacing: .2em; color: #d0e3d5; }
-    .preview-balance { font-size: 2.4rem; font-weight: 900; letter-spacing: -.06em; margin: 5px 0 18px; }
-    .preview-bottom { display: flex; align-items: end; justify-content: space-between; gap: 10px; }
-    .mini-chart { width: 100%; height: 60px; margin-top: 20px; }
-    .floating-ui {
-      position: absolute; z-index: 4; padding: 15px 17px; border-radius: 18px;
-      border: 1px solid rgba(215,255,222,.2); background: rgba(15,40,27,.91);
-      backdrop-filter: blur(18px); box-shadow: 0 18px 45px rgba(0,0,0,.35);
-      animation: floatY 4.8s ease-in-out infinite;
-    }
-    .floating-ui.transaction { right: -2%; top: 12%; width: 225px; }
-    .floating-ui.savings { left: -3%; bottom: 12%; width: 205px; animation-delay: -1.7s; }
-    .floating-row { display: flex; align-items: center; gap: 10px; }
-    .floating-icon {
-      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 13px;
-      background: rgba(199,255,94,.12); color: var(--lime); font-weight: 900;
-    }
-    .pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 999px; font-size: .7rem; font-weight: 800; }
-    .pill-green { background: rgba(32,214,160,.12); color: var(--teal); }
-    .pill-lime { background: rgba(199,255,94,.12); color: var(--lime); }
-    .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; background: var(--lime); }
-    @keyframes cardFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-9px) rotate(-1deg); } }
-    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-
-    /* Animated statistics */
-    .stats-strip { border-block: 1px solid var(--line); background: rgba(255,255,255,.015); }
-    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); padding: 26px 0; }
-    .stat { text-align: center; padding: 8px 18px; border-right: 1px solid var(--line); }
-    .stat:last-child { border: 0; }
-    .stat-number { font-size: clamp(1.8rem,3vw,2.5rem); font-weight: 900; letter-spacing: -.06em; color: var(--lime); line-height: 1.2; }
-    .stat-label { color: var(--muted); font-size: .83rem; margin-top: 5px; }
-
-    /* General sections */
-    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-    .feature-card { padding: 26px; transition: transform .25s, border-color .25s; }
-    .feature-card:hover { transform: translateY(-5px); border-color: rgba(199,255,94,.28); }
-    .feature-card h3 { margin: 20px 0 8px; }
-    .feature-card p { color: var(--muted); font-size: .91rem; margin-bottom: 0; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; align-items: center; }
-    .about-visual {
-      min-height: 340px; padding: 30px; display: flex; align-items: end;
-      background:
-        linear-gradient(145deg, rgba(20,166,107,.16), rgba(199,255,94,.025)),
-        repeating-linear-gradient(135deg, transparent 0 18px, rgba(199,255,94,.025) 18px 20px);
-      position: relative; overflow: hidden;
-    }
-    .about-visual::after {
-      content: ""; position: absolute; width: 240px; height: 240px; right: -55px; top: -65px;
-      border-radius: 50%; border: 1px solid rgba(199,255,94,.3);
-      box-shadow: 0 0 0 25px rgba(199,255,94,.025), 0 0 0 55px rgba(199,255,94,.025);
-    }
-    .about-stat { position: relative; z-index: 1; max-width: 300px; }
-    .about-stat strong { display: block; font-size: 3.3rem; line-height: 1; letter-spacing: -.06em; color: var(--lime); }
-    .check-list { list-style: none; padding: 0; display: grid; gap: 14px; }
-    .check-list li { display: flex; gap: 10px; align-items: start; color: #c2d3c8; }
-    .check { color: var(--lime); font-weight: 900; }
-    .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-    .review-card { padding: 24px; }
-    .stars { color: var(--lime); letter-spacing: .12em; }
-    .review-card blockquote { margin: 15px 0 22px; color: #c1d2c6; font-size: .92rem; }
-    .review-person { display: flex; align-items: center; gap: 11px; }
-    .review-avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #214a34; color: var(--lime); font-weight: 900; }
-    .cta-panel { padding: clamp(28px,5vw,55px); display: flex; align-items: center; justify-content: space-between; gap: 25px; background: radial-gradient(circle at 90% 15%, rgba(199,255,94,.11), transparent 35%), var(--panel); }
-    .cta-panel h2 { font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.055em; line-height: 1.1; margin: 0 0 12px; }
-    .cta-panel p { margin: 0; color: var(--muted); }
-    .site-footer { border-top: 1px solid var(--line); padding: 34px 0; color: var(--muted); font-size: .83rem; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
-    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
-
-    /* Modal and forms */
-    .modal-backdrop {
-      position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
-      padding: 18px; background: rgba(0,0,0,.75); backdrop-filter: blur(10px);
-      overflow-y: auto;
-    }
-    .modal {
-      width: min(100%, 480px); max-height: calc(100dvh - 36px); overflow-y: auto;
-      padding: 28px; border: 1px solid var(--line); border-radius: 25px;
-      background: #0b1d14; box-shadow: 0 30px 100px rgba(0,0,0,.5); position: relative;
-    }
-    .modal-close {
-      position: absolute; right: 17px; top: 17px; width: 36px; height: 36px;
-      border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: white;
-    }
-    .modal h2 { font-size: 1.9rem; letter-spacing: -.05em; margin: 10px 0 5px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
-    .field { display: grid; gap: 6px; margin: 13px 0; }
-    .field.full { grid-column: 1 / -1; }
-    .field label { color: #b6c9bb; font-size: .8rem; font-weight: 700; }
-    .field input, .field select, .field textarea, .control {
-      width: 100%; min-width: 0; padding: 12px 13px; border: 1px solid rgba(211,255,221,.14);
-      border-radius: 12px; outline: none; background: #0a1811; color: var(--text);
-    }
-    .field input:focus, .field select:focus, .field textarea:focus, .control:focus { border-color: var(--lime); }
-    .field input::placeholder { color: #718679; }
-    .form-message { font-size: .84rem; color: var(--danger); margin: 10px 0; min-height: 1.2em; }
-    .form-foot { text-align: center; color: var(--muted); font-size: .86rem; margin-top: 18px; }
-    .text-button { border: 0; padding: 0; background: none; color: var(--lime); font-weight: 800; }
-
-    /* Dashboard */
-    body.dashboard-mode { background: #08140e; }
-    .dashboard-layout { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(0,1fr); }
-    .sidebar {
-      position: sticky; top: 0; height: 100vh; padding: 25px 17px; display: flex; flex-direction: column;
-      background: #091a11; border-right: 1px solid var(--line); overflow-y: auto;
-    }
-    .sidebar .brand { padding: 0 10px 28px; }
-    .side-label { padding: 12px 12px 7px; color: #728a79; font-size: .67rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 900; }
-    .side-nav { display: grid; gap: 5px; }
-    .side-link {
-      display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
-      border: 1px solid transparent; border-radius: 12px; background: transparent;
-      color: #a7bcae; text-align: left; font-size: .87rem;
-    }
-    .side-link svg { width: 19px; height: 19px; flex-shrink: 0; }
-    .side-link:hover, .side-link.active { background: rgba(199,255,94,.09); border-color: rgba(199,255,94,.1); color: var(--lime); }
-    .sidebar-bottom { margin-top: auto; padding-top: 25px; }
-    .demo-note { padding: 13px; background: rgba(199,255,94,.055); border: 1px solid rgba(199,255,94,.13); border-radius: 14px; color: #a9bcae; font-size: .75rem; }
-    .dashboard-main { min-width: 0; }
-    .dash-topbar {
-      position: sticky; top: 0; z-index: 20; min-height: 76px; padding: 15px 30px;
-      display: flex; align-items: center; justify-content: space-between; gap: 15px;
-      border-bottom: 1px solid var(--line); background: rgba(8,20,14,.88); backdrop-filter: blur(18px);
-    }
-    .dash-topbar h1 { font-size: 1.2rem; margin: 0; letter-spacing: -.035em; }
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
-    .icon-button { width: 39px; height: 39px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text); display: grid; place-items: center; }
-    .user-chip { display: flex; align-items: center; gap: 9px; }
-    .user-avatar { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 50%; background: var(--lime); color: #14200d; font-weight: 900; }
-    .dash-content { padding: 27px 30px 90px; max-width: 1500px; margin: auto; }
-    .dash-section { display: none; animation: fadeIn .3s ease; }
-    .dash-section.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-    .welcome-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
-    .welcome-row h2 { margin: 0 0 5px; font-size: clamp(1.6rem,3vw,2.2rem); letter-spacing: -.055em; }
-    .welcome-row p { margin: 0; color: var(--muted); }
-    .dash-grid { display: grid; gap: 16px; }
-    .balance-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
-    .dash-card { min-width: 0; padding: 21px; border: 1px solid var(--line); border-radius: 19px; background: linear-gradient(145deg, #11291c, #0c1d14); }
-    .balance-card { position: relative; overflow: hidden; }
-    .balance-card.primary { background: radial-gradient(circle at 100% 0, rgba(199,255,94,.16), transparent 45%), linear-gradient(145deg,#17412a,#0d2417); }
-    .card-label { color: #a1b7a7; font-size: .83rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .balance-value { font-size: clamp(1.5rem,2.5vw,2.15rem); font-weight: 900; letter-spacing: -.06em; margin: 15px 0 8px; overflow-wrap: anywhere; }
-    .card-foot { color: var(--muted); font-size: .78rem; }
-    .dash-two-col { grid-template-columns: minmax(0,1.5fr) minmax(280px,1fr); margin-top: 18px; }
-    .card-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 17px; }
-    .card-heading h3 { margin: 0; font-size: 1rem; }
-    .link-button { border: 0; background: transparent; color: var(--lime); font-size: .82rem; font-weight: 800; }
-    .chart-wrap { width: 100%; overflow: hidden; }
-    .chart-wrap svg { width: 100%; height: auto; display: block; }
-    .chart-labels { display: flex; justify-content: space-between; gap: 8px; color: #718b79; font-size: .7rem; margin-top: 8px; }
-    .chart-controls { display: flex; gap: 5px; }
-    .chart-controls button { border: 0; border-radius: 8px; padding: 5px 9px; color: var(--muted); background: transparent; font-size: .72rem; }
-    .chart-controls button.active { color: var(--lime); background: rgba(199,255,94,.1); }
-    .quick-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-    .quick-action { padding: 13px 8px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.025); color: var(--text); display: grid; justify-items: center; gap: 8px; font-size: .75rem; }
-    .quick-action:hover { border-color: rgba(199,255,94,.35); background: rgba(199,255,94,.05); }
-    .quick-action .icon { width: 37px; height: 37px; }
-    .activity-list { display: grid; }
-    .activity-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
-    .activity-item:last-child { border-bottom: 0; }
-    .activity-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .activity-left > div:last-child { min-width: 0; }
-    .activity-name { font-weight: 800; font-size: .85rem; overflow-wrap: anywhere; }
-    .activity-meta { color: var(--muted); font-size: .73rem; }
-    .activity-amount { text-align: right; font-size: .86rem; font-weight: 900; white-space: nowrap; }
-    .income { color: var(--teal); }
-    .expense { color: #f0f5ef; }
-    .table-wrap { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 610px; }
-    th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,.065); font-size: .82rem; }
-    th { color: #829989; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
-    td { color: #d7e4da; }
-    .status { display: inline-flex; padding: 5px 8px; border-radius: 999px; font-size: .68rem; font-weight: 800; }
-    .status.completed { color: var(--teal); background: rgba(32,214,160,.1); }
-    .status.pending { color: #f3cb7c; background: rgba(243,203,124,.1); }
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
-    .toolbar .control { width: auto; min-width: 150px; }
-    .toolbar input { flex: 1; min-width: 180px; }
-    .account-card-visual {
-      padding: 23px; min-height: 190px; border-radius: 19px; color: #f6fff4;
-      background: linear-gradient(130deg,#1c623c,#0b2a1a 75%); border: 1px solid rgba(199,255,94,.28);
-      display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .account-card-visual .card-number { letter-spacing: .18em; font-size: 1rem; }
-    .account-card-visual .card-bottom { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
-    .goals { display: grid; gap: 15px; }
-    .goal-top { display: flex; justify-content: space-between; gap: 10px; font-size: .83rem; }
-    .progress { height: 7px; background: #243b2b; border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .progress span { display: block; height: 100%; background: var(--lime); border-radius: inherit; }
-    .settings-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
-    .profile-row { display: flex; justify-content: space-between; gap: 15px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: .85rem; }
-    .profile-row:last-child { border: 0; }
-    .profile-row strong { text-align: right; overflow-wrap: anywhere; }
-    .notice { padding: 13px 15px; border-radius: 12px; border: 1px solid rgba(199,255,94,.16); background: rgba(199,255,94,.055); color: #bdcdbf; font-size: .82rem; margin: 15px 0; }
-    .mobile-nav { display: none; }
-
-    @media (max-width: 1000px) {
-      .nav-links { gap: 15px; }
-      .hero-grid { gap: 25px; }
-      .floating-ui.transaction { right: -1%; }
-      .floating-ui.savings { left: -1%; }
-      .dashboard-layout { grid-template-columns: 215px minmax(0,1fr); }
-      .dash-content { padding: 24px 20px 80px; }
-      .dash-topbar { padding-inline: 20px; }
-      .balance-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .balance-grid .balance-card:last-child { grid-column: 1 / -1; }
-    }
-    @media (max-width: 760px) {
-      .container { width: min(100% - 30px, 600px); }
-      .section { padding: 65px 0; }
-      .nav { height: 68px; }
-      .menu-toggle { display: inline-flex; }
-      .nav-links {
-        display: none; position: absolute; left: 15px; right: 15px; top: 68px; padding: 16px;
-        border: 1px solid var(--line); border-radius: 17px; background: #0b1d14;
-        flex-direction: column; align-items: stretch; gap: 0;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 11px 8px; }
-      .nav-actions .btn-secondary { display: none; }
-      .nav-actions .btn { padding: 10px 14px; font-size: .8rem; }
-      .hero { padding: 55px 0 45px; }
-      .hero-grid { grid-template-columns: 1fr; }
-      .hero-copy h1 { font-size: clamp(3rem,13vw,4.6rem); }
-      .hero-visual { min-height: 405px; margin: 0 5px; }
-      .preview-card { width: min(88%,390px); }
-      .floating-ui.transaction { right: -1%; top: 5%; width: 190px; }
-      .floating-ui.savings { left: -1%; bottom: 4%; width: 185px; }
-      .stats-grid { grid-template-columns: repeat(2,1fr); padding: 15px 0; }
-      .stat { padding: 15px 8px; }
-      .stat:nth-child(2) { border-right: 0; }
-      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-      .features-grid, .reviews-grid { grid-template-columns: 1fr; }
-      .about-grid { grid-template-columns: 1fr; gap: 25px; }
-      .about-visual { min-height: 270px; }
-      .cta-panel { align-items: start; flex-direction: column; }
-      .footer-row { align-items: start; flex-direction: column; }
-      .dashboard-layout { display: block; }
-      .sidebar { display: none; }
-      .dash-topbar { min-height: 67px; padding: 12px 15px; }
-      .dash-topbar h1 { font-size: 1rem; }
-      .dash-content { padding: 20px 14px 100px; }
-      .welcome-row { align-items: start; flex-direction: column; }
-      .welcome-row .btn { align-self: stretch; }
-      .balance-grid { gap: 10px; }
-      .dash-card { padding: 16px; }
-      .balance-value { font-size: 1.55rem; }
-      .dash-two-col { grid-template-columns: 1fr; gap: 12px; }
-      .quick-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; }
-      .quick-action { font-size: .67rem; padding: 10px 3px; }
-      .quick-action .icon { width: 32px; height: 32px; }
-      .settings-grid { grid-template-columns: 1fr; }
-      .mobile-nav {
-        position: fixed; z-index: 30; display: grid; grid-template-columns: repeat(5,1fr);
-        left: 0; right: 0; bottom: 0; padding: 8px 5px max(8px, env(safe-area-inset-bottom));
-        background: rgba(7,20,15,.96); border-top: 1px solid var(--line); backdrop-filter: blur(18px);
-      }
-      .mobile-nav button {
-        display: grid; justify-items: center; gap: 3px; padding: 6px 2px;
-        border: 0; background: transparent; color: #8da394; font-size: .62rem;
-      }
-      .mobile-nav button svg { width: 19px; height: 19px; }
-      .mobile-nav button.active { color: var(--lime); }
-      .modal { padding: 23px 18px; }
-    }
-    @media (max-width: 380px) {
-      .brand { font-size: 1.04rem; }
-      .brand-mark { width: 32px; height: 32px; }
-      .hero-copy h1 { font-size: 2.75rem; }
-      .hero-visual { min-height: 365px; }
-      .floating-ui { padding: 11px; }
-      .floating-ui.transaction { width: 170px; }
-      .floating-ui.savings { width: 165px; }
-      .balance-grid { grid-template-columns: 1fr; }
-      .balance-grid .balance-card:last-child { grid-column: auto; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
-  </style>
+<style>
+:root {
+  --bg:#07130f;
+  --panel:#0d1d17;
+  --panel2:#11251c;
+  --green:#a8ff60;
+  --green2:#6fdb47;
+  --text:#f3f8f1;
+  --muted:#9aada0;
+  --line:rgba(255,255,255,.09);
+  --danger:#ff7777;
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.65;overflow-x:hidden
+}
+button,input,select,textarea{font:inherit}
+button,a{ -webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer}
+svg{display:block}
+.container{width:min(1160px,calc(100% - 40px));margin:auto}
+.muted{color:var(--muted)}
+.green{color:var(--green)}
+.small{font-size:.85rem}
+.hidden{display:none!important}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;color:var(--green);
+  font-size:.76rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase
+}
+.eyebrow:before{content:"";width:24px;height:1px;background:var(--green)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px 20px;border:1px solid transparent;border-radius:12px;
+  font-weight:750;font-size:.9rem;transition:.2s ease
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--green);color:#10200c}
+.btn-primary:hover{background:#bcff89}
+.btn-secondary{border-color:var(--line);background:rgba(255,255,255,.035);color:var(--text)}
+.btn-secondary:hover{border-color:rgba(168,255,96,.4)}
+.btn svg{width:18px;height:18px}
+.icon{width:23px;height:23px;flex-shrink:0}
+.site-header{
+  position:sticky;top:0;z-index:50;background:rgba(7,19,15,.88);
+  backdrop-filter:blur(18px);border-bottom:1px solid var(--line)
+}
+.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:inline-flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.04em;font-size:1.2rem}
+.brand-mark{width:39px;height:39px}
+.brand em{color:var(--green);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:26px;color:#c1cec4;font-size:.87rem}
+.nav-links a:hover{color:var(--green)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.menu-toggle{display:none;background:none;border:1px solid var(--line);color:white;padding:10px;border-radius:10px}
+.hero{position:relative;padding:82px 0 54px;overflow:hidden}
+.hero:before{
+  content:"";position:absolute;width:600px;height:600px;border-radius:50%;
+  right:-200px;top:-240px;background:rgba(88,205,74,.09);filter:blur(100px);pointer-events:none
+}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.9rem,6.5vw,5.7rem);line-height:.99;letter-spacing:-.075em;margin:22px 0}
+.hero h1 span{color:var(--green)}
+.hero-lead{font-size:1.08rem;line-height:1.9;color:#c2d0c5;max-width:670px}
+.hero-copy p{color:var(--muted);line-height:1.9}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+.trust-line{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:.82rem}
+.trust-line svg{color:var(--green);width:21px;height:21px}
+.hero-art{min-width:0;position:relative}
+.art-frame{
+  border:1px solid rgba(168,255,96,.15);border-radius:28px;padding:18px;
+  background:linear-gradient(145deg,rgba(24,52,37,.88),rgba(8,22,16,.95));
+  box-shadow:0 35px 100px rgba(0,0,0,.28)
+}
+.art-frame svg{width:100%;height:auto}
+.floating-note{
+  position:absolute;right:-18px;bottom:36px;display:flex;gap:12px;align-items:center;
+  padding:15px 17px;border:1px solid var(--line);border-radius:17px;
+  background:#102119;box-shadow:0 16px 35px #0005
+}
+.floating-icon{background:#203b24;color:var(--green);padding:10px;border-radius:12px}
+.floating-icon svg{width:22px;height:22px}
+.floating-note strong{display:block;font-size:.91rem}
+.floating-note span{display:block;color:var(--muted);font-size:.77rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:60px}
+.stat{padding:24px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}
+.stat strong{font-size:clamp(1.65rem,3vw,2.35rem);letter-spacing:-.05em;display:block;line-height:1.2}
+.stat p{margin:8px 0 0;color:var(--muted);font-size:.84rem}
+.section{padding:90px 0}
+.section-heading{max-width:700px;margin-bottom:36px}
+.section-heading h2{font-size:clamp(2rem,4vw,3.45rem);letter-spacing:-.06em;line-height:1.1;margin:16px 0}
+.section-heading p{color:var(--muted);line-height:1.9}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.feature{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;transition:.2s
+}
+.feature:hover{border-color:rgba(168,255,96,.35);transform:translateY(-3px)}
+.feature-icon{
+  display:grid;place-items:center;width:51px;height:51px;border-radius:15px;
+  background:rgba(168,255,96,.09);color:var(--green);margin-bottom:20px
+}
+.feature-icon svg{width:25px;height:25px}
+.feature h3{font-size:1.13rem;margin:0 0 10px}
+.feature p{font-size:.9rem;color:var(--muted);line-height:1.85;margin:0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.split-art{padding:24px;background:linear-gradient(145deg,#142d20,#091710);border:1px solid var(--line);border-radius:25px}
+.split-art svg{width:100%;height:auto}
+.check-list{list-style:none;padding:0;margin:25px 0;display:grid;gap:15px}
+.check-list li{display:flex;gap:12px;align-items:flex-start;color:#c4d0c6}
+.check-list svg{width:21px;height:21px;color:var(--green);flex-shrink:0;margin-top:3px}
+.prose{color:var(--muted);line-height:1.95}
+.prose h3{color:var(--text);margin:25px 0 8px;font-size:1.05rem}
+.service-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.service-chip{padding:17px;border-radius:15px;background:#102019;border:1px solid var(--line);color:#dbe6dc;font-size:.85rem}
+.service-chip svg{color:var(--green);width:22px;height:22px;margin-bottom:11px}
+.faq-list{display:grid;gap:12px;max-width:850px}
+.faq{border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:19px 21px}
+.faq summary{cursor:pointer;font-weight:750;list-style:none;display:flex;justify-content:space-between;gap:15px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--green);font-size:1.3rem}
+.faq[open] summary:after{content:"−"}
+.faq p{color:var(--muted);line-height:1.85;margin-bottom:0}
+.cta-panel{
+  border:1px solid rgba(168,255,96,.18);border-radius:28px;padding:48px;
+  background:radial-gradient(ellipse at top right,rgba(168,255,96,.12),transparent 55%),#0e2017;
+  display:flex;align-items:center;justify-content:space-between;gap:30px
+}
+.cta-panel h2{font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.06em;line-height:1.1;margin:15px 0}
+footer{border-top:1px solid var(--line);padding:35px 0;color:var(--muted);font-size:.82rem}
+.footer-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a:hover{color:var(--green)}
+/* Authentication */
+.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75);display:grid;place-items:center;padding:20px}
+.auth-card{width:min(440px,100%);max-height:90vh;overflow:auto;background:#0d1d17;border:1px solid var(--line);border-radius:24px;padding:28px;position:relative}
+.auth-card h2{font-size:1.9rem;letter-spacing:-.05em;margin:18px 0 5px}
+.auth-close{position:absolute;right:18px;top:18px;background:none;color:white;border:1px solid var(--line);border-radius:10px;padding:8px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:22px 0}
+.auth-tab{padding:10px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:10px}
+.auth-tab.active{background:rgba(168,255,96,.12);border-color:var(--green);color:var(--green)}
+.field{display:grid;gap:7px;margin:14px 0}
+.field label{font-size:.83rem;color:#dce8de}
+.field input,.field select,.field textarea{
+  width:100%;background:#07130f;border:1px solid #263c2e;color:white;
+  border-radius:11px;padding:12px 13px;outline:none
+}
+.field input:focus,.field textarea:focus{border-color:var(--green)}
+.auth-message{font-size:.84rem;min-height:22px;color:var(--muted);margin:8px 0}
+.auth-message.error{color:var(--danger)}
+.auth-message.success{color:var(--green)}
+/* Dashboard */
+.dashboard{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
+.sidebar{background:#091711;border-right:1px solid var(--line);padding:24px 15px;display:flex;flex-direction:column;gap:25px}
+.side-label{font-size:.68rem;letter-spacing:.14em;color:#728678;padding:0 13px;margin:8px 0}
+.side-link{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:0;border-radius:11px;background:transparent;color:#aabbb0;text-align:left;font-size:.87rem}
+.side-link svg{width:19px;height:19px}
+.side-link:hover,.side-link.active{background:rgba(168,255,96,.1);color:var(--green)}
+.side-bottom{margin-top:auto}
+.dash-main{min-width:0}
+.dash-top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:22px 30px;border-bottom:1px solid var(--line)}
+.dash-top h2{margin:0;font-size:1.15rem}
+.dash-user{display:flex;gap:12px;align-items:center}
+.avatar{display:grid;place-items:center;background:#203c28;color:var(--green);width:39px;height:39px;border-radius:50%;font-weight:800}
+.dash-content{padding:30px;max-width:1250px;margin:auto}
+.dash-title{font-size:clamp(1.7rem,3vw,2.3rem);letter-spacing:-.05em;margin:0}
+.balance-card{
+  border:1px solid rgba(168,255,96,.18);border-radius:23px;padding:27px;
+  background:radial-gradient(ellipse at top right,rgba(168,255,96,.16),transparent 55%),#102219;
+}
+.balance-label{color:#b7c7ba;font-size:.86rem}
+.balance-amount{font-size:clamp(2.1rem,5vw,3.5rem);letter-spacing:-.06em;font-weight:850;margin:8px 0}
+.dash-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:17px;margin-top:18px}
+.dash-panel{background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:23px;min-width:0}
+.dash-panel h3{font-size:1rem;margin:0 0 18px}
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick-action{display:grid;justify-items:center;gap:9px;padding:15px 7px;border:1px solid var(--line);border-radius:13px;background:#102019;color:#d9e5db;font-size:.76rem}
+.quick-action svg{width:23px;height:23px;color:var(--green)}
+.quick-action:hover{border-color:var(--green)}
+.transaction{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+.transaction:last-child{border-bottom:0}
+.tx-left{display:flex;align-items:center;gap:12px;min-width:0}
+.tx-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:#1b3022;color:var(--green)}
+.tx-icon svg{width:20px;height:20px}
+.tx-name{font-size:.87rem;font-weight:700}
+.tx-date{font-size:.75rem;color:var(--muted)}
+.tx-amount{font-size:.88rem;font-weight:800;white-space:nowrap}
+.view-panel{margin-top:18px}
+.notice{padding:14px 16px;border-radius:12px;background:rgba(168,255,96,.07);border:1px solid rgba(168,255,96,.17);color:#d8e6d8;font-size:.86rem}
+.data-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.data-table th,.data-table td{text-align:left;padding:13px 9px;border-bottom:1px solid var(--line)}
+.data-table th{color:var(--muted);font-weight:600}
+.data-table td{color:#e0e9e1}
+.status-pill{display:inline-block;padding:4px 9px;border-radius:99px;background:rgba(168,255,96,.1);color:var(--green);font-size:.72rem}
+.mobile-side-head{display:none}
+.dash-content .field{max-width:520px}
+.dash-content .btn{margin-top:5px}
+.dash-menu-btn{display:none;background:none;border:1px solid var(--line);color:white;padding:9px;border-radius:10px}
+@media(max-width:900px){
+  .nav-links{gap:14px}.hero-grid{grid-template-columns:1fr;gap:35px}
+  .hero-copy{max-width:760px}.hero-art{max-width:650px;width:100%;margin:auto}
+  .split{gap:30px}.grid-3{grid-template-columns:repeat(2,1fr)}
+  .service-strip{grid-template-columns:repeat(2,1fr)}
+  .dashboard{grid-template-columns:1fr}
+  .sidebar{position:fixed;top:0;bottom:0;left:0;width:270px;z-index:80;transform:translateX(-110%);transition:.25s;box-shadow:20px 0 60px #0007}
+  .sidebar.open{transform:translateX(0)}
+  .mobile-side-head{display:flex;justify-content:space-between;align-items:center}
+  .dash-menu-btn{display:inline-flex}
+  .dash-top{padding:17px 20px}.dash-content{padding:20px}
+}
+@media(max-width:650px){
+  .container{width:min(100% - 30px,1160px)}
+  .nav{min-height:68px}.nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:#0a1912;padding:20px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}
+  .nav-links.open{display:flex}.menu-toggle{display:inline-flex}
+  .nav-actions .btn{padding:10px 12px;font-size:.8rem}
+  .hero{padding:57px 0 35px}.hero h1{font-size:clamp(2.8rem,13vw,4.3rem)}
+  .hero-lead{font-size:1rem}.stats{gap:8px;margin-top:35px}
+  .stat{padding:14px 11px}.stat strong{font-size:1.35rem}.stat p{font-size:.73rem}
+  .floating-note{right:-4px;bottom:14px;padding:11px}.floating-note strong{font-size:.78rem}
+  .section{padding:65px 0}.grid-3{grid-template-columns:1fr}
+  .split{grid-template-columns:1fr}.split-art{order:2}
+  .service-strip{grid-template-columns:repeat(2,1fr)}
+  .cta-panel{padding:28px;align-items:flex-start;flex-direction:column}
+  .dash-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:repeat(2,1fr)}
+  .dash-content{padding:15px}.dash-top{padding:14px}
+  .dash-user .user-label{display:none}
+  .data-table{min-width:470px}
+  .table-wrap{overflow:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+</style>
 </head>
-
 <body>
-  <!-- LANDING PAGE -->
-  <div id="landingPage">
-    <header class="site-header">
-      <div class="container nav">
-        <a href="#home" class="brand" aria-label="Cashflowbank home">
-          <span class="brand-mark">C</span><span>Cashflow<span>bank</span></span>
-        </a>
-        <nav class="nav-links" id="publicNav" aria-label="Main navigation">
-          <a href="#home">Home</a>
-          <a href="#explore">Explore</a>
-          <a href="#about">About</a>
-          <a href="#reviews">Reviews</a>
-          <a href="#support">Support</a>
-        </nav>
-        <div class="nav-actions">
-          <button class="btn btn-secondary" data-auth="login">Log in</button>
-          <button class="btn btn-primary" data-auth="signup">Get started <span aria-hidden="true">↗</span></button>
-          <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+<!-- SVG symbol library: icons throughout the site use these inline vectors. -->
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
+<symbol id="i-mark" viewBox="0 0 48 48">
+  <path d="M7 15 24 5l17 10v18L24 43 7 33Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="m15 25 6 6 13-15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m8.5 12 2.2 2.2 4.8-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18m-5 5h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-transfer" viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M7 15l4-5 4 3 5-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 10h18m-14 5h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 18h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-savings" viewBox="0 0 24 24"><path d="M4 11a8 8 0 0 1 14-4l2 2m0-4v4h-4M20 13a8 8 0 0 1-14 4l-2-2m0 4v-4h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 21a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m19.4 15 .1.1 1.1 1.9-2 3.4-2.2-.5a8 8 0 0 1-2 .9L13.3 23h-2.6l-1.1-2.2a8 8 0 0 1-2-.9l-2.2.5-2-3.4 1.1-1.9a8 8 0 0 1 0-2.2l-1.1-1.9 2-3.4 2.2.5a8 8 0 0 1 2-.9L10.7 0h2.6l1.1 2.2a8 8 0 0 1 2 .9l2.2-.5 2 3.4-1.1 1.9a8 8 0 0 1 0 2.2l1.1 1.9" transform="translate(0 1) scale(.92)" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 9a2.6 2.6 0 1 1 4.3 2c-1.2 1-1.8 1.2-1.8 2.8m0 3h.01" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-deposit" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-loan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M15.5 8.5c-.7-.7-1.7-1-3-1-1.7 0-2.7.8-2.7 2s1.1 1.8 2.7 2.1 2.7.9 2.7 2.1-1.1 2-2.7 2c-1.3 0-2.4-.4-3.2-1.2M12 5.5v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="site-header" id="publicHeader">
+  <div class="container nav">
+    <a class="brand" href="#home" aria-label="Cashflowbank home">
+      <svg class="brand-mark"><use href="#i-mark"/></svg>
+      <span>Cashflow<em>bank</em></span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#home">Home</a><a href="#features">Features</a>
+      <a href="#services">Services</a><a href="#security">Security</a><a href="#faq">FAQs</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-secondary" data-auth="login">Log in</button>
+      <button class="btn btn-primary" data-auth="signup">Get started <svg><use href="#i-arrow"/></svg></button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
+        <svg class="icon"><use href="#i-mark"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="publicSite">
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">A smarter way to bank</span>
+        <h1>Your money.<br>Your future.<br><span>Your flow.</span></h1>
+        <p class="hero-lead">
+          Welcome to Cashflowbank, a modern digital banking experience built for people who want a clearer view of their money and a more intentional way to manage everyday finances. Bring your financial activities into one thoughtfully designed space, understand where your money goes, and make decisions with greater confidence.
+        </p>
+        <p>
+          Whether you are receiving income, preparing for an important purchase, organising your monthly expenses, planning for a business, or simply working toward greater financial independence, Cashflowbank is designed to help you approach your money with clarity. Your financial life should feel organised and accessible, not confusing or overwhelming.
+        </p>
+        <p>
+          Explore a streamlined account experience, intuitive account tools, helpful transaction views, and a dashboard designed to make your financial information easier to understand. Spend less time searching for information and more time thinking about the things that matter to you.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-auth="signup">Open your account <svg><use href="#i-arrow"/></svg></button>
+          <a class="btn btn-secondary" href="#features">Explore the experience</a>
         </div>
+        <div class="trust-line">
+          <svg><use href="#i-shield"/></svg>
+          <span>Designed with privacy, clarity, and responsible money management in mind.</span>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="SVG illustration of a modern digital banking dashboard">
+        <div class="art-frame">
+          <svg viewBox="0 0 560 570" role="img" aria-labelledby="heroSvgTitle heroSvgDesc">
+            <title id="heroSvgTitle">Cashflowbank digital banking illustration</title>
+            <desc id="heroSvgDesc">An illustrative banking interface with a virtual card, financial chart, and account activity.</desc>
+            <defs>
+              <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#c5ff9a"/><stop offset="1" stop-color="#64ce47"/>
+              </linearGradient>
+              <linearGradient id="darkGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#1b3d29"/><stop offset="1" stop-color="#0d2117"/>
+              </linearGradient>
+              <pattern id="dotPattern" width="18" height="18" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.2" fill="#8ae85b" opacity=".35"/>
+              </pattern>
+            </defs>
+            <circle cx="285" cy="260" r="220" fill="#102a1b"/>
+            <circle cx="285" cy="260" r="220" fill="url(#dotPattern)" opacity=".6"/>
+            <circle cx="285" cy="260" r="176" fill="none" stroke="#34583b" stroke-width="1"/>
+            <circle cx="285" cy="260" r="140" fill="none" stroke="#34583b" stroke-width="1" stroke-dasharray="4 10"/>
+            <path d="M80 118c50-54 105-72 163-62" fill="none" stroke="#a8ff60" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+            <circle cx="244" cy="56" r="5" fill="#a8ff60"/>
+            <rect x="54" y="88" width="310" height="197" rx="21" fill="url(#cardGrad)" transform="rotate(-8 209 186)"/>
+            <path d="M83 145c38-42 88-43 126-2s72 37 109 4" fill="none" stroke="#1e4b23" stroke-width="1.5" opacity=".4"/>
+            <path d="M90 166c38-42 88-43 126-2s72 37 109 4" fill="none" stroke="#1e4b23" stroke-width="1.5" opacity=".4"/>
+            <g transform="rotate(-8 209 186)" fill="#15371c">
+              <text x="80" y="129" font-size="12" font-weight="800" letter-spacing="2">CASHFLOWBANK</text>
+              <rect x="81" y="153" width="38" height="28" rx="5" fill="#244c27" opacity=".7"/>
+              <path d="M94 153v28m13-28v28M81 167h38" stroke="#a8ff60" stroke-width="1" opacity=".8"/>
+              <text x="81" y="218" font-size="16" letter-spacing="3">••••  ••••  ••••  2048</text>
+              <text x="81" y="245" font-size="9" letter-spacing="1.5">YOUR FINANCIAL FUTURE</text>
+              <circle cx="320" cy="232" r="14" fill="#173c21" opacity=".7"/>
+              <circle cx="338" cy="232" r="14" fill="#173c21" opacity=".5"/>
+            </g>
+            <rect x="197" y="281" width="310" height="222" rx="19" fill="#0b1911" stroke="#294532"/>
+            <text x="220" y="313" font-size="12" fill="#9aada0">FINANCIAL OVERVIEW</text>
+            <text x="220" y="342" font-size="21" fill="#f3f8f1" font-weight="700">Your money, in focus</text>
+            <path d="M220 443h263M220 411h263M220 379h263" stroke="#294532" stroke-width="1"/>
+            <path d="M222 430 253 408 282 420 311 389 344 402 373 365 406 382 437 347 477 358" fill="none" stroke="#a8ff60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M222 430 253 408 282 420 311 389 344 402 373 365 406 382 437 347 477 358V443H222Z" fill="#a8ff60" opacity=".09"/>
+            <circle cx="437" cy="347" r="5" fill="#a8ff60" stroke="#0b1911" stroke-width="2"/>
+            <text x="220" y="473" font-size="10" fill="#9aada0">ILLUSTRATIVE DASHBOARD</text>
+            <g transform="translate(29 349)">
+              <rect width="139" height="125" rx="17" fill="url(#darkGrad)" stroke="#294532"/>
+              <circle cx="29" cy="29" r="15" fill="#203e25"/>
+              <path d="M22 29h14m-5-5 5 5-5 5" fill="none" stroke="#a8ff60" stroke-width="2" stroke-linecap="round"/>
+              <text x="17" y="65" font-size="10" fill="#9aada0">MONEY MOVEMENT</text>
+              <text x="17" y="86" font-size="13" fill="#f3f8f1" font-weight="700">Stay organised</text>
+              <text x="17" y="104" font-size="10" fill="#9aada0">At a glance</text>
+            </g>
+            <circle cx="445" cy="112" r="32" fill="#173d23" stroke="#3d7040"/>
+            <path d="m429 112 11 11 21-24" fill="none" stroke="#a8ff60" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m432 60 7-13 7 13m-7-13v24" fill="none" stroke="#a8ff60" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="floating-note">
+          <div class="floating-icon"><svg><use href="#i-shield"/></svg></div>
+          <div><strong>Security-conscious design</strong><span>Your account experience, thoughtfully built</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Only these hero statistics animate. -->
+    <div class="stats" aria-label="Illustrative platform statistics">
+      <div class="stat">
+        <strong><span class="count-up" data-target="1000000" data-format="compact">0</span><span class="green">+</span></strong>
+        <p>Financial possibilities</p>
+      </div>
+      <div class="stat">
+        <strong><span class="count-up" data-target="24" data-format="integer">0</span><span class="green">/7</span></strong>
+        <p>Digital access aspiration</p>
+      </div>
+      <div class="stat">
+        <strong><span class="count-up" data-target="100" data-format="integer">0</span><span class="green">%</span></strong>
+        <p>Focus on your experience</p>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:12px">These figures are illustrative design content, not independently verified customer, uptime, or performance claims.</p>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Banking made clearer</span>
+      <h2>A financial experience that puts you first.</h2>
+      <p>
+        Money touches nearly every part of life. The tools you use to manage it should make everyday decisions easier to understand. Cashflowbank brings an approachable interface and useful account features together in a digital experience built around clarity, convenience, and control.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-wallet"/></svg></div>
+        <h3>A clearer account overview</h3>
+        <p>See your account information in a dedicated dashboard. The layout is designed to help you distinguish account details from transaction activity and understand what information is available at a glance.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-transfer"/></svg></div>
+        <h3>Transfer-focused tools</h3>
+        <p>Explore a transfer interface designed to make entering recipient details and reviewing a payment request straightforward. Live transfers require a verified payment provider and secure server-side processing.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-chart"/></svg></div>
+        <h3>More intentional planning</h3>
+        <p>Build a clearer picture of your financial priorities. Organised account information can help you review spending habits, plan upcoming costs, and think more deliberately about saving.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-card"/></svg></div>
+        <h3>Card management concepts</h3>
+        <p>Discover a central place for card-related information and controls. Issuing cards, managing card details, and processing card payments require an authorised card provider.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-globe"/></svg></div>
+        <h3>A digital-first approach</h3>
+        <p>Access the interface from a modern phone, tablet, or computer. Responsive layouts keep essential controls easy to reach and information comfortable to read across different screen sizes.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon"><svg><use href="#i-help"/></svg></div>
+        <h3>Help when you need it</h3>
+        <p>Find support information and use the integrated live-chat widget to contact your configured support team. Real support availability depends on your Tawk.to settings.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services" style="background:#091710">
+  <div class="container split">
+    <div class="split-art">
+      <svg viewBox="0 0 480 380" role="img" aria-label="SVG illustration of financial organisation">
+        <defs><linearGradient id="savingsGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bfff88"/><stop offset="1" stop-color="#57c842"/></linearGradient></defs>
+        <rect x="25" y="20" width="430" height="340" rx="24" fill="#102319" stroke="#2b4831"/>
+        <circle cx="240" cy="190" r="120" fill="#173722"/>
+        <circle cx="240" cy="190" r="90" fill="none" stroke="#35583a" stroke-dasharray="5 8"/>
+        <rect x="80" y="76" width="230" height="140" rx="17" fill="url(#savingsGrad)" transform="rotate(-7 195 146)"/>
+        <g transform="rotate(-7 195 146)">
+          <text x="102" y="108" font-size="10" font-weight="800" fill="#19381b" letter-spacing="2">CASHFLOWBANK</text>
+          <path d="M103 132h155" stroke="#477e36" stroke-width="1"/>
+          <path d="M103 150h100" stroke="#477e36" stroke-width="1"/>
+          <path d="M103 168h125" stroke="#477e36" stroke-width="1"/>
+          <circle cx="271" cy="178" r="13" fill="#214c25"/>
+        </g>
+        <rect x="236" y="222" width="180" height="101" rx="16" fill="#0a1810" stroke="#34523a"/>
+        <text x="255" y="247" fill="#9aada0" font-size="10">FINANCIAL HABITS</text>
+        <rect x="255" y="262" width="130" height="7" rx="3.5" fill="#294330"/>
+        <rect x="255" y="262" width="93" height="7" rx="3.5" fill="#a8ff60"/>
+        <rect x="255" y="280" width="130" height="7" rx="3.5" fill="#294330"/>
+        <rect x="255" y="280" width="65" height="7" rx="3.5" fill="#71db4b"/>
+        <circle cx="100" cy="278" r="31" fill="#1d3d25" stroke="#3b6840"/>
+        <path d="m85 278 10 10 20-22" fill="none" stroke="#a8ff60" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <span class="eyebrow">Tools for real life</span>
+      <h2 style="font-size:clamp(2rem,4vw,3.4rem);line-height:1.1;letter-spacing:-.06em">More clarity for the decisions that matter.</h2>
+      <p class="prose">
+        A useful banking experience is about more than attractive screens. It is about making your financial information understandable, helping you organise priorities, and providing a sensible starting point for the next decision you need to make.
+      </p>
+      <ul class="check-list">
+        <li><svg><use href="#i-shield"/></svg><span><strong>Account awareness.</strong> Understand what information your dashboard displays and where to find the relevant account tools.</span></li>
+        <li><svg><use href="#i-savings"/></svg><span><strong>Saving with intention.</strong> Establish personal goals and build habits around the financial priorities that matter to you.</span></li>
+        <li><svg><use href="#i-transfer"/></svg><span><strong>Payment clarity.</strong> Review transfer information carefully before using any real payment service.</span></li>
+        <li><svg><use href="#i-phone"/></svg><span><strong>Flexible access.</strong> Use a responsive interface designed to adapt to different screens and devices.</span></li>
+      </ul>
+      <button class="btn btn-primary" data-auth="signup">Explore your dashboard <svg><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+  <div class="container" style="margin-top:50px">
+    <div class="service-strip">
+      <div class="service-chip"><svg><use href="#i-transfer"/></svg><div>Transfers</div></div>
+      <div class="service-chip"><svg><use href="#i-deposit"/></svg><div>Deposits</div></div>
+      <div class="service-chip"><svg><use href="#i-card"/></svg><div>Cards</div></div>
+      <div class="service-chip"><svg><use href="#i-loan"/></svg><div>Loan enquiries</div></div>
+      <div class="service-chip"><svg><use href="#i-user"/></svg><div>Account profile</div></div>
+      <div class="service-chip"><svg><use href="#i-shield"/></svg><div>KYC information</div></div>
+      <div class="service-chip"><svg><use href="#i-chart"/></svg><div>Account activity</div></div>
+      <div class="service-chip"><svg><use href="#i-help"/></svg><div>Customer support</div></div>
+    </div>
+    <p class="small muted">Service screens are interface previews unless a secure, verified service provider has been integrated.</p>
+  </div>
+</section>
+
+<section class="section" id="security">
+  <div class="container split">
+    <div>
+      <span class="eyebrow">Privacy and responsibility</span>
+      <h2 style="font-size:clamp(2rem,4vw,3.3rem);line-height:1.1;letter-spacing:-.06em">Trust starts with transparency.</h2>
+      <p class="prose">
+        Financial services demand careful handling of personal information. Cashflowbank's interface is designed with privacy and security in mind, but a polished interface alone does not make a financial product secure. Production use requires a complete security architecture, appropriate regulatory compliance, careful data handling, and properly configured service providers.
+      </p>
+      <ul class="check-list">
+        <li><svg><use href="#i-shield"/></svg><span><strong>Authentication.</strong> Firebase Authentication can manage account sign-in when correctly configured.</span></li>
+        <li><svg><use href="#i-shield"/></svg><span><strong>Access control.</strong> Server-side authorization and Firebase security rules must prevent users from reading or changing other users' information.</span></li>
+        <li><svg><use href="#i-shield"/></svg><span><strong>Responsible payments.</strong> Real transfers and deposits need trusted payment integrations, transaction verification, and secure server-side processing.</span></li>
+        <li><svg><use href="#i-shield"/></svg><span><strong>Identity verification.</strong> A real KYC process requires an appropriate identity-verification provider and compliant data handling.</span></li>
+      </ul>
+    </div>
+    <div class="feature" style="padding:30px">
+      <div class="feature-icon"><svg><use href="#i-shield"/></svg></div>
+      <h3>Built for responsible development</h3>
+      <p class="prose">Use the dashboard as a starting point for your product, then connect each financial function to the correct provider. Never trust browser-only balance changes or treat a demo screen as proof that a payment has completed.</p>
+      <p class="prose">Do not store payment credentials, secret keys, or sensitive identity documents in public frontend code. Restrict access with server-side checks and test security rules before launch.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Frequently asked questions</span>
+      <h2>Good questions deserve clear answers.</h2>
+      <p>Learn how the Cashflowbank experience is intended to work and what is needed before its financial services can be used in production.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq"><summary>What is Cashflowbank?</summary><p>Cashflowbank is a digital banking interface concept intended to organise account information, user access, and financial service screens in a single responsive experience.</p></details>
+      <details class="faq"><summary>Can I create an account?</summary><p>Account creation and sign-in use Firebase Authentication when the Firebase configuration is valid and the Email/Password sign-in method is enabled in the Firebase Console.</p></details>
+      <details class="faq"><summary>Are the displayed balances real?</summary><p>No. The dashboard's sample balance and transaction entries are illustrative demo data. They do not represent money held by a bank and do not change a real financial account.</p></details>
+      <details class="faq"><summary>Can I make a real transfer or deposit?</summary><p>Not with this frontend alone. Real financial operations require a properly integrated and authorised provider, server-side verification, transaction records, and appropriate compliance controls.</p></details>
+      <details class="faq"><summary>How does the animated account balance work?</summary><p>The displayed demo balance animates when the dashboard is opened. The animation is visual only and does not change the underlying value or create a transaction.</p></details>
+      <details class="faq"><summary>Which numbers animate?</summary><p>Only the statistics in the public hero section and the dashboard account balance animate. Other figures and transaction amounts remain static.</p></details>
+      <details class="faq"><summary>Does the site work on mobile?</summary><p>The layout adapts to smaller screens, with a collapsible public navigation menu and a slide-out dashboard sidebar.</p></details>
+      <details class="faq"><summary>How can customers contact support?</summary><p>The supplied Tawk.to widget is included at the bottom of this file. Its availability and behaviour depend on the Tawk.to property and settings associated with the embed code.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-panel">
+      <div>
+        <span class="eyebrow">Start with clarity</span>
+        <h2>Make room for a better<br>financial routine.</h2>
+        <p class="muted" style="max-width:590px">Explore an account interface designed to bring your financial information into focus. Begin with the dashboard and build toward a complete, securely integrated financial product.</p>
+      </div>
+      <button class="btn btn-primary" data-auth="signup">Get started <svg><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <a class="brand" href="#home"><svg class="brand-mark"><use href="#i-mark"/></svg><span>Cashflow<em>bank</em></span></a>
+    <div>© <span id="footerYear">2026</span> Cashflowbank. All rights reserved.</div>
+    <div class="footer-links"><a href="#features">Features</a><a href="#security">Security</a><a href="#faq">FAQs</a><a href="#home">Back to top</a></div>
+  </div>
+  <div class="container small muted" style="margin-top:15px">Cashflowbank is a product interface concept. This website alone does not provide a bank account, hold funds, or execute financial transactions.</div>
+</footer>
+</main>
+
+<!-- Authentication dialog -->
+<div class="modal-backdrop hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <button class="auth-close" id="authClose" aria-label="Close dialog">✕</button>
+    <a class="brand" href="#home"><svg class="brand-mark"><use href="#i-mark"/></svg><span>Cashflow<em>bank</em></span></a>
+    <h2 id="authTitle">Welcome back</h2>
+    <p class="muted small" id="authSubtitle">Sign in to your account.</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab">Log in</button>
+      <button class="auth-tab" id="signupTab">Create account</button>
+    </div>
+    <form id="authForm">
+      <div class="field hidden" id="nameField"><label for="authName">Full name</label><input id="authName" autocomplete="name" placeholder="Your full name"></div>
+      <div class="field"><label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+      <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="At least six characters"></div>
+      <div class="auth-message" id="authMessage" aria-live="polite"></div>
+      <button class="btn btn-primary" id="authSubmit" type="submit" style="width:100%">Log in <svg><use href="#i-arrow"/></svg></button>
+    </form>
+    <p class="small muted" style="margin-top:17px">Use a strong, unique password. This sign-in form only creates or signs into a Firebase user account; it does not open a regulated bank account.</p>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="dashboard hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="mobile-side-head">
+      <a class="brand" href="#" data-view="Dashboard"><svg class="brand-mark"><use href="#i-mark"/></svg><span>Cashflow<em>bank</em></span></a>
+      <button class="auth-close" id="sidebarClose" aria-label="Close dashboard menu">✕</button>
+    </div>
+    <a class="brand desktop-brand" href="#" data-view="Dashboard"><svg class="brand-mark"><use href="#i-mark"/></svg><span>Cashflow<em>bank</em></span></a>
+    <div>
+      <p class="side-label">MAIN</p>
+      <button class="side-link active" data-view="Dashboard"><svg><use href="#i-chart"/></svg>Dashboard</button>
+      <button class="side-link" data-view="Account Summary"><svg><use href="#i-wallet"/></svg>Account Summary</button>
+      <button class="side-link" data-view="Transfer"><svg><use href="#i-transfer"/></svg>Transfer</button>
+      <button class="side-link" data-view="Deposit Check"><svg><use href="#i-deposit"/></svg>Deposit Check</button>
+      <button class="side-link" data-view="Deposit Crypto"><svg><use href="#i-globe"/></svg>Deposit Crypto</button>
+    </div>
+    <div>
+      <p class="side-label">SERVICES</p>
+      <button class="side-link" data-view="Loans"><svg><use href="#i-loan"/></svg>Loans</button>
+      <button class="side-link" data-view="Cards"><svg><use href="#i-card"/></svg>Cards</button>
+    </div>
+    <div>
+      <p class="side-label">ACCOUNT</p>
+      <button class="side-link" data-view="KYC Verification"><svg><use href="#i-shield"/></svg>KYC Verification</button>
+      <button class="side-link" data-view="Profile"><svg><use href="#i-user"/></svg>Profile</button>
+      <button class="side-link" data-view="Settings"><svg><use href="#i-settings"/></svg>Settings</button>
+      <button class="side-link" data-view="Account Status"><svg><use href="#i-clock"/></svg>Account Status</button>
+      <button class="side-link" data-view="Support"><svg><use href="#i-help"/></svg>Support</button>
+    </div>
+    <div class="side-bottom">
+      <button class="side-link" id="signOutButton"><svg><use href="#i-arrow"/></svg>Sign out</button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-top">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="dash-menu-btn" id="dashMenuBtn" aria-label="Open dashboard menu">☰</button>
+        <div><h2 id="pageTitle">Dashboard</h2><div class="small muted">Your financial space</div></div>
+      </div>
+      <div class="dash-user">
+        <div class="avatar" id="userAvatar">U</div>
+        <div class="user-label"><strong id="userName">User</strong><div class="small muted" id="userEmail"></div></div>
       </div>
     </header>
-
-    <main>
-      <section class="hero" id="home">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <div class="eyebrow"><span class="dot"></span> A smarter way to bank</div>
-            <h1>Your money.<br>Your future.<br><span>Your flow.</span></h1>
-            <p>Take control of your financial life with a clean, modern banking experience designed to help you see more clearly, plan smarter, and move forward with confidence.</p>
-            <div class="hero-buttons">
-              <button class="btn btn-primary" data-auth="signup">Open your account <span aria-hidden="true">↗</span></button>
-              <a class="btn btn-secondary" href="#explore">Explore Cashflowbank <span aria-hidden="true">↓</span></a>
-            </div>
-            <div class="trust-row">
-              <div class="avatar-stack" aria-hidden="true">
-                <span>CF</span><span>MK</span><span>AJ</span><span>+</span>
-              </div>
-              <span>Built around clarity, control, and confidence.</span>
-            </div>
-          </div>
-
-          <div class="hero-visual" aria-label="Illustration of the Cashflowbank dashboard">
-            <div class="hero-glow"></div>
-            <div class="preview-card">
-              <div class="preview-top">
-                <div class="brand"><span class="brand-mark">C</span><span>Cashflow<span>bank</span></span></div>
-                <span class="pill pill-green"><span class="dot"></span> Demo preview</span>
-              </div>
-              <div class="muted small" style="margin-top:30px">Available balance</div>
-              <div class="preview-balance">$24,680.50</div>
-              <div class="preview-bottom">
-                <div><div class="muted tiny">Account holder</div><strong>Your Name</strong></div>
-                <div style="text-align:right"><div class="muted tiny">Account</div><strong>•••• 2048</strong></div>
-              </div>
-              <svg class="mini-chart" viewBox="0 0 360 60" fill="none" aria-hidden="true">
-                <defs><linearGradient id="heroChartFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c7ff5e" stop-opacity=".3"/><stop offset="1" stop-color="#c7ff5e" stop-opacity="0"/></linearGradient></defs>
-                <path d="M0 48 C25 45 28 24 54 31 S86 49 109 31 S151 37 173 20 S210 36 234 16 S278 30 300 13 S338 16 360 3 V60 H0Z" fill="url(#heroChartFill)"/>
-                <path d="M0 48 C25 45 28 24 54 31 S86 49 109 31 S151 37 173 20 S210 36 234 16 S278 30 300 13 S338 16 360 3" stroke="#c7ff5e" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-
-            <!-- Restored floating transaction notification -->
-            <div class="floating-ui transaction" aria-label="Animated transaction notification">
-              <div class="floating-row">
-                <div class="floating-icon">↗</div>
-                <div><div class="tiny muted">Payment received</div><strong>+$1,250.00</strong></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:13px">
-                <span class="tiny muted">Sample activity</span><span class="pill pill-green">Received</span>
-              </div>
-            </div>
-
-            <div class="floating-ui savings" aria-label="Animated savings progress card">
-              <div class="floating-row">
-                <div class="floating-icon">✦</div>
-                <div><div class="tiny muted">Savings goal</div><strong>Future fund</strong></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:.78rem"><span class="muted">Progress</span><strong class="lime">72%</strong></div>
-              <div class="progress"><span style="width:72%"></span></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Restored animated counting numbers -->
-      <section class="stats-strip" aria-label="Cashflowbank highlights">
-        <div class="container stats-grid">
-          <div class="stat">
-            <div class="stat-number" data-count="24" data-suffix="/7">0</div>
-            <div class="stat-label">Account access</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" data-count="100" data-suffix="%">0</div>
-            <div class="stat-label">Digital experience</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" data-count="3" data-suffix=" steps">0</div>
-            <div class="stat-label">Simple sign-up flow</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" data-count="1" data-suffix=" place">0</div>
-            <div class="stat-label">Your money overview</div>
-          </div>
-        </div>
-        <p class="container tiny muted" style="text-align:center;margin:0 auto 13px">Product highlights, not customer counts or claims of banking performance.</p>
-      </section>
-
-      <section class="section" id="explore">
-        <div class="container">
-          <div class="section-heading">
-            <div class="eyebrow">Explore the experience</div>
-            <h2>Everything feels <span class="lime">in flow.</span></h2>
-            <p>A thoughtfully designed digital banking interface that puts everyday money management in one place.</p>
-          </div>
-          <div class="features-grid">
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h4"/></svg></div>
-              <h3>One clear overview</h3><p>View your balance summary, recent activity, and money goals from a clean dashboard.</p>
-            </article>
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 3 5-7"/></svg></div>
-              <h3>See your spending</h3><p>Explore transaction history with simple search and filters in the dashboard demo.</p>
-            </article>
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
-              <h3>Plan your next goal</h3><p>Use illustrative savings goals to picture how you might organize future plans.</p>
-            </article>
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div>
-              <h3>Useful account settings</h3><p>Find your sign-in email, account creation date, and profile details in one place.</p>
-            </article>
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></div>
-              <h3>Firebase authentication</h3><p>Create an account and sign in using Firebase Authentication once configured.</p>
-            </article>
-            <article class="panel feature-card">
-              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg></div>
-              <h3>Made for every screen</h3><p>Responsive layouts keep the experience usable on phones, tablets, and desktops.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="about" style="background:rgba(255,255,255,.015)">
-        <div class="container about-grid">
-          <div class="panel about-visual">
-            <div class="about-stat">
-              <div class="eyebrow">Designed with intention</div>
-              <strong>Less noise.</strong>
-              <h3 style="font-size:1.6rem;margin:12px 0">More financial clarity.</h3>
-              <p class="muted">A modern interface for a more organized money routine.</p>
-            </div>
-          </div>
-          <div>
-            <div class="eyebrow">About Cashflowbank</div>
-            <h2 style="font-size:clamp(2rem,4vw,3.1rem);letter-spacing:-.06em;line-height:1.1">Money management should feel <span class="lime">simple.</span></h2>
-            <p class="muted">Cashflowbank is being designed around an easy-to-understand digital banking experience. The website combines a modern landing page with a signed-in dashboard and Firebase-powered account access.</p>
-            <ul class="check-list">
-              <li><span class="check">✓</span><span>Clear dashboard sections for overview, activity, cards, savings, and settings.</span></li>
-              <li><span class="check">✓</span><span>Account creation date read from Firebase Authentication metadata.</span></li>
-              <li><span class="check">✓</span><span>Responsive emerald-green and lime-green design.</span></li>
-              <li><span class="check">✓</span><span>Demo transactions are labeled as examples, not real bank records.</span></li>
-            </ul>
-            <button class="btn btn-primary" data-auth="signup">Get started <span aria-hidden="true">↗</span></button>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="reviews">
-        <div class="container">
-          <div class="section-heading">
-            <div class="eyebrow">The experience</div>
-            <h2>A fresh perspective on <span class="lime">your finances.</span></h2>
-            <p>These sample comments are placeholders to demonstrate the review-card design. They are not verified customer testimonials.</p>
-          </div>
-          <div class="reviews-grid">
-            <article class="panel review-card">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <blockquote>“I like how clean the dashboard feels. Everything is easy to find without making the page feel crowded.”</blockquote>
-              <div class="review-person"><div class="review-avatar">JD</div><div><strong>Jordan D.</strong><div class="tiny muted">Illustrative review</div></div></div>
-            </article>
-            <article class="panel review-card">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <blockquote>“The combination of a clear overview and spending activity makes the concept feel simple and modern.”</blockquote>
-              <div class="review-person"><div class="review-avatar">AM</div><div><strong>Alex M.</strong><div class="tiny muted">Illustrative review</div></div></div>
-            </article>
-            <article class="panel review-card">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <blockquote>“The green design feels fresh, and the mobile layout makes the experience easy to navigate.”</blockquote>
-              <div class="review-person"><div class="review-avatar">SK</div><div><strong>Sam K.</strong><div class="tiny muted">Illustrative review</div></div></div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="support">
-        <div class="container">
-          <div class="panel cta-panel">
-            <div><h2>Ready to get into your <span class="lime">flow?</span></h2><p>Create an account to explore the Cashflowbank dashboard.</p></div>
-            <button class="btn btn-primary" data-auth="signup">Create your account <span aria-hidden="true">↗</span></button>
-          </div>
-          <div style="padding-top:40px;max-width:650px">
-            <div class="eyebrow">Important information</div>
-            <h3>Demo experience</h3>
-            <p class="muted small">This website is a prototype. Firebase Authentication can manage sign-in and account creation, but balances, transaction history, savings goals, cards, and transfer previews shown here are illustrative. No real bank account is opened and no money is transferred by this front-end demo.</p>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-row">
-        <a href="#home" class="brand"><span class="brand-mark">C</span><span>Cashflow<span>bank</span></span></a>
-        <div>© <span id="currentYear"></span> Cashflowbank. Prototype experience.</div>
-        <div class="footer-links"><a href="#about">About</a><a href="#support">Support</a><button class="text-button" data-auth="login">Log in</button></div>
-      </div>
-    </footer>
+    <div class="dash-content" id="dashboardContent"></div>
   </div>
+</div>
 
-  <!-- AUTH MODAL -->
-  <div class="modal-backdrop hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <div class="modal">
-      <button class="modal-close" id="closeAuth" aria-label="Close dialog">✕</button>
-      <a href="#home" class="brand"><span class="brand-mark">C</span><span>Cashflow<span>bank</span></span></a>
-      <h2 id="authTitle">Welcome back.</h2>
-      <p class="muted small" id="authSubtitle">Sign in to continue to your dashboard.</p>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  updateProfile, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-      <form id="loginForm">
-        <div class="field"><label for="loginEmail">Email address</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-        <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password" required minlength="6"></div>
-        <div class="form-message" id="loginMessage" aria-live="polite"></div>
-        <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Log in securely</button>
-        <p class="form-foot">New to Cashflowbank? <button type="button" class="text-button" data-auth="signup">Create an account</button></p>
-      </form>
+/*
+  IMPORTANT:
+  Replace this object with the exact configuration from
+  Firebase Console > Project settings > Your apps.
+  Enable Authentication > Sign-in method > Email/Password.
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyA2zXbQOJPrSO3hEdtJcORDX6XC_33QR68",
+  authDomain: "cashflowbanks-b65d6.firebaseapp.com",
+  projectId: "cashflowbanks-b65d6",
+  storageBucket: "cashflowbanks-b65d6.firebasestorage.app",
+  messagingSenderId: "255726757077",
+  appId: "1:255726757077:web:41a2db9f9cb32e5dc7ae5c"
+};
 
-      <form id="signupForm" class="hidden">
-        <div class="form-grid">
-          <div class="field full"><label for="signupName">Full name</label><input id="signupName" type="text" autocomplete="name" placeholder="Your full name" required maxlength="80"></div>
-          <div class="field full"><label for="signupEmail">Email address</label><input id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-          <div class="field"><label for="signupCountry">Country</label><select id="signupCountry" required><option value="">Select country</option><option>Nigeria</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Ghana</option><option>South Africa</option><option>Other</option></select></div>
-          <div class="field"><label for="signupAccountType">Account type</label><select id="signupAccountType" required><option value="">Choose type</option><option>Personal</option><option>Business</option></select></div>
-          <div class="field full"><label for="signupPassword">Password</label><input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters" required minlength="6"></div>
-          <div class="field full"><label for="signupConfirm">Confirm password</label><input id="signupConfirm" type="password" autocomplete="new-password" placeholder="Enter password again" required minlength="6"></div>
-        </div>
-        <p class="tiny muted">Country and account type are collected only in this prototype form; they are not saved to your Firebase profile.</p>
-        <div class="form-message" id="signupMessage" aria-live="polite"></div>
-        <button class="btn btn-primary btn-block" type="submit" id="signupSubmit">Create my account</button>
-        <p class="form-foot">Already have an account? <button type="button" class="text-button" data-auth="login">Log in</button></p>
-      </form>
-    </div>
-  </div>
+const $ = (selector, root=document) => root.querySelector(selector);
+const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+const publicSite = $("#publicSite");
+const publicHeader = $("#publicHeader");
+const dashboard = $("#dashboard");
+const authModal = $("#authModal");
+const authForm = $("#authForm");
+const authMessage = $("#authMessage");
+let auth = null;
+let firebaseReady = false;
+let authMode = "login";
+let currentUser = null;
+let activeView = "Dashboard";
 
-  <!-- SIGNED-IN DASHBOARD -->
-  <div id="dashboardPage" class="hidden">
-    <div class="dashboard-layout">
-      <aside class="sidebar">
-        <a href="#" class="brand" data-dashboard="overview"><span class="brand-mark">C</span><span>Cashflow<span>bank</span></span></a>
-        <div class="side-label">Workspace</div>
-        <nav class="side-nav" aria-label="Dashboard navigation">
-          <button class="side-link active" data-dashboard="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>Overview</button>
-          <button class="side-link" data-dashboard="transactions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="19" cy="17" r="2"/></svg>Transactions</button>
-          <button class="side-link" data-dashboard="cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>My cards</button>
-          <button class="side-link" data-dashboard="savings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M17 7.5C17 5 14.8 4 12 4S7 5.2 7 7.5 9 11 12 12s5 2.2 5 4.5S14.8 20 12 20s-5-1-5-3.5"/></svg>Savings goals</button>
-        </nav>
-        <div class="side-label">Account</div>
-        <nav class="side-nav">
-          <button class="side-link" data-dashboard="transfer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h15l-4-4M20 16H5l4 4"/></svg>Transfer preview</button>
-          <button class="side-link" data-dashboard="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.1 1.8-1.8 3.1-2.1-.6a8 8 0 0 1-1.6.9l-.5 2.2h-3.6l-.5-2.2a8 8 0 0 1-1.6-.9l-2.1.6-1.8-3.1L6.5 15a7 7 0 0 1 0-1.9l-1.1-1.8 1.8-3.1 2.1.6a8 8 0 0 1 1.6-.9l.5-2.2H15l.5 2.2a8 8 0 0 1 1.6.9l2.1-.6 1.8 3.1-1.1 1.8a7 7 0 0 1-.5 1.9Z" transform="translate(-1 -1) scale(1.08)"/></svg>Settings</button>
-        </nav>
-        <div class="sidebar-bottom">
-          <div class="demo-note"><strong class="lime">Prototype mode</strong><br>Balances and transactions are sample data. This dashboard does not move real money.</div>
-          <button class="side-link" id="sidebarSignOut" style="margin-top:13px"><span aria-hidden="true">↪</span> Sign out</button>
-        </div>
-      </aside>
+/* Demonstration data only. This is not a real account balance. */
+const DEMO_BALANCE = 24850.75;
+const demoTransactions = [
+  {name:"Salary payment",date:"Example incoming payment",amount:"+₦350,000.00",type:"in"},
+  {name:"Online purchase",date:"Example card transaction",amount:"−₦18,500.00",type:"out"},
+  {name:"Savings contribution",date:"Example savings activity",amount:"−₦25,000.00",type:"out"},
+  {name:"Client payment",date:"Example incoming payment",amount:"+₦85,000.00",type:"in"}
+];
 
-      <main class="dashboard-main">
-        <header class="dash-topbar">
-          <div><div class="tiny muted">YOUR FINANCIAL SPACE</div><h1 id="pageTitle">Overview</h1></div>
-          <div class="topbar-right">
-            <span class="pill pill-lime">DEMO ACCOUNT</span>
-            <div class="user-chip"><div class="user-avatar" id="topAvatar">C</div><div class="small"><strong id="topUserName">Account holder</strong><div class="tiny muted" id="topUserEmail">Signed in</div></div></div>
-          </div>
-        </header>
+function svgIcon(id, cls="icon"){
+  return `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"></use></svg>`;
+}
 
-        <div class="dash-content">
-          <!-- Overview -->
-          <section class="dash-section active" id="section-overview">
-            <div class="welcome-row">
-              <div>
-                <h2>Welcome back, <span class="lime" id="welcomeName">there</span> 👋</h2>
-                <p id="welcomeEmail">Your money overview at a glance.</p>
-                <div class="small muted" style="margin-top:5px">Member since <strong id="memberSince" class="lime">Loading...</strong></div>
-              </div>
-              <button class="btn btn-primary" data-dashboard="transfer">＋ New transfer preview</button>
-            </div>
+function escapeHTML(value=""){
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
 
-            <div class="dash-grid balance-grid">
-              <article class="dash-card balance-card primary">
-                <div class="card-label">Total balance <span class="pill pill-lime">DEMO</span></div>
-                <div class="balance-value">$24,680.50</div>
-                <div class="card-foot">Illustrative account balance</div>
-              </article>
-              <article class="dash-card balance-card">
-                <div class="card-label">Income this month <span class="green">↗</span></div>
-                <div class="balance-value">$5,420.00</div>
-                <div class="card-foot">Sample income figures</div>
-              </article>
-              <article class="dash-card balance-card">
-                <div class="card-label">Expenses this month <span>↘</span></div>
-                <div class="balance-value">$1,840.75</div>
-                <div class="card-foot">Sample spending figures</div>
-              </article>
-            </div>
+function setAuthMessage(message="", type=""){
+  authMessage.textContent = message;
+  authMessage.className = "auth-message" + (type ? " " + type : "");
+}
 
-            <div class="dash-grid dash-two-col">
-              <article class="dash-card">
-                <div class="card-heading">
-                  <div><h3>Money overview</h3><div class="tiny muted">Illustrative activity chart</div></div>
-                  <div class="chart-controls"><button class="active" data-range="week">Week</button><button data-range="month">Month</button><button data-range="year">Year</button></div>
-                </div>
-                <div class="chart-wrap">
-                  <svg id="dashboardChart" viewBox="0 0 600 220" role="img" aria-label="Illustrative balance activity chart">
-                    <defs><linearGradient id="dashFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c7ff5e" stop-opacity=".24"/><stop offset="1" stop-color="#c7ff5e" stop-opacity="0"/></linearGradient></defs>
-                    <g stroke="rgba(220,255,226,.08)" stroke-width="1"><path d="M30 30H585M30 75H585M30 120H585M30 165H585M30 205H585"/></g>
-                    <path id="chartArea" d="M30 168 C65 150 80 164 115 126 S170 142 210 103 S275 120 315 77 S370 106 405 62 S470 88 510 48 S555 55 585 25 L585 205H30Z" fill="url(#dashFill)"/>
-                    <path id="chartLine" d="M30 168 C65 150 80 164 115 126 S170 142 210 103 S275 120 315 77 S370 106 405 62 S470 88 510 48 S555 55 585 25" stroke="#c7ff5e" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <circle cx="585" cy="25" r="5" fill="#c7ff5e"/>
-                  </svg>
-                </div>
-                <div class="chart-labels"><span id="chartLabel1">Mon</span><span id="chartLabel2">Tue</span><span id="chartLabel3">Wed</span><span id="chartLabel4">Thu</span><span id="chartLabel5">Fri</span><span id="chartLabel6">Sat</span><span id="chartLabel7">Sun</span></div>
-                <p class="tiny muted">The chart is illustrative and is not connected to a bank account.</p>
-              </article>
+function setAuthMode(mode){
+  authMode = mode;
+  const signup = mode === "signup";
+  $("#authTitle").textContent = signup ? "Create your account" : "Welcome back";
+  $("#authSubtitle").textContent = signup ? "Get started with Cashflowbank." : "Sign in to your account.";
+  $("#nameField").classList.toggle("hidden", !signup);
+  $("#authName").required = signup;
+  $("#authPassword").autocomplete = signup ? "new-password" : "current-password";
+  $("#loginTab").classList.toggle("active", !signup);
+  $("#signupTab").classList.toggle("active", signup);
+  $("#authSubmit").innerHTML = (signup ? "Create account " : "Log in ") + '<svg><use href="#i-arrow"></use></svg>';
+  setAuthMessage("");
+}
 
-              <article class="dash-card">
-                <div class="card-heading"><h3>Quick actions</h3></div>
-                <div class="quick-grid">
-                  <button class="quick-action" data-dashboard="transfer"><span class="icon">↗</span>Transfer</button>
-                  <button class="quick-action" data-dashboard="transactions"><span class="icon">⇄</span>Activity</button>
-                  <button class="quick-action" data-dashboard="cards"><span class="icon">▤</span>Cards</button>
-                  <button class="quick-action" data-dashboard="savings"><span class="icon">✦</span>Save</button>
-                </div>
-                <div class="notice">These actions open demo views only. No payment or transfer will be sent.</div>
-              </article>
-            </div>
+function openAuth(mode="login"){
+  if(currentUser){showDashboard(currentUser);return;}
+  setAuthMode(mode);
+  authModal.classList.remove("hidden");
+  document.body.style.overflow="hidden";
+  setTimeout(()=>$("#authEmail").focus(),50);
+}
+function closeAuth(){
+  authModal.classList.add("hidden");
+  document.body.style.overflow="";
+}
 
-            <div class="dash-grid dash-two-col">
-              <article class="dash-card">
-                <div class="card-heading"><h3>Recent transactions</h3><button class="link-button" data-dashboard="transactions">View all ↗</button></div>
-                <div class="activity-list" id="recentActivity"></div>
-              </article>
-              <article class="dash-card">
-                <div class="card-heading"><h3>Savings goals</h3><button class="link-button" data-dashboard="savings">View goals</button></div>
-                <div class="goals">
-                  <div><div class="goal-top"><strong>Emergency fund</strong><span class="lime">$3,600 / $5,000</span></div><div class="progress"><span style="width:72%"></span></div></div>
-                  <div><div class="goal-top"><strong>Travel fund</strong><span class="lime">$1,200 / $3,000</span></div><div class="progress"><span style="width:40%"></span></div></div>
-                  <div><div class="goal-top"><strong>New laptop</strong><span class="lime">$840 / $1,400</span></div><div class="progress"><span style="width:60%"></span></div></div>
-                </div>
-                <p class="tiny muted" style="margin-bottom:0">Example goals only; not stored or funded.</p>
-              </article>
-            </div>
-          </section>
+$$("[data-auth]").forEach(button=>button.addEventListener("click",()=>openAuth(button.dataset.auth)));
+$("#authClose").addEventListener("click",closeAuth);
+authModal.addEventListener("click",event=>{if(event.target===authModal)closeAuth();});
+$("#loginTab").addEventListener("click",()=>setAuthMode("login"));
+$("#signupTab").addEventListener("click",()=>setAuthMode("signup"));
 
-          <!-- Transactions -->
-          <section class="dash-section" id="section-transactions">
-            <div class="welcome-row"><div><h2>Transactions</h2><p>Review and filter illustrative account activity.</p></div><span class="pill pill-lime">SAMPLE DATA</span></div>
-            <div class="dash-card">
-              <div class="toolbar">
-                <input class="control" id="transactionSearch" type="search" placeholder="Search transactions..." aria-label="Search transactions">
-                <select class="control" id="transactionFilter" aria-label="Filter transaction type"><option value="all">All transactions</option><option value="income">Money in</option><option value="expense">Money out</option></select>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Transaction</th><th>Date</th><th>Category</th><th>Status</th><th>Amount</th></tr></thead>
-                  <tbody id="transactionTableBody"></tbody>
-                </table>
-                <p class="muted small hidden" id="noTransactions">No matching transactions found.</p>
-              </div>
-            </div>
-            <p class="tiny muted">All listed transactions are fictional examples for the prototype.</p>
-          </section>
-
-          <!-- Cards -->
-          <section class="dash-section" id="section-cards">
-            <div class="welcome-row"><div><h2>My cards</h2><p>A visual preview of a future card-management feature.</p></div><span class="pill pill-lime">PREVIEW</span></div>
-            <div class="dash-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
-              <article class="account-card-visual">
-                <div style="display:flex;justify-content:space-between;align-items:center"><div class="brand"><span class="brand-mark">C</span><span>Cashflow<span>bank</span></span></div><span>◉</span></div>
-                <div class="card-number">•••• &nbsp; •••• &nbsp; •••• &nbsp; 2048</div>
-                <div class="card-bottom"><div><div class="tiny" style="opacity:.7">CARDHOLDER</div><strong id="cardHolderName">ACCOUNT HOLDER</strong></div><div><div class="tiny" style="opacity:.7">EXPIRES</div><strong>•• / ••</strong></div></div>
-              </article>
-              <article class="dash-card"><div class="icon">▤</div><h3>Card controls</h3><p class="muted small">Card lock, replacement, and card issuance are not connected in this prototype.</p><button class="btn btn-secondary btn-block" id="cardInfoButton">View card information</button><p class="tiny muted" id="cardInfoMessage" aria-live="polite"></p></article>
-            </div>
-          </section>
-
-          <!-- Savings -->
-          <section class="dash-section" id="section-savings">
-            <div class="welcome-row"><div><h2>Savings goals</h2><p>Example progress toward a few financial milestones.</p></div><span class="pill pill-lime">ILLUSTRATIVE</span></div>
-            <div class="dash-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
-              <article class="dash-card"><div class="icon">✦</div><h3>Emergency fund</h3><div class="balance-value">$3,600</div><p class="muted small">Example target: $5,000</p><div class="progress"><span style="width:72%"></span></div><p class="small lime">72% of target</p></article>
-              <article class="dash-card"><div class="icon">✈</div><h3>Travel fund</h3><div class="balance-value">$1,200</div><p class="muted small">Example target: $3,000</p><div class="progress"><span style="width:40%"></span></div><p class="small lime">40% of target</p></article>
-              <article class="dash-card"><div class="icon">⌘</div><h3>New laptop</h3><div class="balance-value">$840</div><p class="muted small">Example target: $1,400</p><div class="progress"><span style="width:60%"></span></div><p class="small lime">60% of target</p></article>
-            </div>
-            <div class="notice">These savings goals are sample display data. The website does not hold deposits or move money into savings.</div>
-          </section>
-
-          <!-- Transfer preview -->
-          <section class="dash-section" id="section-transfer">
-            <div class="welcome-row"><div><h2>Transfer preview</h2><p>Preview how a transfer form could work.</p></div><span class="pill pill-lime">NO MONEY MOVES</span></div>
-            <div class="dash-card" style="max-width:650px">
-              <div class="notice">This is a non-functional demonstration. Do not enter sensitive banking information. Submitting this form only displays a local preview; it does not send money.</div>
-              <form id="transferForm">
-                <div class="field"><label for="recipientName">Recipient name</label><input id="recipientName" type="text" placeholder="Example recipient" required maxlength="80"></div>
-                <div class="field"><label for="recipientRef">Demo recipient reference</label><input id="recipientRef" type="text" placeholder="e.g. recipient-001" required maxlength="50"></div>
-                <div class="field"><label for="transferAmount">Amount (USD)</label><input id="transferAmount" type="number" min="1" max="100000" step=".01" placeholder="0.00" required></div>
-                <div class="field"><label for="transferNote">Note (optional)</label><input id="transferNote" type="text" maxlength="120" placeholder="What's it for?"></div>
-                <button class="btn btn-primary btn-block" type="submit">Preview transfer</button>
-              </form>
-              <div id="transferResult" class="notice hidden" aria-live="polite"></div>
-            </div>
-          </section>
-
-          <!-- Settings -->
-          <section class="dash-section" id="section-settings">
-            <div class="welcome-row"><div><h2>Account settings</h2><p>View the profile details available from Firebase Authentication.</p></div></div>
-            <div class="settings-grid">
-              <article class="dash-card">
-                <div class="card-heading"><h3>Your profile</h3><span class="pill pill-green">SIGNED IN</span></div>
-                <div class="profile-row"><span class="muted">Full name</span><strong id="settingsName">Loading...</strong></div>
-                <div class="profile-row"><span class="muted">Email address</span><strong id="settingsEmail">Loading...</strong></div>
-                <div class="profile-row"><span class="muted">Account created</span><strong id="accountCreatedDate">Loading...</strong></div>
-                <div class="profile-row"><span class="muted">Authentication</span><strong>Firebase</strong></div>
-                <div class="profile-row"><span class="muted">Currency display</span><strong>USD ($)</strong></div>
-                <p class="tiny muted">The creation date comes from Firebase Authentication account metadata.</p>
-              </article>
-              <article class="dash-card">
-                <div class="card-heading"><h3>Security & prototype</h3></div>
-                <p class="muted small">Your sign-in session is managed by Firebase Authentication. Do not use this demo as a production banking service.</p>
-                <div class="notice">Never share your password or authentication codes. This prototype does not store real bank credentials.</div>
-                <button class="btn btn-secondary btn-block" id="settingsSignOut">Sign out</button>
-              </article>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
-
-    <nav class="mobile-nav" aria-label="Mobile dashboard navigation">
-      <button class="active" data-dashboard="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>Home</button>
-      <button data-dashboard="transactions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Activity</button>
-      <button data-dashboard="transfer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h15l-4-4M20 16H5l4 4"/></svg>Transfer</button>
-      <button data-dashboard="savings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M17 7.5C17 5 14.8 4 12 4S7 5.2 7 7.5 9 11 12 12s5 2.2 5 4.5S14.8 20 12 20s-5-1-5-3.5"/></svg>Savings</button>
-      <button data-dashboard="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 13.5 21 15l-2 3-2.5-.5-2 1.5-.5 2h-4l-.5-2-2-1.5L5 18l-2-3 2-1.5v-3L3 9l2-3 2.5.5 2-1.5.5-2h4l.5 2 2 1.5L19 6l2 3-2 1.5z" transform="translate(0 1) scale(.95)"/></svg>Settings</button>
-    </nav>
-  </div>
-
-  <script>
-    // Footer year
-    document.getElementById("currentYear").textContent = new Date().getFullYear();
-
-    // Public navigation mobile menu
-    const menuToggle = document.getElementById("menuToggle");
-    const publicNav = document.getElementById("publicNav");
-    menuToggle.addEventListener("click", () => {
-      const isOpen = publicNav.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
+async function initFirebase(){
+  try{
+    const app=initializeApp(firebaseConfig);
+    auth=getAuth(app);
+    firebaseReady=true;
+    onAuthStateChanged(auth,user=>{
+      currentUser=user;
+      if(user) showDashboard(user);
+      else showPublicSite();
     });
-    publicNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-      publicNav.classList.remove("open");
-      menuToggle.setAttribute("aria-expanded", "false");
-    }));
+  }catch(error){
+    console.error("Firebase initialisation failed:",error);
+    firebaseReady=false;
+    setAuthMessage("Firebase is not configured correctly. Check the configuration in this file.","error");
+  }
+}
 
-    // Animated counting numbers: start when the stats enter the viewport.
-    (function initCounters() {
-      const counters = document.querySelectorAll("[data-count]");
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      function animateCounter(element) {
-        if (element.dataset.counted === "true") return;
-        element.dataset.counted = "true";
-        const target = Number(element.dataset.count);
-        const suffix = element.dataset.suffix || "";
-        if (reduceMotion) {
-          element.textContent = target.toLocaleString() + suffix;
-          return;
-        }
-        const duration = 1400;
-        const start = performance.now();
-
-        function tick(now) {
-          const progress = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const value = Math.round(target * eased);
-          element.textContent = value.toLocaleString() + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      }
-
-      if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              animateCounter(entry.target);
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.4 });
-        counters.forEach(counter => observer.observe(counter));
-      } else {
-        counters.forEach(animateCounter);
-      }
-    })();
-
-    // Authentication modal
-    const authModal = document.getElementById("authModal");
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-    const authTitle = document.getElementById("authTitle");
-    const authSubtitle = document.getElementById("authSubtitle");
-    let firebaseReady = false;
-    let auth = null;
-    let firebaseInitError = "";
-
-    function setFormMessage(id, message, isError = true) {
-      const element = document.getElementById(id);
-      element.textContent = message;
-      element.style.color = isError ? "var(--danger)" : "var(--teal)";
-    }
-
-    function openAuth(mode = "login") {
-      authModal.classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-      const isSignup = mode === "signup";
-      loginForm.classList.toggle("hidden", isSignup);
-      signupForm.classList.toggle("hidden", !isSignup);
-      authTitle.textContent = isSignup ? "Create your account." : "Welcome back.";
-      authSubtitle.textContent = isSignup
-        ? "Start your Cashflowbank demo experience."
-        : "Sign in to continue to your dashboard.";
-      setFormMessage("loginMessage", "");
-      setFormMessage("signupMessage", "");
-      setTimeout(() => document.getElementById(isSignup ? "signupName" : "loginEmail").focus(), 60);
-    }
-
-    function closeAuth() {
-      authModal.classList.add("hidden");
-      document.body.style.overflow = "";
-    }
-
-    document.querySelectorAll("[data-auth]").forEach(button => {
-      button.addEventListener("click", () => openAuth(button.dataset.auth));
-    });
-    document.getElementById("closeAuth").addEventListener("click", closeAuth);
-    authModal.addEventListener("click", event => {
-      if (event.target === authModal) closeAuth();
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && !authModal.classList.contains("hidden")) closeAuth();
-    });
-
-    // Firebase configuration supplied for this project.
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2zXbQOJPrSO3hEdJtCORDX6XC_33QR68",
-      authDomain: "cashflowbanks-b65d6.firebaseapp.com",
-      projectId: "cashflowbanks-b65d6",
-      storageBucket: "cashflowbanks-b65d6.firebasestorage.app",
-      messagingSenderId: "255726757077",
-      appId: "1:255726757077:web:41a2db9f9cb32e5dc7ae5c"
-    };
-
-    let createUserWithEmailAndPassword;
-    let signInWithEmailAndPassword;
-    let updateProfile;
-    let signOut;
-    let onAuthStateChanged;
-
-    async function initializeFirebase() {
-      try {
-        const appModule = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js");
-        const authModule = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js");
-        const app = appModule.initializeApp(firebaseConfig);
-        auth = authModule.getAuth(app);
-        createUserWithEmailAndPassword = authModule.createUserWithEmailAndPassword;
-        signInWithEmailAndPassword = authModule.signInWithEmailAndPassword;
-        updateProfile = authModule.updateProfile;
-        signOut = authModule.signOut;
-        onAuthStateChanged = authModule.onAuthStateChanged;
-        firebaseReady = true;
-
-        onAuthStateChanged(auth, user => {
-          if (user) {
-            showDashboard(user);
-          } else {
-            showLanding();
-          }
-        });
-      } catch (error) {
-        firebaseInitError = error?.message || "Firebase could not be initialized.";
-        console.error("Firebase initialization failed:", error);
-        setFormMessage("loginMessage", "Firebase could not initialize. Check your internet connection and Firebase configuration.");
-        setFormMessage("signupMessage", "Firebase could not initialize. Check your internet connection and Firebase configuration.");
-      }
-    }
-
-    loginForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      if (!firebaseReady) {
-        setFormMessage("loginMessage", firebaseInitError
-          ? "Firebase is unavailable. Check the configuration, network, and browser console."
-          : "Connecting to Firebase. Please try again in a moment.");
-        return;
-      }
-
-      const submit = document.getElementById("loginSubmit");
-      submit.disabled = true;
-      submit.textContent = "Signing in...";
-      setFormMessage("loginMessage", "");
-
-      try {
-        await signInWithEmailAndPassword(
-          auth,
-          document.getElementById("loginEmail").value.trim(),
-          document.getElementById("loginPassword").value
-        );
-        closeAuth();
-      } catch (error) {
-        console.error(error);
-        const messages = {
-          "auth/invalid-credential": "The email or password is incorrect.",
-          "auth/user-not-found": "No account was found for this email.",
-          "auth/wrong-password": "The email or password is incorrect.",
-          "auth/too-many-requests": "Too many attempts. Please try again later.",
-          "auth/invalid-email": "Enter a valid email address."
-        };
-        setFormMessage("loginMessage", messages[error.code] || error.message || "Could not sign in. Please try again.");
-      } finally {
-        submit.disabled = false;
-        submit.textContent = "Log in securely";
-      }
-    });
-
-    signupForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      const name = document.getElementById("signupName").value.trim();
-      const email = document.getElementById("signupEmail").value.trim();
-      const password = document.getElementById("signupPassword").value;
-      const confirmPassword = document.getElementById("signupConfirm").value;
-
-      if (password !== confirmPassword) {
-        setFormMessage("signupMessage", "Your passwords do not match.");
-        return;
-      }
-      if (name.length < 2) {
-        setFormMessage("signupMessage", "Please enter your full name.");
-        return;
-      }
-      if (!firebaseReady) {
-        setFormMessage("signupMessage", firebaseInitError
-          ? "Firebase is unavailable. Check the configuration, network, and browser console."
-          : "Connecting to Firebase. Please try again in a moment.");
-        return;
-      }
-
-      const submit = document.getElementById("signupSubmit");
-      submit.disabled = true;
-      submit.textContent = "Creating account...";
-      setFormMessage("signupMessage", "");
-
-      try {
-        const credential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(credential.user, { displayName: name });
-        closeAuth();
-        showDashboard(credential.user);
-      } catch (error) {
-        console.error(error);
-        const messages = {
-          "auth/email-already-in-use": "An account already exists for this email. Try logging in.",
-          "auth/invalid-email": "Enter a valid email address.",
-          "auth/weak-password": "Choose a stronger password with at least 6 characters.",
-          "auth/operation-not-allowed": "Email/password sign-in is not enabled in Firebase Authentication."
-        };
-        setFormMessage("signupMessage", messages[error.code] || error.message || "Could not create the account. Please try again.");
-      } finally {
-        submit.disabled = false;
-        submit.textContent = "Create my account";
-      }
-    });
-
-    // Demo transaction data only. Replace with a trusted backend before production.
-    const demoTransactions = [
-      { name: "Monthly salary", category: "Income", date: "2026-10-12", amount: 4200, type: "income", status: "Completed", symbol: "↙" },
-      { name: "Grocery market", category: "Shopping", date: "2026-10-11", amount: -86.45, type: "expense", status: "Completed", symbol: "⌂" },
-      { name: "Online subscription", category: "Subscription", date: "2026-10-10", amount: -14.99, type: "expense", status: "Completed", symbol: "↗" },
-      { name: "Freelance payment", category: "Income", date: "2026-10-08", amount: 650, type: "income", status: "Completed", symbol: "↙" },
-      { name: "Electricity bill", category: "Utilities", date: "2026-10-07", amount: -74.20, type: "expense", status: "Completed", symbol: "ϟ" },
-      { name: "Restaurant", category: "Food", date: "2026-10-05", amount: -42.80, type: "expense", status: "Completed", symbol: "⌂" },
-      { name: "Refund received", category: "Refund", date: "2026-10-03", amount: 35.50, type: "income", status: "Completed", symbol: "↙" },
-      { name: "Phone bill", category: "Utilities", date: "2026-10-01", amount: -58.00, type: "expense", status: "Pending", symbol: "⌕" },
-      { name: "Project payment", category: "Income", date: "2026-09-28", amount: 535, type: "income", status: "Completed", symbol: "↙" },
-      { name: "Transport", category: "Travel", date: "2026-09-25", amount: -23.60, type: "expense", status: "Completed", symbol: "↗" }
-    ];
-
-    const money = amount => new Intl.NumberFormat("en-US", {
-      style: "currency", currency: "USD", minimumFractionDigits: 2
-    }).format(amount);
-
-    const dateFormat = value => {
-      const date = new Date(value + "T12:00:00");
-      return Number.isNaN(date.getTime())
-        ? value
-        : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    };
-
-    function renderRecentActivity() {
-      const target = document.getElementById("recentActivity");
-      target.innerHTML = "";
-      demoTransactions.slice(0, 5).forEach(transaction => {
-        const row = document.createElement("div");
-        row.className = "activity-item";
-        const left = document.createElement("div");
-        left.className = "activity-left";
-        const icon = document.createElement("div");
-        icon.className = "icon";
-        icon.textContent = transaction.symbol;
-        const info = document.createElement("div");
-        const name = document.createElement("div");
-        name.className = "activity-name";
-        name.textContent = transaction.name;
-        const meta = document.createElement("div");
-        meta.className = "activity-meta";
-        meta.textContent = `${transaction.category} · ${dateFormat(transaction.date)}`;
-        info.append(name, meta);
-        left.append(icon, info);
-        const amount = document.createElement("div");
-        amount.className = "activity-amount " + (transaction.type === "income" ? "income" : "expense");
-        amount.textContent = `${transaction.amount > 0 ? "+" : "−"}${money(Math.abs(transaction.amount))}`;
-        row.append(left, amount);
-        target.appendChild(row);
-      });
-    }
-
-    function renderTransactions() {
-      const body = document.getElementById("transactionTableBody");
-      const query = document.getElementById("transactionSearch").value.trim().toLowerCase();
-      const filter = document.getElementById("transactionFilter").value;
-
-      const filtered = demoTransactions.filter(transaction => {
-        const matchesQuery = [transaction.name, transaction.category, transaction.status, transaction.date]
-          .some(value => value.toLowerCase().includes(query));
-        const matchesFilter = filter === "all" || transaction.type === filter;
-        return matchesQuery && matchesFilter;
-      });
-
-      body.innerHTML = "";
-      filtered.forEach(transaction => {
-        const row = document.createElement("tr");
-        const values = [
-          transaction.name,
-          dateFormat(transaction.date),
-          transaction.category
-        ];
-        values.forEach(value => {
-          const cell = document.createElement("td");
-          cell.textContent = value;
-          row.appendChild(cell);
-        });
-
-        const statusCell = document.createElement("td");
-        const status = document.createElement("span");
-        status.className = "status " + transaction.status.toLowerCase();
-        status.textContent = transaction.status;
-        statusCell.appendChild(status);
-        row.appendChild(statusCell);
-
-        const amountCell = document.createElement("td");
-        amountCell.className = transaction.type === "income" ? "income" : "";
-        amountCell.style.fontWeight = "800";
-        amountCell.textContent = `${transaction.amount > 0 ? "+" : "−"}${money(Math.abs(transaction.amount))}`;
-        row.appendChild(amountCell);
-        body.appendChild(row);
-      });
-
-      document.getElementById("noTransactions").classList.toggle("hidden", filtered.length !== 0);
-    }
-
-    document.getElementById("transactionSearch").addEventListener("input", renderTransactions);
-    document.getElementById("transactionFilter").addEventListener("change", renderTransactions);
-
-    // Dashboard sections and navigation
-    const sectionTitles = {
-      overview: "Overview",
-      transactions: "Transactions",
-      cards: "My cards",
-      savings: "Savings goals",
-      transfer: "Transfer preview",
-      settings: "Account settings"
-    };
-
-    function navigateDashboard(section) {
-      if (!sectionTitles[section]) section = "overview";
-      document.querySelectorAll(".dash-section").forEach(element => {
-        element.classList.toggle("active", element.id === `section-${section}`);
-      });
-      document.querySelectorAll("[data-dashboard]").forEach(element => {
-        element.classList.toggle("active", element.dataset.dashboard === section && (
-          element.classList.contains("side-link") || element.closest(".mobile-nav")
-        ));
-      });
-      document.getElementById("pageTitle").textContent = sectionTitles[section];
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    document.querySelectorAll("[data-dashboard]").forEach(element => {
-      element.addEventListener("click", event => {
-        event.preventDefault();
-        navigateDashboard(element.dataset.dashboard);
-      });
-    });
-
-    // Chart controls
-    const chartRanges = {
-      week: {
-        line: "M30 168 C65 150 80 164 115 126 S170 142 210 103 S275 120 315 77 S370 106 405 62 S470 88 510 48 S555 55 585 25",
-        labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
-      },
-      month: {
-        line: "M30 160 C65 174 80 130 115 145 S170 95 210 120 S275 78 315 100 S370 55 405 77 S470 40 510 58 S555 25 585 35",
-        labels: ["1st","5th","10th","15th","20th","25th","30th"]
-      },
-      year: {
-        line: "M30 170 C65 145 80 155 115 130 S170 160 210 110 S275 125 315 90 S370 95 405 60 S470 75 510 38 S555 45 585 20",
-        labels: ["Jan","Mar","May","Jul","Sep","Nov","Dec"]
-      }
-    };
-
-    document.querySelectorAll("[data-range]").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll("[data-range]").forEach(item => item.classList.toggle("active", item === button));
-        const data = chartRanges[button.dataset.range];
-        document.getElementById("chartLine").setAttribute("d", data.line);
-        document.getElementById("chartArea").setAttribute("d", data.line + " L585 205H30Z");
-        data.labels.forEach((label, index) => {
-          document.getElementById(`chartLabel${index + 1}`).textContent = label;
-        });
-      });
-    });
-
-    // Transfer form intentionally previews only and never sends money.
-    document.getElementById("transferForm").addEventListener("submit", event => {
-      event.preventDefault();
-      const name = document.getElementById("recipientName").value.trim();
-      const reference = document.getElementById("recipientRef").value.trim();
-      const amount = Number(document.getElementById("transferAmount").value);
-      const note = document.getElementById("transferNote").value.trim();
-      const result = document.getElementById("transferResult");
-
-      if (!name || !reference || !Number.isFinite(amount) || amount <= 0) {
-        result.textContent = "Please enter a valid recipient, reference, and amount.";
-        result.classList.remove("hidden");
-        return;
-      }
-
-      result.textContent = `DEMO PREVIEW ONLY — ${money(amount)} to ${name} (reference: ${reference}). ${note ? "Note: " + note + ". " : ""}No money was sent.`;
-      result.classList.remove("hidden");
-    });
-
-    document.getElementById("cardInfoButton").addEventListener("click", () => {
-      document.getElementById("cardInfoMessage").textContent =
-        "This is a visual demo card. No payment card has been issued or connected.";
-    });
-
-    // Populate user information. Firebase metadata provides the real account creation date.
-    function showDashboard(user) {
-      const displayName = user.displayName || (user.email ? user.email.split("@")[0] : "Account holder");
-      const email = user.email || "No email available";
-      const initial = displayName.trim().charAt(0).toUpperCase() || "C";
-
-      document.getElementById("landingPage").classList.add("hidden");
-      document.getElementById("dashboardPage").classList.remove("hidden");
-      document.body.classList.add("dashboard-mode");
+authForm.addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(!firebaseReady || !auth){
+    setAuthMessage("Firebase is unavailable. Check your Firebase configuration and reload the page.","error");
+    return;
+  }
+  const email=$("#authEmail").value.trim();
+  const password=$("#authPassword").value;
+  const name=$("#authName").value.trim();
+  const submit=$("#authSubmit");
+  submit.disabled=true;
+  setAuthMessage("Please wait…");
+  try{
+    if(authMode==="signup"){
+      const credential=await createUserWithEmailAndPassword(auth,email,password);
+      if(name) await updateProfile(credential.user,{displayName:name});
+      currentUser=credential.user;
       closeAuth();
-
-      document.getElementById("welcomeName").textContent = displayName;
-      document.getElementById("welcomeEmail").textContent = email;
-      document.getElementById("topUserName").textContent = displayName;
-      document.getElementById("topUserEmail").textContent = email;
-      document.getElementById("topAvatar").textContent = initial;
-      document.getElementById("cardHolderName").textContent = displayName.toUpperCase();
-      document.getElementById("settingsName").textContent = displayName;
-      document.getElementById("settingsEmail").textContent = email;
-
-      const createdAt = user.metadata?.creationTime;
-      let formattedCreatedAt = "Unavailable";
-      if (createdAt) {
-        const createdDate = new Date(createdAt);
-        if (!Number.isNaN(createdDate.getTime())) {
-          formattedCreatedAt = createdDate.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-          });
-        }
-      }
-      document.getElementById("accountCreatedDate").textContent = formattedCreatedAt;
-      document.getElementById("memberSince").textContent = formattedCreatedAt;
-
-      renderRecentActivity();
-      renderTransactions();
-      navigateDashboard("overview");
+      showDashboard(credential.user);
+    }else{
+      const credential=await signInWithEmailAndPassword(auth,email,password);
+      currentUser=credential.user;
+      closeAuth();
+      showDashboard(credential.user);
     }
+  }catch(error){
+    console.error("Authentication error:",error);
+    const messages={
+      "auth/invalid-email":"Please enter a valid email address.",
+      "auth/invalid-credential":"Email or password is incorrect.",
+      "auth/email-already-in-use":"An account already exists for this email.",
+      "auth/weak-password":"Choose a stronger password.",
+      "auth/operation-not-allowed":"Enable Email/Password authentication in Firebase Console.",
+      "auth/api-key-not-valid.-please-pass-a-valid-api-key.":"The Firebase API key is invalid. Copy the exact configuration from Firebase Console.",
+      "auth/network-request-failed":"Network error. Check your internet connection."
+    };
+    setAuthMessage(messages[error.code] || error.message || "Authentication failed.","error");
+  }finally{
+    submit.disabled=false;
+  }
+});
 
-    function showLanding() {
-      document.getElementById("dashboardPage").classList.add("hidden");
-      document.getElementById("landingPage").classList.remove("hidden");
-      document.body.classList.remove("dashboard-mode");
-    }
+function showPublicSite(){
+  dashboard.classList.add("hidden");
+  publicSite.classList.remove("hidden");
+  publicHeader.classList.remove("hidden");
+  closeAuth();
+}
 
-    async function handleSignOut() {
-      if (!firebaseReady || !auth) {
-        showLanding();
-        return;
+function showDashboard(user){
+  if(!user)return;
+  currentUser=user;
+  publicSite.classList.add("hidden");
+  publicHeader.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  closeAuth();
+  const name=user.displayName || (user.email ? user.email.split("@")[0] : "User");
+  $("#userName").textContent=name;
+  $("#userEmail").textContent=user.email || "";
+  $("#userAvatar").textContent=(name.trim()[0]||"U").toUpperCase();
+  renderView(activeView);
+}
+
+$("#signOutButton").addEventListener("click",async()=>{
+  if(auth){
+    try{await signOut(auth);}catch(error){console.error(error);alert("Unable to sign out. Please try again.");}
+  }else showPublicSite();
+});
+
+$("#menuToggle").addEventListener("click",()=>{
+  const nav=$("#navLinks");
+  nav.classList.toggle("open");
+  $("#menuToggle").setAttribute("aria-expanded",String(nav.classList.contains("open")));
+});
+$("#navLinks").addEventListener("click",event=>{
+  if(event.target.closest("a")){
+    $("#navLinks").classList.remove("open");
+    $("#menuToggle").setAttribute("aria-expanded","false");
+  }
+});
+$("#dashMenuBtn").addEventListener("click",()=>$("#sidebar").classList.add("open"));
+$("#sidebarClose").addEventListener("click",()=>$("#sidebar").classList.remove("open"));
+
+$$("[data-view]").forEach(button=>button.addEventListener("click",event=>{
+  event.preventDefault();
+  if(!currentUser){openAuth("login");return;}
+  activeView=button.dataset.view;
+  $("#sidebar").classList.remove("open");
+  renderView(activeView);
+}));
+
+function balanceMarkup(){
+  return `
+  <div class="balance-card">
+    <div class="balance-label">${svgIcon("wallet")} Available demo balance</div>
+    <div class="balance-amount">₦<span id="accountBalance" data-balance-target="${DEMO_BALANCE}">0.00</span></div>
+    <div class="small muted">Illustrative balance only · Not connected to real funds</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:23px">
+      <button class="btn btn-primary" data-view="Transfer">${svgIcon("transfer")} Transfer preview</button>
+      <button class="btn btn-secondary" data-view="Account Summary">${svgIcon("chart")} Account summary</button>
+    </div>
+  </div>`;
+}
+
+function transactionRows(){
+  return demoTransactions.map(tx=>`
+    <div class="transaction">
+      <div class="tx-left">
+        <div class="tx-icon">${svgIcon(tx.type==="in"?"deposit":"card")}</div>
+        <div><div class="tx-name">${escapeHTML(tx.name)}</div><div class="tx-date">${escapeHTML(tx.date)}</div></div>
+      </div>
+      <div class="tx-amount" style="color:${tx.type==="in"?"var(--green)":"var(--text)"}">${escapeHTML(tx.amount)}</div>
+    </div>`).join("");
+}
+
+function dashboardHome(){
+  return `
+    <div style="margin-bottom:23px">
+      <p class="eyebrow">YOUR FINANCIAL SPACE</p>
+      <h1 class="dash-title">Welcome, ${escapeHTML(currentUser?.displayName || currentUser?.email?.split("@")[0] || "User")}.</h1>
+      <p class="muted">Review your account interface and explore your available dashboard tools.</p>
+    </div>
+    ${balanceMarkup()}
+    <div class="dash-panel" style="margin-top:18px">
+      <h3>Quick actions</h3>
+      <div class="quick-actions">
+        <button class="quick-action" data-view="Transfer">${svgIcon("transfer")}<span>Transfer</span></button>
+        <button class="quick-action" data-view="Deposit Check">${svgIcon("deposit")}<span>Deposit check</span></button>
+        <button class="quick-action" data-view="Deposit Crypto">${svgIcon("globe")}<span>Crypto deposit</span></button>
+        <button class="quick-action" data-view="Support">${svgIcon("help")}<span>Get support</span></button>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-panel"><h3>Recent demo activity</h3>${transactionRows()}</div>
+      <div class="dash-panel">
+        <h3>Account overview</h3>
+        <div class="transaction"><span class="muted">Account holder</span><strong>${escapeHTML(currentUser?.displayName || "User")}</strong></div>
+        <div class="transaction"><span class="muted">Account access</span><span class="status-pill">Signed in</span></div>
+        <div class="transaction"><span class="muted">Financial connection</span><span class="status-pill">Demo only</span></div>
+        <p class="small muted">These sample entries are not real transactions. Connect a secure backend before displaying actual account information.</p>
+      </div>
+    </div>`;
+}
+
+function summaryView(){
+  return `
+    <h1 class="dash-title">Account Summary</h1>
+    <p class="muted">A summary of the demonstration account.</p>
+    ${balanceMarkup()}
+    <div class="dash-panel view-panel">
+      <h3>Example transaction history</h3>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>Description</th><th>Activity type</th><th>Amount</th><th>Record status</th></tr></thead>
+        <tbody>${demoTransactions.map(t=>`<tr><td>${escapeHTML(t.name)}</td><td>${t.type==="in"?"Incoming example":"Outgoing example"}</td><td>${escapeHTML(t.amount)}</td><td><span class="status-pill">Sample</span></td></tr>`).join("")}</tbody>
+      </table></div>
+    </div>`;
+}
+
+function previewView(title,description,fields=[],buttonLabel="Submit preview"){
+  return `
+    <h1 class="dash-title">${escapeHTML(title)}</h1>
+    <p class="muted">${escapeHTML(description)}</p>
+    <div class="dash-panel view-panel">
+      <div class="notice">Preview mode only. Submitting this form will not move money, create a deposit, or send a financial request to a provider.</div>
+      <form id="previewForm" style="margin-top:20px">
+        ${fields.map(field=>`
+          <div class="field"><label for="field-${field.id}">${escapeHTML(field.label)}</label>
+          ${field.type==="textarea"
+            ? `<textarea id="field-${field.id}" name="${field.id}" rows="4" ${field.required?"required":""} placeholder="${escapeHTML(field.placeholder||"")}"></textarea>`
+            : `<input id="field-${field.id}" name="${field.id}" type="${field.type||"text"}" ${field.required?"required":""} placeholder="${escapeHTML(field.placeholder||"")}">`}
+          </div>`).join("")}
+        <button class="btn btn-primary" type="submit">${escapeHTML(buttonLabel)} <svg><use href="#i-arrow"></use></svg></button>
+        <p class="auth-message" id="previewMessage" aria-live="polite"></p>
+      </form>
+    </div>`;
+}
+
+function profileView(){
+  return `
+    <h1 class="dash-title">Profile</h1><p class="muted">Your signed-in Firebase identity information.</p>
+    <div class="dash-panel view-panel">
+      <div class="field"><label>Display name</label><input readonly value="${escapeHTML(currentUser?.displayName||"Not provided")}"></div>
+      <div class="field"><label>Email address</label><input readonly value="${escapeHTML(currentUser?.email||"Not available")}"></div>
+      <div class="field"><label>Authentication provider</label><input readonly value="Firebase Authentication"></div>
+      <p class="small muted">For security, this screen does not display passwords, secret tokens, or sensitive authentication data.</p>
+    </div>`;
+}
+
+function statusView(){
+  return `
+    <h1 class="dash-title">Account Status</h1><p class="muted">The current status of this demo interface.</p>
+    <div class="dash-panel view-panel">
+      <div class="transaction"><span>Authentication</span><span class="status-pill">Signed in</span></div>
+      <div class="transaction"><span>Demo dashboard</span><span class="status-pill">Available</span></div>
+      <div class="transaction"><span>Live banking connection</span><span class="status-pill">Not connected</span></div>
+      <div class="transaction"><span>Payment processing</span><span class="status-pill">Not configured</span></div>
+      <div class="transaction"><span>Identity verification</span><span class="status-pill">Not configured</span></div>
+    </div>`;
+}
+
+function settingsView(){
+  return `
+    <h1 class="dash-title">Settings</h1><p class="muted">Manage basic interface preferences.</p>
+    <div class="dash-panel view-panel">
+      <div class="transaction"><div><strong>Appearance</strong><div class="small muted">Dark emerald theme</div></div><span class="status-pill">Enabled</span></div>
+      <div class="transaction"><div><strong>Currency display</strong><div class="small muted">Nigerian naira in sample data</div></div><span class="status-pill">NGN</span></div>
+      <p class="small muted">These are interface settings. No financial records or bank settings are changed here.</p>
+    </div>`;
+}
+
+function renderView(view){
+  activeView=view;
+  $("#pageTitle").textContent=view;
+  $$(".side-link[data-view]").forEach(button=>button.classList.toggle("active",button.dataset.view===view));
+  const content=$("#dashboardContent");
+  switch(view){
+    case "Dashboard": content.innerHTML=dashboardHome(); break;
+    case "Account Summary": content.innerHTML=summaryView(); break;
+    case "Transfer":
+      content.innerHTML=previewView("Transfer preview","Review the kind of information a transfer form may request.",[
+        {id:"recipient",label:"Recipient name",required:true,placeholder:"Recipient's name"},
+        {id:"destination",label:"Recipient account or destination",required:true,placeholder:"Enter destination"},
+        {id:"amount",label:"Amount",type:"number",required:true,placeholder:"Enter an amount"},
+        {id:"note",label:"Payment note",placeholder:"Optional description"}
+      ],"Review transfer preview"); break;
+    case "Deposit Check":
+      content.innerHTML=previewView("Deposit Check","A real check deposit requires an eligible banking partner and verification process.",[
+        {id:"bank",label:"Issuing bank",required:true,placeholder:"Bank name"},
+        {id:"amount",label:"Check amount",type:"number",required:true,placeholder:"Enter an amount"},
+        {id:"reference",label:"Reference note",placeholder:"Optional reference"}
+      ],"Review deposit preview"); break;
+    case "Deposit Crypto":
+      content.innerHTML=previewView("Deposit Crypto","A real cryptocurrency deposit requires a secure wallet integration and network verification.",[
+        {id:"asset",label:"Asset or cryptocurrency",required:true,placeholder:"Asset name"},
+        {id:"network",label:"Blockchain network",required:true,placeholder:"Network name"},
+        {id:"reference",label:"Transaction reference",placeholder:"Optional transaction ID"}
+      ],"Review crypto deposit"); break;
+    case "Loans":
+      content.innerHTML=previewView("Loan enquiry","This preview does not constitute a credit application or loan offer.",[
+        {id:"purpose",label:"Loan purpose",required:true,placeholder:"What is the loan for?"},
+        {id:"amount",label:"Requested amount",type:"number",required:true,placeholder:"Enter an amount"},
+        {id:"details",label:"Additional information",type:"textarea",placeholder:"Provide non-sensitive details"}
+      ],"Review enquiry"); break;
+    case "Cards":
+      content.innerHTML=`<h1 class="dash-title">Cards</h1><p class="muted">Card service information.</p><div class="dash-panel view-panel"><div class="notice">No real payment card is issued by this demonstration website.</div><h3 style="margin-top:22px">Card management preview</h3><p class="prose">A production card service requires an authorised issuer or card-processing provider. Do not enter real card numbers, security codes, or PINs into this demo.</p></div>`;break;
+    case "KYC Verification":
+      content.innerHTML=`<h1 class="dash-title">KYC Verification</h1><p class="muted">Identity-verification information.</p><div class="dash-panel view-panel"><div class="notice">Identity verification is not configured. Do not upload or enter sensitive identity documents into this preview.</div><p class="prose">A production KYC workflow should use a suitable identity-verification provider, informed consent, secure document handling, access restrictions, and applicable legal and regulatory procedures.</p></div>`;break;
+    case "Profile": content.innerHTML=profileView();break;
+    case "Settings": content.innerHTML=settingsView();break;
+    case "Account Status": content.innerHTML=statusView();break;
+    case "Support":
+      content.innerHTML=previewView("Customer Support","Describe your question without including passwords, payment credentials, or sensitive identity details.",[
+        {id:"subject",label:"Subject",required:true,placeholder:"How can we help?"},
+        {id:"message",label:"Message",type:"textarea",required:true,placeholder:"Describe your question"}
+      ],"Prepare support message");break;
+    default: content.innerHTML=dashboardHome();
+  }
+  // Only the account balance gets an animation within the dashboard.
+  const balance=$("#accountBalance");
+  if(balance) animateBalance(balance,Number(balance.dataset.balanceTarget)||0);
+  content.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{
+    activeView=button.dataset.view;renderView(activeView);
+  }));
+  const form=$("#previewForm");
+  if(form) form.addEventListener("submit",event=>{
+    event.preventDefault();
+    const message=$("#previewMessage");
+    message.textContent="Preview submitted locally. No financial operation or external request was performed.";
+    message.className="auth-message success";
+  });
+}
+
+function animateBalance(element,target){
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const duration=reduced?0:1300;
+  const startTime=performance.now();
+  function frame(now){
+    const progress=duration===0?1:Math.min((now-startTime)/duration,1);
+    const eased=1-Math.pow(1-progress,4);
+    const value=target*eased;
+    element.textContent=value.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+    if(progress<1)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* Animate hero statistics only when they enter view. */
+const numberFormatters={
+  compact:value=>value>=1000000?(value/1000000).toLocaleString("en-US",{maximumFractionDigits:0})+"M":value.toLocaleString("en-US"),
+  integer:value=>Math.round(value).toLocaleString("en-US")
+};
+function animateCounter(element){
+  const target=Number(element.dataset.target);
+  const formatter=numberFormatters[element.dataset.format]||numberFormatters.integer;
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const duration=reduced?0:1700;
+  const start=performance.now();
+  function step(now){
+    const progress=duration===0?1:Math.min((now-start)/duration,1);
+    const eased=1-Math.pow(1-progress,4);
+    element.textContent=formatter(target*eased);
+    if(progress<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const heroCounters=$$(".count-up");
+if("IntersectionObserver" in window){
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
       }
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error("Sign-out failed:", error);
-        alert("Could not sign out right now. Please try again.");
-      }
-    }
+    });
+  },{threshold:.5});
+  heroCounters.forEach(counter=>observer.observe(counter));
+}else{
+  heroCounters.forEach(animateCounter);
+}
 
-    document.getElementById("sidebarSignOut").addEventListener("click", handleSignOut);
-    document.getElementById("settingsSignOut").addEventListener("click", handleSignOut);
+$("#footerYear").textContent=String(new Date().getFullYear());
+initFirebase();
+</script>
 
-    // Start Firebase. Hosting this page over HTTPS or localhost is recommended for module imports.
-    initializeFirebase();
-  </script>
+<!-- Tawk.to live chat widget -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+(function(){
+ var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+ s1.async=true;
+ s1.src="https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
+ s1.charset="UTF-8";
+ s1.setAttribute("crossorigin","*");
+ s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
 </body>
 </html>
