@@ -1,822 +1,293 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#092e27">
-<title>Cashflowbank | Online Banking</title>
-<style>
-:root {
-  --green:#0c493b;
-  --green2:#14634d;
-  --lime:#c6f36a;
-  --ink:#172a27;
-  --muted:#74817d;
-  --bg:#f3f6f4;
-  --white:#fff;
-  --border:#e1e8e4;
-  --red:#c94d52;
-  --radius:18px;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink)}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
-.hidden{display:none!important}
-.muted{color:var(--muted)}
-.small{font-size:12px}
-.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:850;color:var(--green)}
-.brand-mark{display:grid;place-items:center;width:38px;height:38px;background:var(--lime);color:var(--green);border-radius:12px;font-weight:950}
-.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:750}
-.btn-primary{background:var(--green);color:white}
-.btn-primary:hover{background:var(--green2)}
-.btn-light{background:#edf3ef;color:var(--green)}
-.btn-danger{background:#fff0f0;color:#a92c32}
-.btn-outline{border:1px solid var(--border);background:white;color:var(--green)}
-input,select{width:100%;padding:12px 13px;border:1px solid #dbe4df;border-radius:10px;background:#fff;color:var(--ink);outline:none}
-input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #14634d16}
-input[readonly]{background:#f1f4f2;color:#53635c}
-label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.field{margin-bottom:15px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-.msg{font-size:13px;line-height:1.5;margin:12px 0;white-space:pre-wrap}
-.msg.error{color:#b32e38}.msg.success{color:#176f4b}
-.auth-shell{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:white}
-.auth-hero{padding:clamp(28px,6vw,80px);background:linear-gradient(145deg,#082e27,#145b47);color:white;display:flex;flex-direction:column;justify-content:space-between;min-height:100vh}
-.auth-hero h1{font-size:clamp(38px,5vw,65px);line-height:1.03;letter-spacing:-2px;max-width:560px;margin:45px 0 18px}
-.auth-hero p{color:#d1e5dc;line-height:1.8;max-width:430px}
-.auth-hero .brand{color:white}
-.auth-note{color:#c5d9d0;font-size:12px}
-.auth-side{display:flex;align-items:center;justify-content:center;padding:28px}
-.auth-card{width:min(100%,450px)}
-.auth-card h2{font-size:30px;margin:0 0 8px;letter-spacing:-.8px}
-.auth-tabs{display:flex;gap:8px;background:#f1f5f2;padding:5px;border-radius:12px;margin:25px 0}
-.auth-tabs button{flex:1;border:0;padding:11px;border-radius:9px;background:transparent;color:var(--muted);font-weight:750}
-.auth-tabs button.active{background:white;color:var(--green);box-shadow:0 2px 7px #172a270d}
-.topbar{height:76px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
-.top-actions{display:flex;align-items:center;gap:12px}
-.avatar{width:39px;height:39px;border-radius:50%;background:#e5efdf;color:var(--green);display:grid;place-items:center;font-weight:850;overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.app-layout{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:calc(100vh - 76px)}
-.sidebar{background:#fff;border-right:1px solid var(--border);padding:22px 15px;display:flex;flex-direction:column;gap:6px}
-.nav-label{font-size:10px;letter-spacing:1.5px;font-weight:850;color:#9aa59f;padding:16px 12px 8px}
-.nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:12px;border:0;border-radius:10px;background:transparent;text-align:left;color:#61716a;font-weight:650}
-.nav-btn:hover,.nav-btn.active{background:#eaf4ed;color:var(--green)}
-.nav-btn .nav-icon{width:22px;text-align:center;font-size:17px}
-.sidebar-bottom{margin-top:auto;padding:12px 8px;color:var(--muted);font-size:11px;line-height:1.6}
-.main{padding:clamp(18px,3vw,34px);min-width:0;max-width:1500px;width:100%;margin:0 auto}
-.welcome{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:25px}
-.welcome h1{font-size:clamp(24px,3vw,32px);letter-spacing:-1px;margin:0 0 7px}
-.welcome p{margin:0;color:var(--muted);font-size:14px}
-.panel{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:22px;min-width:0}
-.panel h3{margin:0 0 6px;font-size:16px}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
-.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.75fr);gap:20px}
-.balance-card{background:linear-gradient(125deg,#082e27,#145c49);border-radius:var(--radius);padding:25px;color:white;position:relative;overflow:hidden;min-height:225px}
-.balance-card:after{content:"";position:absolute;width:230px;height:230px;border:1px solid #ffffff17;border-radius:50%;right:-60px;top:-95px;box-shadow:0 0 0 25px #ffffff08,0 0 0 55px #ffffff05}
-.balance-card .label{color:#c2d9ce;font-size:13px}
-.balance-amount{font-size:clamp(30px,4vw,43px);letter-spacing:-1.5px;font-weight:800;margin:14px 0 25px;overflow-wrap:anywhere}
-.balance-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:#d0e4da}
-.balance-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
-.balance-actions button{border:1px solid #ffffff35;background:#ffffff12;color:white;border-radius:9px;padding:10px 13px;font-weight:700}
-.balance-actions button:hover{background:#ffffff25}
-.account-card{background:#f7faf8;border:1px solid var(--border);border-radius:15px;padding:18px}
-.account-card .card-chip{width:36px;height:27px;border-radius:6px;background:linear-gradient(135deg,#d9e4ba,#a8bf79);margin-bottom:20px}
-.account-number{font-size:18px;font-weight:800;letter-spacing:2px;margin:8px 0 18px}
-.card-bottom{display:flex;justify-content:space-between;gap:10px;font-size:12px}
-.card-bottom strong{display:block;margin-top:5px;font-size:13px}
-.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
-.stat{padding:18px;background:white;border:1px solid var(--border);border-radius:15px}
-.stat .stat-icon{width:35px;height:35px;display:grid;place-items:center;background:#edf5e9;color:var(--green);border-radius:10px;margin-bottom:15px}
-.stat .stat-value{font-size:20px;font-weight:800;margin:5px 0}
-.stat .stat-name{font-size:12px;color:var(--muted)}
-.section{margin-top:22px}
-.table-wrap{overflow:auto}
-table{border-collapse:collapse;width:100%;min-width:530px}
-th,td{text-align:left;padding:14px 12px;border-bottom:1px solid #edf1ee;font-size:13px}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:#8b9891;font-weight:800}
-td{color:#34463f}
-.amount-positive{color:#21845a;font-weight:800}.amount-negative{color:var(--red);font-weight:800}
-.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:800;background:#e9f6ed;color:#247449}
-.status.pending{background:#fff4d9;color:#956500}.status.suspended{background:#ffeded;color:#b32e38}
-.profile-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.65fr);gap:20px}
-.profile-photo{width:86px;height:86px;border-radius:50%;background:#eaf4ed;display:grid;place-items:center;overflow:hidden;color:var(--green);font-size:27px;font-weight:850;margin-bottom:12px}
-.profile-photo img{width:100%;height:100%;object-fit:cover}
-.readonly-note{padding:13px 14px;background:#f0f6ee;border-radius:10px;color:#45614f;font-size:12px;line-height:1.6;margin-bottom:18px}
-.page-title{margin:0 0 7px;font-size:27px;letter-spacing:-.7px}
-.page-subtitle{margin:0 0 23px;color:var(--muted);font-size:14px}
-.admin-banner{background:#fff6de;border:1px solid #f0dfaa;padding:13px 15px;border-radius:11px;font-size:12px;line-height:1.6;margin-bottom:18px;color:#705415}
-.admin-user-list{display:grid;gap:9px}
-.admin-user{border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.admin-user strong{display:block;font-size:14px}.admin-user small{color:var(--muted);overflow-wrap:anywhere}
-.mobile-menu{display:none}
-footer{padding:25px;text-align:center;color:#8b9791;font-size:11px}
-@media(max-width:900px){
- .app-layout{grid-template-columns:1fr}
- .sidebar{display:none;position:fixed;top:76px;bottom:0;left:0;width:260px;z-index:20;box-shadow:10px 0 30px #0001;overflow:auto}
- .sidebar.open{display:flex}
- .mobile-menu{display:inline-flex}
- .dashboard-grid,.profile-layout{grid-template-columns:1fr}
- .auth-shell{grid-template-columns:1fr}
- .auth-hero{min-height:auto;padding:28px}
- .auth-hero h1{font-size:42px;margin:35px 0 12px}
- .auth-note{margin-top:25px}
-}
-@media(max-width:560px){
- .topbar{padding:0 14px;height:66px}
- .sidebar{top:66px}
- .brand{font-size:17px}.brand-mark{width:33px;height:33px}
- .app-layout{min-height:calc(100vh - 66px)}
- .main{padding:17px 13px}
- .welcome{align-items:flex-start}
- .stats-grid{grid-template-columns:1fr}
- .stat{display:flex;align-items:center;gap:14px}
- .stat .stat-icon{margin:0;flex-shrink:0}
- .stat .stat-value{font-size:18px}
- .panel{padding:16px}
- .balance-card{padding:20px}
- .balance-amount{font-size:31px}
- .form-grid{grid-template-columns:1fr}
- .auth-side{padding:25px 18px}
- .top-actions .top-email{display:none}
- .welcome .btn{padding:10px;font-size:12px}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071811">
+  <meta name="description" content="Cashflowbank — secure, modern digital banking built around you.">
+  <title>Cashflowbank — Smarter Digital Banking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#10271b;--deep:#071811;--green:#17452f;--mint:#68d9a6;--lime:#b9ff85;--paper:#f7faf6;--muted:#617268;--line:#e3ece5;--white:#fff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;font-family:"DM Sans",sans-serif;color:var(--ink);background:#fff;line-height:1.6}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}img{display:block;max-width:100%}.container{width:min(1180px,calc(100% - 40px));margin-inline:auto}.section{padding:100px 0}.eyebrow{color:#4c9d7b;font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}.section-heading{text-align:center;max-width:700px;margin:0 auto 48px}.section-heading h2{font-family:Manrope,sans-serif;font-size:clamp(2rem,4vw,3.1rem);line-height:1.12;letter-spacing:-.045em;margin:12px 0}.section-heading p{color:var(--muted);margin:0}.btn{border:0;border-radius:100px;padding:13px 20px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px)}.btn-primary{color:#092318;background:linear-gradient(110deg,#d0ffa8,#66dca0);box-shadow:0 9px 28px #8dff9b26}.btn-outline{border:1px solid #c8ddd0;background:transparent;color:var(--ink)}.icon{width:22px;height:22px;display:inline-block;vertical-align:middle}
+    /* CASHFLOWBANK — PREMIUM GLASS HERO */
+    .hero-premium{--hero-lime:#b9ff85;--hero-mint:#6ce0ae;position:relative;isolation:isolate;display:flex;flex-direction:column;width:min(1440px,calc(100% - 36px));min-height:790px;padding:22px clamp(20px,5vw,68px) 24px;margin:22px auto;overflow:hidden;border:1px solid #d5f4c9;border-radius:34px;background:radial-gradient(ellipse at 50% 80%,#b7ff8530,transparent 42%),radial-gradient(ellipse at 5% 100%,#68d99a30,transparent 40%),linear-gradient(125deg,#071811 0%,#143e2b 48%,#071710 100%);box-shadow:0 24px 90px #00160e45}
+    .hero-premium .hero-glass-lines{position:absolute;z-index:-1;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0,transparent 29px,#d8ffd508 30px,#d8ffd508 58px,#00000028 59px,transparent 83px);opacity:.95}
+    .hero-premium:before,.hero-premium:after{position:absolute;content:"";pointer-events:none;z-index:-1}.hero-premium:before{width:520px;height:520px;right:-180px;bottom:-220px;border-radius:50%;background:#7effa020;filter:blur(70px)}.hero-premium:after{width:320px;height:420px;left:-200px;top:20%;background:#a8ff8b12;filter:blur(70px)}
+    .hero-premium .hero-nav{display:flex;width:100%;align-items:center;justify-content:space-between;gap:24px;position:relative;z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.15rem}.hero-premium .brand{color:#f4fff6;white-space:nowrap}.hero-logo{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,#d0ffab,#5dd9a0);color:#0b281a;font-size:24px}.hero-premium .hero-nav nav{display:flex;gap:clamp(13px,2.4vw,32px);font-size:.84rem;color:#e2f3e6}.hero-premium .hero-nav nav a{transition:color .2s}.hero-premium .hero-nav nav a:hover{color:var(--hero-lime)}.hero-premium .hero-contact{background:linear-gradient(100deg,#c7ffa1,#59cf99);border:0;color:#092318;white-space:nowrap}
+    .hero-premium .hero-content{width:100%;max-width:850px;margin:42px auto 0;text-align:center;position:relative;z-index:2}.hero-premium .hero-pill{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;color:#e3f8e7;background:#ffffff0d;border:1px solid #ffffff28;border-radius:100px;font-size:.78rem}.live-dot{width:7px;height:7px;border-radius:50%;background:var(--hero-lime);box-shadow:0 0 12px #b9ff85}.hero-premium .hero-content h1{margin:23px 0 16px;color:#f5fff5;font-size:clamp(2.5rem,5.2vw,4.8rem);font-weight:850;letter-spacing:-.065em;line-height:1.06}.hero-premium .hero-content h1 span{color:#d0ffa9}.hero-premium .hero-content>p{max-width:570px;margin:0 auto;color:#d1e5d5;font-size:.98rem;line-height:1.8}.hero-premium .hero-start{display:inline-flex;align-items:center;gap:24px;margin-top:23px;padding:7px 8px 7px 21px;border:1px solid #d8ffb0;border-radius:100px;background:linear-gradient(110deg,#d0ffa8,#66dca0);color:#082317;font-weight:800;box-shadow:0 8px 30px #8dff9b22;transition:transform .2s,box-shadow .2s}.hero-premium .hero-start:hover{transform:translateY(-3px);box-shadow:0 12px 35px #8dff9b35}.hero-premium .hero-start>span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#0b2a1c;color:white;font-size:1.2rem}
+    .hero-social-proof{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:23px;text-align:left}.avatar-stack{display:flex;padding-left:5px}.avatar-stack span{width:31px;height:31px;display:grid;place-items:center;margin-left:-5px;border:2px solid #143c2a;border-radius:50%;background:linear-gradient(135deg,#d4ffa9,#4fbf91);color:#092719;font-size:.72rem;font-weight:900}.avatar-stack span:nth-child(2){background:linear-gradient(135deg,#ffe3b4,#b7e5a1)}.avatar-stack span:nth-child(3){background:linear-gradient(135deg,#b9e9dc,#6abda1)}.avatar-stack span:nth-child(4){background:#214b36;color:white}.hero-social-proof strong,.hero-social-proof small{display:block}.hero-social-proof strong{font-size:.8rem;color:#f5fff5}.hero-social-proof small{margin-top:3px;color:#b4d0bb;font-size:.7rem}
+    .hero-premium .hero-visual{width:100%;max-width:840px;min-height:340px;margin:22px auto 0;position:relative;display:flex;align-items:flex-end;justify-content:center}.hero-orbit{position:absolute;left:50%;bottom:-95px;border:1px solid #d8ffb01c;border-radius:50%;transform:translateX(-50%);pointer-events:none}.orbit-one{width:550px;height:350px}.orbit-two{width:430px;height:290px;bottom:-75px}.phone-shell{position:relative;z-index:2;width:248px;height:425px;padding:7px;border:2px solid #c5e9ca;border-radius:36px 36px 0 0;border-bottom:0;background:linear-gradient(145deg,#b8d6c1,#253c30 35%,#10251a);box-shadow:0 0 0 5px #ffffff09,0 20px 70px #0009;animation:cfb-phone-float 5s ease-in-out infinite}.phone-screen{height:100%;position:relative;overflow:hidden;border-radius:29px 29px 0 0;background:radial-gradient(ellipse at top right,#1c6240,transparent 65%),#091d14;padding:14px 13px 0;color:#f5fff6}.phone-status{display:flex;justify-content:space-between;font-size:.65rem;font-weight:800}.phone-greeting{display:flex;align-items:center;gap:8px;margin-top:22px}.phone-avatar{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#d3ffa7,#5fc79a);color:#092719;font-weight:900}.phone-greeting small,.phone-greeting strong{display:block}.phone-greeting small{color:#a9c9b2;font-size:.62rem}.phone-greeting strong{margin-top:2px;font-size:.75rem}.phone-notification{margin-left:auto;font-size:1.2rem}.phone-balance{padding:17px 13px;margin-top:17px;border:1px solid #ffffff1a;border-radius:16px;background:linear-gradient(135deg,#17432c,#0c2b1b)}.phone-balance>small{color:#b5d4bc;font-size:.63rem}.phone-balance>div{margin:8px 0;font-size:1.4rem;font-weight:900;letter-spacing:-.055em}.phone-balance>div span{font-size:.8rem;color:#bdd8c3}.phone-balance .balance-status{color:#c5ff99}.phone-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:13px 0 20px}.phone-actions>div{display:grid;justify-items:center;gap:6px}.phone-actions>div>span{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:#ffffff0d;border:1px solid #ffffff15;color:#c7ff9f;font-size:1.1rem}.phone-actions small{color:#b6cbb9;font-size:.57rem}.phone-activity{padding:13px 10px;border:1px solid #ffffff14;border-radius:15px;background:#ffffff05}.activity-heading{display:flex;justify-content:space-between;margin-bottom:11px}.activity-heading strong{font-size:.72rem}.activity-heading small{color:#b9ff85;font-size:.62rem}.phone-transaction{display:flex;align-items:center;gap:7px;padding:9px 0;border-top:1px solid #ffffff10}.transaction-symbol{display:grid;place-items:center;width:29px;height:29px;flex-shrink:0;border-radius:10px;background:#ffffff0d;color:#c7ff9f}.phone-transaction div{min-width:0}.phone-transaction div strong,.phone-transaction div small{display:block}.phone-transaction div strong{font-size:.61rem;white-space:nowrap}.phone-transaction div small{margin-top:3px;color:#9cb8a3;font-size:.54rem}.phone-transaction b{margin-left:auto;white-space:nowrap;color:#c5ff99;font-size:.59rem}.phone-transaction b.spent{color:#f5d0a4}.phone-bottom{display:flex;justify-content:space-around;position:absolute;bottom:0;left:0;width:100%;padding:12px 3px 13px;background:#0b251a;border-top:1px solid #ffffff12}.phone-bottom span{display:grid;justify-items:center;gap:3px;color:#c3ff9b;font-size:.85rem}.phone-bottom small{color:#a9c4af;font-size:.52rem}
+    .float-card{position:absolute;z-index:3;width:220px;padding:17px;border:1px solid #ffffff42;border-radius:19px;background:linear-gradient(145deg,#ffffff20,#ffffff08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 15px 40px #0003}.float-left{left:0;top:75px;animation:cfb-float-left 5s ease-in-out infinite}.float-right{right:0;top:100px;animation:cfb-float-right 5.5s ease-in-out infinite}.float-card-label{display:flex;align-items:center;gap:8px;color:#d6ead9;font-size:.7rem}.mini-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#c4ff9d20;color:#c9ff9f;font-size:1rem}.float-card>strong,.float-card>small{display:block}.float-card>strong{margin-top:16px;font-size:1.05rem;color:#f5fff6}.float-card>small{margin-top:7px;color:#c2d8c7;font-size:.68rem;line-height:1.5}.mini-bars{display:flex;align-items:flex-end;gap:6px;height:42px;margin-top:15px}.mini-bars i{flex:1;height:45%;border-radius:5px 5px 0 0;background:linear-gradient(#c8ff9e,#59c994)}.mini-bars i:nth-child(2){height:75%}.mini-bars i:nth-child(3){height:55%}.mini-bars i:nth-child(4){height:90%}.mini-bars i:nth-child(5){height:65%}.mini-bars i:nth-child(6){height:100%}.mini-bars i:nth-child(7){height:80%}.float-progress{height:6px;overflow:hidden;margin-top:17px;border-radius:99px;background:#ffffff1a}.float-progress span{display:block;width:76%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#c7ff9e,#5bd4a0)}.payment-toast{position:absolute;z-index:4;right:12%;bottom:22px;display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid #ffffff25;border-radius:15px;background:#e7ffe9;color:#123723;box-shadow:0 10px 30px #0004;animation:cfb-float-right 4s ease-in-out infinite}.payment-toast>span{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#b9ff85;font-weight:900}.payment-toast strong,.payment-toast small{display:block}.payment-toast strong{font-size:.73rem}.payment-toast small{margin-top:3px;font-size:.62rem}.hero-bottom-note{display:flex;justify-content:space-between;gap:14px;margin-top:auto;padding-top:20px;color:#b4d2bb;font-size:.67rem;letter-spacing:.08em}
+    @keyframes cfb-phone-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes cfb-float-left{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(-1deg)}}@keyframes cfb-float-right{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(10px) rotate(1deg)}}
+    @media(min-width:1100px){.hero-premium{min-height:900px}.hero-premium .hero-content{margin-top:55px}.hero-premium .hero-visual{margin-top:25px;min-height:370px}.phone-shell{width:260px;height:440px}}
+    @media(max-width:800px){.hero-premium{min-height:auto;padding:19px 20px 22px;border-radius:25px}.hero-premium .hero-nav nav{display:none}.hero-premium .hero-content{margin-top:55px}.hero-premium .hero-content h1{font-size:clamp(2.35rem,8vw,3.6rem)}.hero-premium .hero-content>p{font-size:.9rem}.hero-premium .hero-visual{min-height:360px;margin-top:35px}.phone-shell{width:220px;height:390px}.float-card{width:165px;padding:12px}.float-left{left:-4px;top:65px}.float-right{right:-4px;top:105px}.float-card>strong{font-size:.83rem}.float-card>small{font-size:.61rem}.payment-toast{right:2%;bottom:10px;padding:9px 12px}.orbit-one{width:410px;height:280px}.orbit-two{width:320px;height:230px}}
+    @media(max-width:480px){.hero-premium{width:calc(100% - 16px);margin:8px auto;padding:17px 15px 18px}.hero-premium .hero-contact{padding:10px 13px;font-size:.75rem}.hero-premium .hero-content{margin-top:46px}.hero-premium .hero-content h1{font-size:clamp(2.05rem,8.8vw,2.8rem);letter-spacing:-.06em}.hero-premium .hero-pill{font-size:.68rem}.hero-premium .hero-visual{min-height:340px;margin-top:28px}.phone-shell{width:194px;height:355px;border-radius:29px 29px 0 0;padding:5px}.phone-screen{padding:11px 9px 0;border-radius:24px 24px 0 0}.phone-greeting{margin-top:15px}.phone-balance{padding:12px 10px;margin-top:12px}.phone-balance>div{font-size:1.16rem}.phone-actions{margin:10px 0 13px;gap:4px}.phone-actions>div>span{width:32px;height:32px}.phone-transaction{gap:5px;padding:7px 0}.phone-transaction div strong{font-size:.55rem}.phone-transaction b{font-size:.52rem}.float-card{width:126px;padding:9px;border-radius:13px}.float-card-label{font-size:.58rem;gap:5px}.mini-icon{width:23px;height:23px}.float-card>strong{font-size:.72rem;margin-top:10px}.float-card>small{font-size:.55rem}.float-left{top:60px;left:-5px}.float-right{top:105px;right:-5px}.mini-bars{height:26px;gap:3px}.payment-toast{bottom:6px;right:0;gap:6px}.payment-toast>span{width:23px;height:23px}.payment-toast strong{font-size:.62rem}.payment-toast small{font-size:.54rem}.hero-bottom-note{font-size:.55rem}}
+    @media(prefers-reduced-motion:reduce){.hero-premium *, .hero-premium *:before,.hero-premium *:after{animation:none!important;transition:none!important}}
+    /* Remaining landing page */
+    .trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:28px 0;border-bottom:1px solid var(--line);border-top:1px solid var(--line)}.trust-item{text-align:center}.trust-item strong{display:block;font:800 clamp(1.5rem,3vw,2.2rem) Manrope;color:#163d2b}.trust-item span{color:var(--muted);font-size:.85rem}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}.about-photos{display:grid;grid-template-columns:1fr 1fr;gap:14px}.about-photos img{height:220px;width:100%;object-fit:cover;border-radius:20px}.about-photos img:first-child{grid-column:span 2;height:300px}.about-copy h2{font:800 clamp(2rem,4vw,3rem)/1.12 Manrope;letter-spacing:-.045em;margin:12px 0 18px}.about-copy p{color:var(--muted)}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}.metrics strong{display:block;font-size:1.45rem}.metrics small{color:var(--muted);font-size:.75rem}
+    .services{background:#f7faf8}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.service-card{background:#fff;padding:30px;border:1px solid #edf2ed;border-radius:22px;box-shadow:0 12px 35px #173c2510;transition:transform .2s,box-shadow .2s}.service-card:hover{transform:translateY(-5px);box-shadow:0 20px 45px #173c2518}.service-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:#e8f8ec;color:#328867;margin-bottom:20px}.service-card h3{margin:0 0 10px}.service-card p{color:var(--muted);font-size:.92rem}.service-card a{display:inline-flex;align-items:center;gap:8px;border:1px solid #75b99a;border-radius:99px;padding:7px 12px;font-size:.82rem;font-weight:700}
+    .feature-band{background:#0a2c1f;color:#f3fff5;overflow:hidden}.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}.feature-grid h2{font:800 clamp(2rem,4vw,3.2rem)/1.1 Manrope;letter-spacing:-.05em}.feature-grid p{color:#c1d8c8}.feature-list{display:grid;gap:15px;margin:25px 0}.feature-list div{display:flex;gap:12px;align-items:center}.check{display:grid;place-items:center;width:27px;height:27px;flex-shrink:0;border-radius:50%;background:#b9ff8520;color:#b9ff85}.feature-card{padding:28px;border:1px solid #ffffff28;border-radius:24px;background:linear-gradient(145deg,#ffffff15,#ffffff05);box-shadow:0 20px 60px #0002}.feature-card h3{margin-top:0}.feature-row{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid #ffffff17;color:#d8e9dc}.feature-row strong{color:#c8ff9e}
+    .testimonials{background:linear-gradient(#f9fbf9,#fff)}.testimonial-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.testimonial-card{overflow:hidden;border:1px solid #edf1ed;border-radius:18px;background:#fff;box-shadow:0 12px 28px #142d1b0d}.testimonial-card img{width:100%;height:150px;object-fit:cover}.testimonial-body{padding:17px}.testimonial-body p{font-size:.82rem;color:#647168}.reviewer{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.74rem;font-weight:800}.stars{color:#55a88b;letter-spacing:2px;white-space:nowrap}
+    .cta{margin:0 auto 40px;width:min(1440px,calc(100% - 36px));padding:80px 24px;border-radius:30px;text-align:center;color:#f4fff5;background:radial-gradient(ellipse at right bottom,#16765355,transparent 40%),#043d31}.cta h2{font:800 clamp(2rem,4vw,3rem) Manrope;margin:0 0 8px}.cta p{color:#c8e2d3;margin:0 0 25px}
+    footer{padding:55px 0 30px;background:#062d24;color:#d5e8dc}.footer-grid{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:45px}.footer-links{display:grid;gap:12px;font-size:.9rem;color:#c4d9cb}.footer-links a:hover{color:#b9ff85}.subscribe{display:flex;gap:8px;margin-top:12px}.subscribe input{min-width:0;flex:1;padding:12px;border-radius:8px;border:1px solid #ffffff35;background:#ffffff0d;color:white}.subscribe button{border-radius:8px;background:#61c99d;color:#062b1f;border:0;padding:0 15px;font-weight:800}.footer-bottom{display:flex;justify-content:space-between;gap:15px;border-top:1px solid #ffffff1a;margin-top:40px;padding-top:20px;color:#a9c8b6;font-size:.8rem}
+    /* Authentication / app dialogs */
+    .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:#03130edb;backdrop-filter:blur(8px);overflow:auto}.modal.open{display:flex}.modal-card{width:min(560px,100%);max-height:94vh;overflow:auto;padding:28px;border-radius:24px;background:#fff;box-shadow:0 30px 100px #0006}.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:start;margin-bottom:20px}.modal-head h2{margin:0;font:800 1.65rem Manrope}.modal-head p{margin:6px 0 0;color:var(--muted);font-size:.9rem}.close-modal{width:36px;height:36px;border:0;border-radius:50%;background:#eef4ef;font-size:1.2rem}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;padding:5px;background:#edf4ee;border-radius:12px;margin-bottom:20px}.auth-tabs button{border:0;border-radius:9px;padding:11px;background:transparent;color:#52655a;font-weight:800}.auth-tabs button.active{background:#fff;color:#143e2b;box-shadow:0 3px 10px #10271b10}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.82rem;font-weight:800}.field input,.field select{width:100%;min-height:45px;border:1px solid #dce7de;border-radius:10px;padding:10px 12px;background:#fff;color:#183225;outline:none}.field input:focus,.field select:focus{border-color:#55ad83;box-shadow:0 0 0 3px #55ad831e}.form-note{color:#68786d;font-size:.78rem;margin:12px 0}.form-error{color:#b42318;font-size:.85rem;min-height:1.2em}.form-success{color:#167344;font-size:.85rem;min-height:1.2em}.full-btn{width:100%;margin-top:8px}.dashboard{display:none;min-height:100vh;background:#f4f8f4}.dashboard.active{display:block}.dash-nav{display:flex;justify-content:space-between;align-items:center;padding:17px max(20px,calc((100% - 1180px)/2));background:#092a1e;color:#fff}.dash-layout{width:min(1180px,calc(100% - 36px));margin:28px auto;display:grid;grid-template-columns:220px 1fr;gap:24px}.dash-sidebar,.dash-main-card{background:#fff;border:1px solid #e3ece5;border-radius:18px;padding:22px}.dash-sidebar{height:max-content}.dash-sidebar button{display:block;width:100%;text-align:left;border:0;border-radius:9px;padding:12px;background:transparent;color:#4b6254;margin:4px 0}.dash-sidebar button.active{background:#e9f8ed;color:#17452f;font-weight:800}.dash-main h1{font:800 1.8rem Manrope;margin:0}.dash-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:20px}.balance-panel{padding:25px;border-radius:18px;color:#f2fff4;background:linear-gradient(125deg,#0b3525,#1b6542);margin-bottom:20px}.balance-panel small{color:#c1deca}.balance-panel h2{font:800 2.3rem Manrope;margin:7px 0}.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}.stat-card{padding:18px;background:#fff;border:1px solid #e3ece5;border-radius:14px}.stat-card small{color:#6c7c70}.stat-card strong{display:block;font-size:1.25rem;margin-top:6px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:520px}th,td{text-align:left;padding:13px;border-bottom:1px solid #edf2ed;font-size:.85rem}th{color:#6b7b70;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}.positive{color:#16804b}.negative{color:#b45332}.notice{padding:12px;border-radius:10px;background:#fff6dc;color:#75551a;font-size:.83rem;margin:12px 0}
+    @media(max-width:850px){.section{padding:75px 0}.about-grid,.feature-grid{grid-template-columns:1fr;gap:35px}.service-grid{grid-template-columns:repeat(2,1fr)}.testimonial-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}.footer-grid>div:last-child{grid-column:1/-1}.dash-layout{grid-template-columns:1fr}.dash-sidebar{display:flex;gap:5px;overflow:auto}.dash-sidebar button{white-space:nowrap;width:auto}.dash-stats{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.container{width:calc(100% - 30px)}.trust-strip{grid-template-columns:1fr 1fr;gap:22px}.service-grid,.testimonial-grid{grid-template-columns:1fr}.testimonial-card img{height:210px}.about-photos img{height:155px}.about-photos img:first-child{height:220px}.metrics{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr;gap:28px}.footer-grid>div:last-child{grid-column:auto}.footer-bottom{flex-direction:column}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.modal-card{padding:20px}.dash-top{align-items:flex-start;flex-direction:column}.dash-stats{grid-template-columns:1fr}.dash-main-card{padding:16px}}
+  </style>
 </head>
 <body>
-
-<!-- Authentication -->
-<section id="authScreen" class="auth-shell">
-  <div class="auth-hero">
-    <div class="brand"><span class="brand-mark">C</span> Cashflowbank</div>
-    <div>
-      <span class="status">Banking, made clearer</span>
-      <h1>Your money.<br>Your next move.</h1>
-      <p>Manage your account details, review your activity and keep track of your financial information from one simple dashboard.</p>
-    </div>
-    <div class="auth-note">Secure account access · Profile privacy · Account information at a glance</div>
-  </div>
-  <div class="auth-side">
-    <div class="auth-card">
-      <h2 id="authTitle">Welcome back</h2>
-      <p class="muted" id="authSubtitle">Sign in to continue to your dashboard.</p>
-      <div class="auth-tabs">
-        <button id="loginTab" class="active" type="button">Sign in</button>
-        <button id="signupTab" type="button">Create account</button>
+  <main id="landing">
+    <section class="hero-premium" id="home">
+      <div class="hero-glass-lines"></div>
+      <header class="hero-nav">
+        <a class="brand" href="#home"><span class="hero-logo">↗</span> Cashflowbank</a>
+        <nav aria-label="Main navigation"><a href="#home">Home</a><a href="#about">About Us</a><a href="#services">Services</a><a href="#how">How It Works</a><a href="#testimonials">Reviews</a></nav>
+        <button class="btn hero-contact" data-open-auth="signup">Open an Account <span>↗</span></button>
+      </header>
+      <div class="hero-content">
+        <div class="hero-pill"><span class="live-dot"></span> Secure digital banking • Available worldwide</div>
+        <h1>Secure Solutions for<br><span>Smarter Digital Banking.</span></h1>
+        <p>Manage money, track spending, and grow your savings with secure, user-friendly banking tools built for everyday life.</p>
+        <button class="hero-start" data-open-auth="signup">Get Started Free <span>→</span></button>
+        <div class="hero-social-proof">
+          <div class="avatar-stack"><span>J</span><span>A</span><span>M</span><span>+</span></div>
+          <div><strong>Built around your money</strong><small>Simple tools. Clear balances. More control.</small></div>
+        </div>
       </div>
-      <form id="authForm">
-        <div class="field hidden" id="nameField">
-          <label for="authName">Full name</label>
-          <input id="authName" autocomplete="name" maxlength="100">
+      <div class="hero-visual" aria-label="Animated banking app preview">
+        <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+        <div class="float-card float-left">
+          <div class="float-card-label"><span class="mini-icon">↗</span> Monthly savings</div>
+          <strong>+18.6%</strong><small>Your savings overview at a glance</small>
+          <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
-        <div class="field">
-          <label for="authEmail">Email address</label>
-          <input id="authEmail" type="email" autocomplete="email" required>
+        <div class="phone-shell"><div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●● ▰</span></div>
+          <div class="phone-greeting"><span class="phone-avatar">C</span><div><small>Good morning,</small><strong>Cashflow Member</strong></div><span class="phone-notification">♧</span></div>
+          <div class="phone-balance"><small>Total balance</small><div>₦3,200,000<span>.00</span></div><small class="balance-status">● Account active</small></div>
+          <div class="phone-actions"><div><span>↗</span><small>Send</small></div><div><span>↓</span><small>Receive</small></div><div><span>＋</span><small>Add</small></div><div><span>•••</span><small>More</small></div></div>
+          <div class="phone-activity"><div class="activity-heading"><strong>Recent activity</strong><small>See all</small></div>
+            <div class="phone-transaction"><span class="transaction-symbol">↙</span><div><strong>Salary payment</strong><small>Today · 9:15 AM</small></div><b>+₦250,000</b></div>
+            <div class="phone-transaction"><span class="transaction-symbol">↗</span><div><strong>Online purchase</strong><small>Yesterday</small></div><b class="spent">−₦18,500</b></div>
+          </div>
+          <div class="phone-bottom"><span>⌂<small>Home</small></span><span>▤<small>Cards</small></span><span>↔<small>Transfer</small></span><span>◉<small>Profile</small></span></div>
+        </div></div>
+        <div class="float-card float-right">
+          <div class="float-card-label"><span class="mini-icon">◎</span> Account security</div>
+          <strong>Protected, always</strong><small>Keep track of your account and activity in one place.</small>
+          <div class="float-progress"><span></span></div>
         </div>
-        <div class="field">
-          <label for="authPassword">Password</label>
-          <input id="authPassword" type="password" minlength="8" autocomplete="current-password" required>
-        </div>
-        <div class="field hidden" id="confirmField">
-          <label for="confirmPassword">Confirm password</label>
-          <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password">
-        </div>
-        <button class="btn btn-primary" id="authSubmit" type="submit" style="width:100%">Sign in securely</button>
-        <p id="authMessage" class="msg" role="status"></p>
-      </form>
-      <p class="small muted">Demo interface only. This website is not connected to a licensed bank or payment network.</p>
+        <div class="payment-toast"><span>✓</span><div><strong>Payment received</strong><small>Your activity, in real time</small></div></div>
+      </div>
+      <div class="hero-bottom-note"><span>SECURE BY DESIGN</span><span>MADE FOR EVERYDAY LIFE</span><span>YOUR MONEY, YOUR CONTROL</span></div>
+    </section>
+    <section class="container"><div class="trust-strip">
+      <div class="trust-item"><strong><span class="count-up" data-target="1" data-suffix="M+">0</span></strong><span>Users choosing smarter money tools</span></div>
+      <div class="trust-item"><strong><span class="count-up" data-target="50" data-suffix="+">0</span></strong><span>Countries represented</span></div>
+      <div class="trust-item"><strong><span class="count-up" data-target="99" data-suffix=".9%">0</span></strong><span>Platform availability goal</span></div>
+      <div class="trust-item"><strong><span class="count-up" data-target="24" data-suffix="/7">0</span></strong><span>Access to your account</span></div>
+    </div></section>
+    <section class="section container" id="about"><div class="about-grid">
+      <div class="about-photos">
+        <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=85" alt="European colleagues working together in a bright office">
+        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=650&q=85" alt="White colleagues discussing a project">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=650&q=85" alt="Customer making a secure card payment">
+      </div>
+      <div class="about-copy"><span class="eyebrow">About Cashflowbank</span><h2>More than a bank. A better way to manage money.</h2><p>We’re building a simpler way to understand, organize and manage your money. Cashflowbank brings account information and everyday banking tools together in one clear experience.</p><p>Our focus is straightforward: useful features, clear information, and security-conscious account access.</p>
+        <div class="metrics"><div><strong>10k+</strong><small>Community members</small></div><div><strong>24/7</strong><small>Account access</small></div><div><strong>50+</strong><small>Countries supported in our vision</small></div><div><strong>1M+</strong><small>Our user-growth ambition</small></div></div>
+        <button class="btn btn-primary" data-open-auth="signup">Join Cashflowbank <span>→</span></button>
+      </div>
+    </div></section>
+    <section class="section services" id="services"><div class="container"><div class="section-heading"><span class="eyebrow">Our services</span><h2>Services that fit your lifestyle.</h2><p>Tools to help you stay organized and make informed financial decisions.</p></div>
+      <div class="service-grid">
+        <article class="service-card"><div class="service-icon">◎</div><h3>International Transfers</h3><p>Keep track of your transfer activity and manage recipient details with a simple interface.</p><a href="#how">Read more →</a></article>
+        <article class="service-card"><div class="service-icon">▤</div><h3>Loans &amp; Credit</h3><p>Explore financial information and keep your money plans organized in one place.</p><a href="#how">Read more →</a></article>
+        <article class="service-card"><div class="service-icon">♧</div><h3>Customer Support</h3><p>Find help and guidance when you need assistance with your account.</p><a href="#contact">Read more →</a></article>
+        <article class="service-card"><div class="service-icon">⌂</div><h3>Everyday Banking</h3><p>See your account overview, review activity, and keep an eye on your money.</p><a href="#how">Read more →</a></article>
+        <article class="service-card"><div class="service-icon">↗</div><h3>Savings Insights</h3><p>Use simple summaries to understand your spending and savings habits.</p><a href="#how">Read more →</a></article>
+        <article class="service-card"><div class="service-icon">◈</div><h3>Account Management</h3><p>Manage your profile and view your account information from your dashboard.</p><a href="#how">Read more →</a></article>
+      </div>
+    </div></section>
+    <section class="section feature-band" id="how"><div class="container feature-grid">
+      <div><span class="eyebrow" style="color:#b9ff85">Designed for clarity</span><h2>Your finances, organized in one secure-looking space.</h2><p>From your account profile to your latest activity, the Cashflowbank experience is designed to keep important information easy to find.</p><div class="feature-list"><div><span class="check">✓</span> Simple account overview</div><div><span class="check">✓</span> Transaction history layout</div><div><span class="check">✓</span> Responsive design for phone and laptop</div><div><span class="check">✓</span> Account registration and sign-in interface</div></div><button class="btn btn-primary" data-open-auth="signup">Create your account →</button></div>
+      <div class="feature-card"><h3>Account activity</h3><p style="color:#b9d7c2">A sample preview of the dashboard experience</p><div class="feature-row"><span>Incoming payment</span><strong>+₦250,000.00</strong></div><div class="feature-row"><span>Card purchase</span><strong style="color:#f2c59b">−₦18,500.00</strong></div><div class="feature-row"><span>Monthly savings</span><strong>+₦75,000.00</strong></div><div class="feature-row"><span>Account status</span><strong>Preview only</strong></div><p style="font-size:.78rem">Demo figures are illustrative and are not real bank balances or transaction records.</p></div>
+    </div></section>
+    <section class="section testimonials" id="testimonials"><div class="container"><div class="section-heading"><span class="eyebrow">Testimonials</span><h2>What people think about us.</h2><p>A sample testimonial layout ready for verified customer feedback.</p></div>
+      <div class="testimonial-grid">
+        <article class="testimonial-card"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=85" alt="Smiling white male customer portrait"><div class="testimonial-body"><p>“The layout makes it easy to see the information I need without digging through lots of screens.”</p><div class="reviewer"><span>Alex Morgan</span><span class="stars">★★★★★</span></div></div></article>
+        <article class="testimonial-card"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=85" alt="Smiling white female customer portrait"><div class="testimonial-body"><p>“I like how clean the experience feels on my phone. Everything is easy to find.”</p><div class="reviewer"><span>Emily Carter</span><span class="stars">★★★★★</span></div></div></article>
+        <article class="testimonial-card"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=85" alt="White male customer portrait"><div class="testimonial-body"><p>“The simple dashboard gives me a clear view of the activity I want to review.”</p><div class="reviewer"><span>Daniel Brooks</span><span class="stars">★★★★★</span></div></div></article>
+        <article class="testimonial-card"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=85" alt="White female customer portrait"><div class="testimonial-body"><p>“It feels modern and straightforward. I can check my account details quickly.”</p><div class="reviewer"><span>Sophie Williams</span><span class="stars">★★★★★</span></div></div></article>
+      </div>
+    </div></section>
+    <section class="cta"><h2>Join people building better money habits.</h2><p>Experience a modern account interface designed around you.</p><button class="btn btn-primary" data-open-auth="signup">Get Started Free →</button></section>
+  </main>
+  <footer id="contact"><div class="container"><div class="footer-grid">
+    <div><a class="brand" href="#home"><span class="hero-logo">↗</span> Cashflowbank</a><p style="color:#b9d2c1;max-width:300px">A modern digital banking interface designed to make money management feel clearer.</p></div>
+    <div><h3>Explore</h3><div class="footer-links"><a href="#home">Home</a><a href="#about">About us</a><a href="#services">Services</a><a href="#testimonials">Testimonials</a><a href="#how">How it works</a></div></div>
+    <div><h3>Join our online community</h3><p style="color:#b9d2c1">Get updates about Cashflowbank.</p><form class="subscribe" id="subscribeForm"><input type="email" id="subscribeEmail" placeholder="Enter your email address" required aria-label="Email address"><button type="submit">Subscribe</button></form><p id="subscribeMessage" style="font-size:.8rem"></p></div>
+  </div><div class="footer-bottom"><span>© <span id="year"></span> Cashflowbank. All rights reserved.</span><span>Use responsibly. This demo is not a licensed banking service.</span></div></div></footer>
+
+  <section id="dashboard" class="dashboard" aria-label="Account dashboard">
+    <div class="dash-nav"><a class="brand" href="#" id="dashboardBrand"><span class="hero-logo">↗</span> Cashflowbank</a><div><span id="navUser">Member</span> &nbsp; <button class="btn btn-outline" id="signOutBtn" style="color:#fff;border-color:#ffffff50">Sign out</button></div></div>
+    <div class="dash-layout"><aside class="dash-sidebar"><button class="active" data-dash-view="overview">Overview</button><button data-dash-view="transactions">Transactions</button><button data-dash-view="profile">My profile</button><button data-dash-view="security">Security</button></aside>
+      <div class="dash-main"><div class="dash-top"><div><h1 id="welcomeTitle">Welcome back</h1><p style="color:#718075;margin:5px 0">Here is your account overview.</p></div><button class="btn btn-primary" id="backHomeBtn">← Home page</button></div>
+        <div id="dashOverview"><div class="balance-panel"><small>Account balance</small><h2>₦0.00</h2><small>Balance display is a demo. No real banking ledger is connected.</small></div><div class="dash-stats"><div class="stat-card"><small>Account number</small><strong id="accountNumberDisplay">Pending</strong></div><div class="stat-card"><small>Account type</small><strong id="accountTypeDisplay">—</strong></div><div class="stat-card"><small>Member since</small><strong id="createdAtDisplay">—</strong></div></div><div class="dash-main-card"><h3>Recent transactions</h3><p style="color:#6c7c70">Your real transaction history will appear here when a trusted server-side ledger is connected.</p><div class="notice">This front-end demo does not move money or create real bank transactions.</div></div></div>
+        <div id="dashTransactions" class="dash-main-card" style="display:none"><h3>Transactions</h3><p>No real transactions are connected to this demo yet.</p></div>
+        <div id="dashProfile" class="dash-main-card" style="display:none"><h3>Profile details</h3><div class="feature-row"><span>Full name</span><strong id="profileName">—</strong></div><div class="feature-row"><span>Email</span><strong id="profileEmail">—</strong></div><div class="feature-row"><span>Country</span><strong id="profileCountry">—</strong></div><div class="feature-row"><span>Gender</span><strong id="profileGender">—</strong></div></div>
+        <div id="dashSecurity" class="dash-main-card" style="display:none"><h3>Security</h3><p>Never share your password or PIN. Passwords are handled by Firebase Authentication. Do not store a banking PIN in public client-side code.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-card"><div class="modal-head"><div><h2 id="authTitle">Welcome to Cashflowbank</h2><p id="authSubtitle">Create your account in a few simple steps.</p></div><button class="close-modal" id="closeAuth" aria-label="Close">×</button></div>
+      <div class="auth-tabs"><button id="signupTab" class="active" type="button">Create account</button><button id="loginTab" type="button">Sign in</button></div>
+      <form id="signupForm"><div class="form-grid">
+        <div class="field full"><label for="regName">Full name</label><input id="regName" autocomplete="name" required placeholder="Your full name"></div>
+        <div class="field"><label for="regEmail">Email address</label><input id="regEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+        <div class="field"><label for="regCountry">Country</label><select id="regCountry" required><option value="">Choose country</option></select></div>
+        <div class="field"><label for="regAccountType">Account type</label><select id="regAccountType" required><option value="">Choose type</option><option>Personal</option><option>Business</option><option>Student</option></select></div>
+        <div class="field"><label for="regGender">Gender</label><select id="regGender" required><option value="">Choose option</option><option>Female</option><option>Male</option><option>Prefer not to say</option><option>Other</option></select></div>
+        <div class="field"><label for="regPassword">Password</label><input id="regPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="At least 8 characters"></div>
+        <div class="field"><label for="regConfirm">Confirm password</label><input id="regConfirm" type="password" minlength="8" autocomplete="new-password" required placeholder="Repeat password"></div>
+        <div class="field full"><label for="regPin">Choose a 4–6 digit PIN</label><input id="regPin" inputmode="numeric" type="password" minlength="4" maxlength="6" pattern="[0-9]{4,6}" autocomplete="off" required placeholder="Do not reuse your card PIN"><span class="form-note">Demo note: this PIN is not saved. Secure PIN storage requires a protected backend.</span></div>
+      </div><p class="form-error" id="signupError" role="alert"></p><button class="btn btn-primary full-btn" type="submit" id="signupSubmit">Create account →</button></form>
+      <form id="loginForm" style="display:none"><div class="form-grid"><div class="field full"><label for="loginIdentity">Email or account number</label><input id="loginIdentity" autocomplete="username" required placeholder="Email address or account number"></div><div class="field full"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Your password"></div></div><p class="form-note">Account-number sign-in needs a trusted server lookup to map an account number to its Firebase user. This demo supports email/password sign-in directly.</p><p class="form-error" id="loginError" role="alert"></p><button class="btn btn-primary full-btn" type="submit">Sign in →</button></form>
+      <p class="form-note">By continuing, you agree to use this demo responsibly. Do not enter a real banking PIN or sensitive financial credentials.</p>
     </div>
   </div>
-</section>
 
-<!-- Main app -->
-<section id="appScreen" class="hidden">
-  <header class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="btn btn-light mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button>
-      <div class="brand"><span class="brand-mark">C</span> Cashflowbank</div>
-    </div>
-    <div class="top-actions">
-      <span class="top-email muted small" id="headerEmail"></span>
-      <div class="avatar" id="headerAvatar">C</div>
-      <button class="btn btn-light" id="signOutButton">Sign out</button>
-    </div>
-  </header>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  <div class="app-layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="nav-label">MAIN MENU</div>
-      <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span> Dashboard</button>
-      <button class="nav-btn" data-page="account"><span class="nav-icon">▤</span> Account summary</button>
-      <button class="nav-btn" data-page="transactions"><span class="nav-icon">↔</span> Transactions</button>
-      <div class="nav-label">MY ACCOUNT</div>
-      <button class="nav-btn" data-page="profile"><span class="nav-icon">♙</span> My profile</button>
-      <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span> Settings</button>
-      <button class="nav-btn hidden" id="adminNav" data-page="admin"><span class="nav-icon">♜</span> Admin panel</button>
-      <div class="sidebar-bottom">Cashflowbank<br>Account information portal<br><br>Only authorized administrators can change saved customer and account records.</div>
-    </aside>
-
-    <main class="main">
-      <section class="app-page" id="page-dashboard">
-        <div class="welcome">
-          <div>
-            <h1 id="welcomeName">Welcome back</h1>
-            <p>Here is your account overview.</p>
-          </div>
-          <span class="small muted" id="todayDate"></span>
-        </div>
-
-        <div class="dashboard-grid">
-          <div>
-            <div class="balance-card">
-              <div class="label">Account balance</div>
-              <div class="balance-amount" id="balanceAmount">₦0.00</div>
-              <div class="balance-foot"><span>Account status</span><span id="dashboardStatus">Pending setup</span></div>
-              <div class="balance-actions">
-                <button type="button" data-page="account">Account details</button>
-                <button type="button" data-page="transactions">View activity</button>
-              </div>
-            </div>
-            <div class="stats-grid">
-              <div class="stat"><div class="stat-icon">↗</div><div><div class="stat-name">Account type</div><div class="stat-value" id="statType">Not set</div></div></div>
-              <div class="stat"><div class="stat-icon">▤</div><div><div class="stat-name">Account number</div><div class="stat-value" id="statNumber">Pending</div></div></div>
-              <div class="stat"><div class="stat-icon">✓</div><div><div class="stat-name">Verification</div><div class="stat-value" id="statKyc">Pending</div></div></div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>Account information</h3><span class="status" id="statusBadge">Pending</span></div>
-            <div class="account-card">
-              <div class="card-chip"></div>
-              <div class="small muted">CASHFLOWBANK ACCOUNT</div>
-              <div class="account-number" id="cardNumber">•••• •••• ••••</div>
-              <div class="card-bottom">
-                <div><span class="muted">ACCOUNT HOLDER</span><strong id="cardHolder">Your name</strong></div>
-                <div><span class="muted">ACCOUNT TYPE</span><strong id="cardType">Not set</strong></div>
-              </div>
-            </div>
-            <div class="section">
-              <div class="small muted">Registered email</div>
-              <strong id="accountEmail" style="display:block;margin:6px 0 16px;overflow-wrap:anywhere">—</strong>
-              <div class="small muted">Country</div>
-              <strong id="accountCountry" style="display:block;margin-top:6px">—</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel section">
-          <div class="panel-head"><div><h3>Recent activity</h3><p class="small muted">No real transactions are processed by this demo.</p></div><button class="btn btn-light" data-page="transactions">View all</button></div>
-          <div id="recentTransactions" class="muted small">No transactions to display.</div>
-        </div>
-      </section>
-
-      <section class="app-page hidden" id="page-account">
-        <h1 class="page-title">Account summary</h1>
-        <p class="page-subtitle">Review the account information saved to your profile.</p>
-        <div class="panel">
-          <div class="readonly-note">🔒 These account details are read-only. Contact your authorized administrator if something needs to be corrected.</div>
-          <div class="form-grid">
-            <div class="field"><label>Full name</label><input id="sumName" readonly></div>
-            <div class="field"><label>Email</label><input id="sumEmail" readonly></div>
-            <div class="field"><label>Account number</label><input id="sumNumber" readonly></div>
-            <div class="field"><label>Account type</label><input id="sumType" readonly></div>
-            <div class="field"><label>Account status</label><input id="sumStatus" readonly></div>
-            <div class="field"><label>Country</label><input id="sumCountry" readonly></div>
-            <div class="field"><label>Date of birth</label><input id="sumDob" readonly></div>
-            <div class="field"><label>Phone</label><input id="sumPhone" readonly></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="app-page hidden" id="page-transactions">
-        <h1 class="page-title">Transactions</h1>
-        <p class="page-subtitle">Review account activity recorded in the system.</p>
-        <div class="panel">
-          <div class="readonly-note">This demo does not send, receive or settle money. No real transactions are available unless you connect a legitimate financial provider and a trusted backend.</div>
-          <div id="allTransactions" class="muted small">No transactions to display.</div>
-        </div>
-      </section>
-
-      <section class="app-page hidden" id="page-profile">
-        <h1 class="page-title">My profile</h1>
-        <p class="page-subtitle">Set up your profile once and view the details saved to your account.</p>
-        <div class="profile-layout">
-          <div class="panel">
-            <div class="readonly-note" id="profileNotice">Profile fields become read-only after initial setup. Only an authorized administrator can change saved details.</div>
-            <form id="profileForm">
-              <div class="profile-photo" id="profilePhoto">C</div>
-              <div class="field"><label for="profilePicture">Profile picture (optional, initial setup only)</label><input id="profilePicture" type="file" accept="image/png,image/jpeg,image/webp"></div>
-              <div class="form-grid">
-                <div class="field"><label for="profileName">Full name</label><input id="profileName" maxlength="100" required></div>
-                <div class="field"><label for="profileEmail">Email address</label><input id="profileEmail" type="email" readonly></div>
-                <div class="field"><label for="profileDOB">Date of birth</label><input id="profileDOB" type="date" required></div>
-                <div class="field"><label for="profileCountry">Country</label>
-                  <select id="profileCountry" required>
-                    <option value="">Choose country</option>
-                    <option>Nigeria</option><option>Ghana</option><option>Kenya</option><option>South Africa</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Other</option>
-                  </select>
-                </div>
-                <div class="field"><label for="profilePhone">Phone number</label><input id="profilePhone" type="tel" maxlength="30" placeholder="+234..."></div>
-                <div class="field"><label for="profileAddress">Address</label><input id="profileAddress" maxlength="200" placeholder="Your address"></div>
-              </div>
-              <p class="small muted">Only submit details you are comfortable storing. Do not enter passwords, card PINs or one-time codes here.</p>
-              <button class="btn btn-primary" id="saveProfile" type="submit">Save initial profile</button>
-              <p class="msg" id="profileMessage" role="status"></p>
-            </form>
-          </div>
-          <div class="panel">
-            <h3>Profile status</h3>
-            <p class="muted small">Your personal details are visible to you and authorized administrators.</p>
-            <div class="section"><div class="small muted">Profile completion</div><strong id="profileCompletion" style="display:block;margin-top:7px">Not complete</strong></div>
-            <div class="section"><div class="small muted">Profile created</div><strong id="profileCreated" style="display:block;margin-top:7px">—</strong></div>
-            <div class="section"><div class="small muted">Last updated</div><strong id="profileUpdated" style="display:block;margin-top:7px">—</strong></div>
-            <div class="section"><div class="small muted">Access control</div><strong style="display:block;margin-top:7px">Admin-managed records</strong></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="app-page hidden" id="page-settings">
-        <h1 class="page-title">Settings</h1>
-        <p class="page-subtitle">Account access and security information.</p>
-        <div class="panel">
-          <h3>Sign-in account</h3>
-          <p class="muted" id="settingsEmail"></p>
-          <p class="small muted">Password changes should be handled through Firebase Authentication's secure password-reset flow. Account balances and protected profile details cannot be edited here.</p>
-          <button class="btn btn-outline" id="resetPassword" type="button">Send password reset email</button>
-          <p class="msg" id="settingsMessage" role="status"></p>
-        </div>
-      </section>
-
-      <section class="app-page hidden" id="page-admin">
-        <h1 class="page-title">Admin panel</h1>
-        <p class="page-subtitle">Manage customer records and account status.</p>
-        <div class="admin-banner">Restricted area. Access requires a verified Firebase custom claim named <code>admin: true</code>. Do not grant this role from the browser or through a public registration form.</div>
-        <div class="panel">
-          <div class="panel-head"><h3>Customer records</h3><button class="btn btn-light" id="refreshUsers" type="button">Refresh</button></div>
-          <p class="small muted">Choose a customer to edit permitted fields. Changes are checked by Firestore security rules.</p>
-          <div id="adminUserList" class="admin-user-list">Loading customers…</div>
-          <p class="msg" id="adminMessage" role="status"></p>
-        </div>
-        <div class="panel section hidden" id="adminEditor">
-          <h3>Edit customer record</h3>
-          <p class="small muted" id="editingUserId"></p>
-          <form id="adminForm">
-            <div class="form-grid">
-              <div class="field"><label for="adminName">Full name</label><input id="adminName" maxlength="100" required></div>
-              <div class="field"><label for="adminAccountType">Account type</label><select id="adminAccountType"><option>Personal Savings</option><option>Current Account</option><option>Business Account</option><option>Student Account</option></select></div>
-              <div class="field"><label for="adminAccountNumber">Account number</label><input id="adminAccountNumber" maxlength="34"></div>
-              <div class="field"><label for="adminStatus">Account status</label><select id="adminStatus"><option>Pending</option><option>Active</option><option>Suspended</option><option>Closed</option></select></div>
-              <div class="field"><label for="adminBalance">Displayed balance (NGN)</label><input id="adminBalance" type="number" min="0" step="0.01" required></div>
-              <div class="field"><label for="adminKyc">Verification status</label><select id="adminKyc"><option>Pending</option><option>In review</option><option>Verified</option><option>Rejected</option></select></div>
-            </div>
-            <button class="btn btn-primary" id="saveAdminRecord" type="submit">Save customer record</button>
-            <button class="btn btn-light" id="cancelAdminEdit" type="button">Cancel</button>
-            <p class="msg" id="adminEditMessage" role="status"></p>
-          </form>
-        </div>
-      </section>
-    </main>
-  </div>
-  <footer>Cashflowbank · Account information demo · Not a licensed bank</footer>
-</section>
-
-<!-- Support widget -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
-(function(){
- var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
- s1.async=true;
- s1.src="https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
- s1.charset="UTF-8";
- s1.setAttribute("crossorigin","*");
- s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-
-<script type="module">
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {
-  getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
-  signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, collection,
-  getDocs, query, orderBy, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-import {
-  getStorage, ref, uploadBytes, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
-
-/*
-  Use the exact Web App configuration shown in:
-  Firebase Console → Project settings → Your apps → Web app.
-  If Firebase reports auth/api-key-not-valid, verify the apiKey there.
-*/
-const firebaseConfig = {
-  apiKey: "AIzaSyA2zXbQOJPrSO3hEdtJcORDX6XC_33QR68",
-  authDomain: "cashflowbanks-b65d6.firebaseapp.com",
-  projectId: "cashflowbanks-b65d6",
-  storageBucket: "cashflowbanks-b65d6.firebasestorage.app",
-  messagingSenderId: "255726757077",
-  appId: "1:255726757077:web:41a2db9f9cb32e5dc7ae5c"
-};
-
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-const $ = id => document.getElementById(id);
-let currentUser = null;
-let currentRecord = null;
-let isAdmin = false;
-let editingUid = null;
-let signupMode = false;
-
-const money = value => new Intl.NumberFormat("en-NG", {
-  style:"currency", currency:"NGN", minimumFractionDigits:2
-}).format(Number(value || 0));
-
-const safeText = value => String(value ?? "");
-const dateText = value => {
-  if (!value) return "—";
-  try {
-    const d = value.toDate ? value.toDate() : new Date(value);
-    return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString();
-  } catch { return "—"; }
-};
-const setMessage = (id, text, type="") => {
-  const el = $(id);
-  el.textContent = text;
-  el.className = "msg " + type;
-};
-const initials = name => safeText(name).trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase() || "C";
-
-function showAuth() {
-  $("authScreen").classList.remove("hidden");
-  $("appScreen").classList.add("hidden");
-}
-function showApp() {
-  $("authScreen").classList.add("hidden");
-  $("appScreen").classList.remove("hidden");
-}
-function setAuthMode(signup) {
-  signupMode = signup;
-  $("nameField").classList.toggle("hidden", !signup);
-  $("confirmField").classList.toggle("hidden", !signup);
-  $("authName").required = signup;
-  $("confirmPassword").required = signup;
-  $("authPassword").autocomplete = signup ? "new-password" : "current-password";
-  $("loginTab").classList.toggle("active", !signup);
-  $("signupTab").classList.toggle("active", signup);
-  $("authTitle").textContent = signup ? "Create your account" : "Welcome back";
-  $("authSubtitle").textContent = signup ? "Register to set up your profile." : "Sign in to continue to your dashboard.";
-  $("authSubmit").textContent = signup ? "Create account" : "Sign in securely";
-  setMessage("authMessage", "");
-}
-$("loginTab").addEventListener("click", () => setAuthMode(false));
-$("signupTab").addEventListener("click", () => setAuthMode(true));
-
-$("authForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  const email = $("authEmail").value.trim();
-  const password = $("authPassword").value;
-  const button = $("authSubmit";
-  button.disabled = true;
-  setMessage("authMessage", "Please wait…");
-  try {
-    if (signupMode) {
-      const name = $("authName").value.trim();
-      if (!name) throw new Error("Enter your full name.");
-      if (password !== $("confirmPassword").value) throw new Error("Passwords do not match.");
-      if (password.length < 8) throw new Error("Use a password with at least 8 characters.");
-      const credential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(credential.user, { displayName:name });
-      // Initial profile: no balance, account status or admin role is accepted here.
-      await setDoc(doc(db, "users", credential.user.uid), {
-        name,
-        email:credential.user.email,
-        createdAt:serverTimestamp()
-      });
-      setMessage("authMessage", "Account created. Complete your profile next.", "success");
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-    }
-  } catch (error) {
-    setMessage("authMessage", friendlyError(error), "error");
-  } finally {
-    button.disabled = false;
-  }
-});
-
-function friendlyError(error) {
-  const code = error?.code || "";
-  if (code === "auth/api-key-not-valid" || code === "auth/invalid-api-key")
-    return "Firebase API key is invalid. Copy the Web API configuration from Firebase Console → Project settings → Your apps.";
-  if (code === "auth/email-already-in-use") return "An account already exists for this email. Sign in instead.";
-  if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
-    return "Email or password is incorrect.";
-  if (code === "auth/weak-password") return "Choose a stronger password with at least 8 characters.";
-  if (code === "permission-denied" || code === "firestore/permission-denied")
-    return "Firebase denied this action. Check that your Firestore rules are published and configured correctly.";
-  return error?.message || "Something went wrong. Please try again.";
-}
-
-$("signOutButton").addEventListener("click", () => signOut(auth).catch(e => alert(friendlyError(e))));
-$("mobileMenu").addEventListener("click", () => $("sidebar").classList.toggle("open"));
-
-function navigate(page) {
-  document.querySelectorAll(".app-page").forEach(el => el.classList.add("hidden"));
-  const target = $("page-" + page);
-  if (target) target.classList.remove("hidden");
-  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.page === page));
-  $("sidebar").classList.remove("open");
-  if (page === "admin" && isAdmin) loadUsers();
-}
-document.querySelectorAll("[data-page]").forEach(btn => {
-  btn.addEventListener("click", () => navigate(btn.dataset.page));
-});
-
-function setInput(id, value) { $(id).value = value ?? ""; }
-function setReadOnlyProfile(locked) {
-  ["profileName","profileDOB","profileCountry","profilePhone","profileAddress"].forEach(id => {
-    $(id).readOnly = locked;
-    $(id).disabled = locked && id === "profileCountry";
-  });
-  $("profilePicture").disabled = locked;
-  $("saveProfile").classList.toggle("hidden", locked);
-  $("profileNotice").textContent = locked
-    ? "Your profile has been submitted and is now read-only. Contact an authorized administrator to request changes."
-    : "Complete your profile carefully. After initial submission, these details can only be changed by an authorized administrator.";
-}
-
-async function loadUser(user) {
-  currentUser = user;
-  const token = await user.getIdTokenResult(true);
-  isAdmin = token.claims.admin === true;
-  $("adminNav").classList.toggle("hidden", !isAdmin);
-  $("headerEmail").textContent = user.email || "";
-  $("settingsEmail").textContent = user.email || "";
-  const today = new Date();
-  $("todayDate").textContent = today.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
-
-  const snap = await getDoc(doc(db,"users",user.uid));
-  currentRecord = snap.exists() ? snap.data() : null;
-
-  if (!currentRecord) {
-    currentRecord = { name:user.displayName || "", email:user.email || "" };
-    setReadOnlyProfile(false);
-  } else {
-    setReadOnlyProfile(true);
-  }
-  renderRecord();
-  showApp();
-}
-
-function renderRecord() {
-  const r = currentRecord || {};
-  const name = r.name || currentUser?.displayName || "Customer";
-  const accountType = r.accountType || "Not set";
-  const accountNumber = r.accountNumber || "Pending";
-  const status = r.accountStatus || "Pending";
-  const photo = r.photoURL || currentUser?.photoURL || "";
-
-  $("welcomeName").textContent = "Welcome back, " + name.split(" ")[0];
-  $("balanceAmount").textContent = money(r.balance);
-  $("dashboardStatus").textContent = status;
-  $("statType").textContent = accountType;
-  $("statNumber").textContent = accountNumber === "Pending" ? "Pending" : "••" + accountNumber.slice(-4);
-  $("statKyc").textContent = r.kycStatus || "Pending";
-  $("statusBadge").textContent = status;
-  $("statusBadge").className = "status" + (status === "Suspended" || status === "Closed" ? " suspended" : status === "Pending" ? " pending" : "");
-  $("cardNumber").textContent = accountNumber === "Pending" ? "•••• •••• ••••" : "•••• •••• " + accountNumber.slice(-4);
-  $("cardHolder").textContent = name;
-  $("cardType").textContent = accountType;
-  $("accountEmail").textContent = r.email || currentUser?.email || "—";
-  $("accountCountry").textContent = r.country || "Not set";
-
-  $("headerAvatar").innerHTML = "";
-  if (photo) {
-    const img = document.createElement("img");
-    img.src = photo; img.alt = "Profile picture";
-    $("headerAvatar").appendChild(img);
-  } else $("headerAvatar").textContent = initials(name);
-
-  setInput("sumName",name);
-  setInput("sumEmail",r.email || currentUser?.email);
-  setInput("sumNumber",accountNumber);
-  setInput("sumType",accountType);
-  setInput("sumStatus",status);
-  setInput("sumCountry",r.country);
-  setInput("sumDob",r.dateOfBirth);
-  setInput("sumPhone",r.phone);
-
-  setInput("profileName",r.name || currentUser?.displayName);
-  setInput("profileEmail",r.email || currentUser?.email);
-  setInput("profileDOB",r.dateOfBirth);
-  setInput("profileCountry",r.country);
-  setInput("profilePhone",r.phone);
-  setInput("profileAddress",r.address);
-
-  $("profilePhoto").innerHTML = "";
-  if (photo) {
-    const img = document.createElement("img");
-    img.src = photo; img.alt = "Profile picture";
-    $("profilePhoto").appendChild(img);
-  } else $("profilePhoto").textContent = initials(name);
-
-  $("profileCompletion").textContent = r.dateOfBirth && r.country ? "Complete" : "Needs setup";
-  $("profileCreated").textContent = dateText(r.createdAt);
-  $("profileUpdated").textContent = dateText(r.updatedAt);
-  renderTransactions([]);
-  setReadOnlyProfile(!!(r.profileComplete === true));
-}
-
-function renderTransactions(items) {
-  const empty = '<p class="muted small">No transactions to display.</p>';
-  $("recentTransactions").innerHTML = empty;
-  $("allTransactions").innerHTML = empty;
-  if (!items.length) return;
-  const table = document.createElement("table");
-  table.innerHTML = "<thead><tr><th>Description</th><th>Date</th><th>Status</th><th>Amount</th></tr></thead>";
-  const tbody = document.createElement("tbody");
-  items.forEach(item => {
-    const tr = document.createElement("tr");
-    const values = [
-      item.description || "Transaction",
-      dateText(item.createdAt),
-      item.status || "Recorded",
-      money(item.amount)
-    ];
-    values.forEach((value,i) => {
-      const td = document.createElement("td");
-      td.textContent = value;
-      if (i===3) td.className = Number(item.amount) >= 0 ? "amount-positive" : "amount-negative";
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);
-  $("recentTransactions").replaceChildren(table.cloneNode(true));
-  $("allTransactions").replaceChildren(table);
-}
-
-$("profileForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!currentUser || currentRecord?.profileComplete === true) return;
-  const button = $("saveProfile");
-  button.disabled = true;
-  setMessage("profileMessage","Saving profile…");
-  try {
-    const name = $("profileName").value.trim();
-    const dateOfBirth = $("profileDOB").value;
-    const country = $("profileCountry").value;
-    if (!name || !dateOfBirth || !country) throw new Error("Enter your name, date of birth and country.");
-    if (new Date(dateOfBirth + "T00:00:00") > new Date()) throw new Error("Date of birth cannot be in the future.");
-
-    let photoURL = "";
-    const file = $("profilePicture").files[0];
-    if (file) {
-      if (!["image/jpeg","image/png","image/webp"].includes(file.type)) throw new Error("Use a JPG, PNG or WebP image.");
-      if (file.size > 3 * 1024 * 1024) throw new Error("Profile picture must be 3 MB or smaller.");
-      const imageRef = ref(storage, "profilePictures/" + currentUser.uid + "/profile");
-      await uploadBytes(imageRef,file,{contentType:file.type});
-      photoURL = await getDownloadURL(imageRef);
-    }
-    await updateProfile(currentUser,{displayName:name,...(photoURL ? {photoURL} : {})});
-    const data = {
-      name,
-      email:currentUser.email,
-      dateOfBirth,
-      country,
-      phone:$("profilePhone").value.trim(),
-      address:$("profileAddress").value.trim(),
-      profileComplete:true,
-      updatedAt:serverTimestamp()
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2zXbQOJPrSO3hEdtJcORDX6XC_33QR68",
+      authDomain: "cashflowbanks-b65d6.firebaseapp.com",
+      projectId: "cashflowbanks-b65d6",
+      storageBucket: "cashflowbanks-b65d6.firebasestorage.app",
+      messagingSenderId: "255726757077",
+      appId: "1:255726757077:web:41a2db9f9cb32e5dc7ae5c"
     };
-    if (photoURL) data.photoURL = photoURL;
-    if (!currentRecord?.createdAt) data.createdAt = serverTimestamp();
-    await setDoc(doc(db,"users",currentUser.uid),data,{merge:true});
-    const snap = await getDoc(doc(db,"users",currentUser.uid));
-    currentRecord = snap.data();
-    renderRecord();
-    setMessage("profileMessage","Profile saved. Your details are now read-only.", "success");
-  } catch (error) {
-    setMessage("profileMessage",friendlyError(error),"error");
-  } finally { button.disabled = false; }
-});
 
-$("resetPassword").addEventListener("click", async () => {
-  if (!currentUser?.email) return;
-  try {
-    await sendPasswordResetEmail(auth,currentUser.email);
-    setMessage("settingsMessage","Password reset email sent. Check your inbox.","success");
-  } catch(error) { setMessage("settingsMessage",friendlyError(error),"error"); }
-});
+    const $ = (selector) => document.querySelector(selector);
+    const authModal = $("#authModal");
+    let auth = null, db = null, firebaseReady = false;
 
-async function loadUsers() {
-  if (!isAdmin) return;
-  $("adminUserList").textContent = "Loading customers…";
-  setMessage("adminMessage","");
-  try {
-    const result = await getDocs(query(collection(db,"users"),orderBy("createdAt","desc")));
-    $("adminUserList").replaceChildren();
-    if (result.empty) {
-      $("adminUserList").textContent = "No customer records found.";
-      return;
+    // Full country list for the registration selector.
+    const countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czechia","Democratic Republic of the Congo","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+    countries.forEach(country => { const option = document.createElement("option"); option.value = country; option.textContent = country; $("#regCountry").append(option); });
+
+    $("#year").textContent = new Date().getFullYear();
+    $("#subscribeForm").addEventListener("submit", event => { event.preventDefault(); $("#subscribeMessage").textContent = "Thanks! Newsletter signup is a front-end demo until a mailing service is connected."; $("#subscribeEmail").value = ""; });
+
+    function openAuth(mode="signup") { authModal.classList.add("open"); document.body.style.overflow="hidden"; setAuthMode(mode); }
+    function closeAuth() { authModal.classList.remove("open"); document.body.style.overflow=""; }
+    function setAuthMode(mode) {
+      const signup = mode === "signup";
+      $("#signupForm").style.display = signup ? "block" : "none";
+      $("#loginForm").style.display = signup ? "none" : "block";
+      $("#signupTab").classList.toggle("active", signup); $("#loginTab").classList.toggle("active", !signup);
+      $("#authTitle").textContent = signup ? "Create your account" : "Welcome back";
+      $("#authSubtitle").textContent = signup ? "Create your Cashflowbank profile." : "Sign in to view your profile.";
+      $("#signupError").textContent = ""; $("#loginError").textContent = "";
     }
-    result.forEach(userDoc => {
-      const u = userDoc.data();
-      const row = document.createElement("div");
-      row.className = "admin-user";
-      const details = document.createElement("div");
-      const title = document.createElement("strong");
-      title.textContent = u.name || "Unnamed customer";
-      const sub = document.createElement("small");
-      sub.textContent = (u.email || "No email") + " · " + (u.accountStatus || "Pending");
-      details.append(title,sub);
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "btn btn-light";
-      button.textContent = "Edit";
-      button.addEventListener("click",() => openAdminEditor(userDoc.id,u));
-      row.append(details,button);
-      $("adminUserList").appendChild(row);
-    });
-  } catch(error) {
-    $("adminUserList").textContent = "";
-    setMessage("adminMessage",friendlyError(error),"error");
-  }
-}
+    document.querySelectorAll("[data-open-auth]").forEach(button => button.addEventListener("click", () => openAuth(button.dataset.openAuth)));
+    $("#closeAuth").addEventListener("click", closeAuth);
+    authModal.addEventListener("click", event => { if(event.target === authModal) closeAuth(); });
+    $("#signupTab").addEventListener("click", () => setAuthMode("signup"));
+    $("#loginTab").addEventListener("click", () => setAuthMode("login"));
 
-function openAdminEditor(uid,u) {
-  editingUid = uid;
-  $("adminEditor").classList.remove("hidden");
-  $("editingUserId").textContent = "Customer UID: " + uid;
-  setInput("adminName",u.name);
-  setInput("adminAccountType",u.accountType || "Personal Savings");
-  setInput("adminAccountNumber",u.accountNumber);
-  setInput("adminStatus",u.accountStatus || "Pending");
-  setInput("adminBalance",Number(u.balance || 0));
-  setInput("adminKyc",u.kycStatus || "Pending");
-  setMessage("adminEditMessage","");
-  $("adminEditor").scrollIntoView({behavior:"smooth",block:"start"});
-}
-$("refreshUsers").addEventListener("click",loadUsers);
-$("cancelAdminEdit").addEventListener("click",() => {
-  editingUid = null;
-  $("adminEditor").classList.add("hidden");
-});
-
-$("adminForm").addEventListener("submit",async event => {
-  event.preventDefault();
-  if (!isAdmin || !editingUid) {
-    setMessage("adminEditMessage","Admin access is required.","error");
-    return;
-  }
-  const button = $("saveAdminRecord");
-  button.disabled = true;
-  try {
-    const balance = Number($("adminBalance").value);
-    if (!Number.isFinite(balance) || balance < 0) throw new Error("Enter a valid non-negative balance.");
-    await updateDoc(doc(db,"users",editingUid),{
-      name:$("adminName").value.trim(),
-      accountType:$("adminAccountType").value,
-      accountNumber:$("adminAccountNumber").value.trim(),
-      accountStatus:$("adminStatus").value,
-      balance,
-      kycStatus:$("adminKyc").value,
-      updatedAt:serverTimestamp()
-    });
-    setMessage("adminEditMessage","Customer record updated.","success");
-    await loadUsers();
-    if (editingUid === currentUser.uid) {
-      const own = await getDoc(doc(db,"users",currentUser.uid));
-      currentRecord = own.data();
-      renderRecord();
+    function makeAccountNumber(uid) {
+      // A display identifier only, not a bank-issued account number.
+      const digits = uid.replace(/\D/g,"").slice(-10).padStart(10,"0");
+      return "CFB" + digits;
     }
-  } catch(error) {
-    setMessage("adminEditMessage",friendlyError(error),"error");
-  } finally { button.disabled = false; }
-});
+    function showDashboard(user, profile={}) {
+      $("#landing").style.display = "none"; $("#dashboard").classList.add("active"); closeAuth();
+      const displayName = profile.name || user.displayName || user.email?.split("@")[0] || "Member";
+      $("#navUser").textContent = displayName; $("#welcomeTitle").textContent = "Welcome, " + displayName;
+      $("#accountNumberDisplay").textContent = profile.accountNumber || "Not assigned";
+      $("#accountTypeDisplay").textContent = profile.accountType || "Personal";
+      let created = profile.createdAt?.toDate ? profile.createdAt.toDate() : (user.metadata?.creationTime ? new Date(user.metadata.creationTime) : null);
+      $("#createdAtDisplay").textContent = created && !isNaN(created) ? created.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "—";
+      $("#profileName").textContent = displayName; $("#profileEmail").textContent = user.email || "—";
+      $("#profileCountry").textContent = profile.country || "—"; $("#profileGender").textContent = profile.gender || "—";
+      setDashView("overview"); window.scrollTo({top:0,behavior:"instant"});
+    }
+    function setDashView(view) {
+      ["overview","transactions","profile","security"].forEach(name => { $("#dash"+name[0].toUpperCase()+name.slice(1)).style.display = name===view ? "block" : "none"; });
+      document.querySelectorAll("[data-dash-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.dashView===view));
+    }
+    document.querySelectorAll("[data-dash-view]").forEach(btn=>btn.addEventListener("click",()=>setDashView(btn.dataset.dashView)));
+    $("#backHomeBtn").addEventListener("click",()=>{ $("#dashboard").classList.remove("active"); $("#landing").style.display="block"; window.scrollTo({top:0,behavior:"smooth"}); });
+    $("#dashboardBrand").addEventListener("click",event=>{event.preventDefault();$("#backHomeBtn").click();});
+    $("#signOutBtn").addEventListener("click",async()=>{ if(auth && firebaseReady){try{await signOut(auth);}catch(e){alert(e.message);}} $("#dashboard").classList.remove("active");$("#landing").style.display="block";window.scrollTo({top:0,behavior:"smooth"}); });
 
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    currentUser = null;
-    currentRecord = null;
-    isAdmin = false;
-    showAuth();
-    return;
-  }
-  try {
-    await loadUser(user);
-  } catch(error) {
-    showApp();
-    setMessage("profileMessage","Could not load profile: " + friendlyError(error),"error");
-  }
-});
-</script>
+    try {
+      const app = initializeApp(firebaseConfig); auth = getAuth(app); db = getFirestore(app); firebaseReady = true;
+      onAuthStateChanged(auth, async user => {
+        if (!user) return;
+        try { const snap = await getDoc(doc(db,"users",user.uid)); showDashboard(user,snap.exists()?snap.data():{}); }
+        catch(error) { console.error("Could not load profile:",error); showDashboard(user,{}); }
+      });
+    } catch(error) { console.error("Firebase initialization failed:",error); }
+
+    $("#signupForm").addEventListener("submit", async event => {
+      event.preventDefault(); $("#signupError").textContent="";
+      if(!firebaseReady){$("#signupError").textContent="Firebase is not configured correctly. Check your Firebase project settings.";return;}
+      const name=$("#regName").value.trim(), email=$("#regEmail").value.trim(), country=$("#regCountry").value, accountType=$("#regAccountType").value, gender=$("#regGender").value, password=$("#regPassword").value, confirm=$("#regConfirm").value, pin=$("#regPin").value;
+      if(password!==confirm){$("#signupError").textContent="Your passwords do not match.";return;}
+      if(!/^\d{4,6}$/.test(pin)){$("#signupError").textContent="PIN must contain 4 to 6 digits.";return;}
+      if(password.length<8){$("#signupError").textContent="Use a password with at least 8 characters.";return;}
+      const submit=$("#signupSubmit"); submit.disabled=true; submit.textContent="Creating account…";
+      try {
+        const credential=await createUserWithEmailAndPassword(auth,email,password);
+        await updateProfile(credential.user,{displayName:name});
+        const profile={name,email,country,accountType,gender,accountNumber:makeAccountNumber(credential.user.uid),createdAt:serverTimestamp()};
+        await setDoc(doc(db,"users",credential.user.uid),profile);
+        // PIN intentionally not stored in browser or Firestore by this public demo.
+        showDashboard(credential.user,profile);
+      } catch(error) {
+        $("#signupError").textContent=error.code==="auth/email-already-in-use"?"That email already has an account. Please sign in.":error.code==="auth/weak-password"?"Choose a stronger password.":error.message || "Could not create your account.";
+      } finally {submit.disabled=false;submit.textContent="Create account →";}
+    });
+
+    $("#loginForm").addEventListener("submit",async event=>{
+      event.preventDefault();$("#loginError").textContent="";
+      if(!firebaseReady){$("#loginError").textContent="Firebase is not configured correctly. Check your Firebase project settings.";return;}
+      const identity=$("#loginIdentity").value.trim(), password=$("#loginPassword").value;
+      if(!identity.includes("@")){$("#loginError").textContent="Account-number login requires a trusted server-side account lookup. For this demo, sign in with the email address attached to your account.";return;}
+      try { await signInWithEmailAndPassword(auth,identity,password); }
+      catch(error){$("#loginError").textContent=error.code==="auth/invalid-credential"?"Email or password is incorrect.":error.message || "Could not sign in.";}
+    });
+
+    // Counter restarts each time the section leaves and re-enters the viewport.
+    const counters=[...document.querySelectorAll(".count-up")];
+    function animateCounter(el) {
+      const target=Number(el.dataset.target), suffix=el.dataset.suffix||"", duration=1500, start=performance.now();
+      if(el._frame) cancelAnimationFrame(el._frame);
+      el.textContent="0"+suffix;
+      function frame(now){const progress=Math.min((now-start)/duration,1), eased=1-Math.pow(1-progress,3);const value=Math.round(target*eased);el.textContent=value.toLocaleString()+suffix;if(progress<1)el._frame=requestAnimationFrame(frame);}
+      el._frame=requestAnimationFrame(frame);
+    }
+    const counterObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){animateCounter(entry.target);}else if(entry.target._frame){cancelAnimationFrame(entry.target._frame);entry.target._frame=null;}}),{threshold:.35});
+    counters.forEach(counter=>counterObserver.observe(counter));
+  </script>
+  <!-- Optional live chat: create your own Tawk.to property and replace YOUR_PROPERTY_ID and YOUR_WIDGET_ID below. -->
+  <script>
+    (function(){
+      const propertyId="YOUR_PROPERTY_ID", widgetId="YOUR_WIDGET_ID";
+      if(propertyId==="YOUR_PROPERTY_ID"||widgetId==="YOUR_WIDGET_ID") return;
+      const s=document.createElement("script");s.async=true;s.src="https://embed.tawk.to/"+propertyId+"/"+widgetId;s.charset="UTF-8";s.setAttribute("crossorigin","*");document.head.appendChild(s);
+    })();
+  </script>
 </body>
 </html>
