@@ -200,6 +200,20 @@ footer a:not(.brand){display:block;font-size:13px;margin:9px 0;color:#d9c8cb}foo
 @media(max-width:420px){.about-photos{min-height:300px}.about-photo-main{height:250px;width:82%}.about-photo-small{height:135px;width:55%;border-width:6px}.about-float{left:0;bottom:0;padding:10px 12px}.trust-cards{grid-template-columns:1fr}.stat-grid{gap:8px}.stat-box{padding:13px}}
 @media(prefers-reduced-motion:reduce){.float-panel,.spend-panel,.about-float{animation:none!important}}
 
+
+/* Account dashboard view */
+.dashboard-view{display:none;min-height:calc(100vh - 48px);background:#fff8f8;padding:28px 0 54px}
+.dashboard-view.active{display:block}.dashboard-shell{width:min(1240px,calc(100% - 32px));margin:auto;display:grid;grid-template-columns:238px minmax(0,1fr);gap:24px}
+.dash-sidebar{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px 14px;align-self:start;position:sticky;top:18px}
+.dash-brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;letter-spacing:-.5px;padding:0 8px 22px;border-bottom:1px solid var(--line)}
+.dash-brand .brand-mark{width:34px;height:34px}.dash-nav{display:grid;gap:6px;margin-top:20px}.dash-nav button{display:flex;align-items:center;gap:12px;text-align:left;border:0;background:transparent;border-radius:12px;padding:12px;color:#75666a;font-size:13px;font-weight:750}.dash-nav button svg{width:19px;height:19px;flex-shrink:0}.dash-nav button.active,.dash-nav button:hover{background:#fff0f1;color:var(--red)}
+.dash-sidebar-note{margin:26px 6px 0;padding:14px;background:#fff8f8;border:1px solid var(--line);border-radius:14px;font-size:11px;color:var(--muted)}.dash-sidebar-note strong{display:block;color:var(--red);font-size:12px;margin-bottom:4px}
+.dash-main{min-width:0}.dash-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.dash-topbar h1{font-size:clamp(26px,3vw,36px);letter-spacing:-1.3px;margin:0 0 4px}.dash-topbar p{color:var(--muted);margin:0;font-size:13px}.dash-user{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:15px;max-width:240px}.dash-avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#ffe8ea;color:var(--red);font-weight:900;flex-shrink:0}.dash-user strong,.dash-user small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dash-user strong{font-size:12px}.dash-user small{font-size:10px;color:var(--muted)}
+.dash-banner{display:flex;justify-content:space-between;align-items:center;gap:20px;background:linear-gradient(120deg,#b51f2b,#76131c);border-radius:23px;padding:27px 30px;color:#fff;position:relative;overflow:hidden;box-shadow:0 18px 40px #b51f2b20}.dash-banner:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff30;border-radius:50%;right:-55px;top:-100px;box-shadow:0 0 0 32px #ffffff0b,0 0 0 65px #ffffff08}.dash-banner>*{position:relative;z-index:1}.dash-banner small{font-size:11px;opacity:.8;font-weight:700;letter-spacing:.7px}.dash-balance{font-size:clamp(30px,4vw,43px);letter-spacing:-1.7px;line-height:1.2;margin:8px 0 14px;font-weight:850}.dash-banner .btn{background:#fff;color:var(--red);white-space:nowrap}.dash-banner p{margin:0;font-size:11px;opacity:.8}.dash-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 24px}.dash-stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px;min-width:0}.dash-stat-head{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:700}.dash-stat-icon{width:34px;height:34px;border-radius:11px;background:#fff0f1;color:var(--red);display:grid;place-items:center;flex-shrink:0}.dash-stat-icon svg{width:18px;height:18px}.dash-stat strong{display:block;font-size:clamp(17px,2vw,24px);letter-spacing:-.7px;margin:12px 0 4px;overflow-wrap:anywhere}.dash-stat small{color:var(--muted);font-size:10px}.dash-positive{color:#16845d!important;font-weight:800}
+.dash-lower{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:18px}.dash-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;min-width:0}.dash-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.dash-panel-head h2{font-size:17px;letter-spacing:-.4px;margin:0}.dash-panel-head button{border:0;background:none;color:var(--red);font-size:11px;font-weight:850}.dash-activity{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #f5e9ea}.dash-activity-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#fff0f1;color:var(--red);flex-shrink:0}.dash-activity-icon svg{width:19px;height:19px}.dash-activity-copy{min-width:0;flex:1}.dash-activity-copy strong,.dash-activity-copy small{display:block}.dash-activity-copy strong{font-size:12px}.dash-activity-copy small{font-size:10px;color:var(--muted)}.dash-amount{text-align:right;font-size:12px;font-weight:850;white-space:nowrap}.dash-amount.out{color:#2b2022}.dash-amount.in{color:#16845d}.dash-chart{height:155px;display:flex;align-items:end;gap:10px;border-bottom:1px solid var(--line);padding:10px 4px 0}.dash-chart span{flex:1;min-width:6px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#ed6972,#b51f2b);height:var(--bar)}.dash-chart-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;padding-top:10px}.dash-chart-legend{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px;margin-top:18px}.dash-chart-legend i{width:8px;height:8px;border-radius:3px;background:var(--red)}.dash-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0}.dash-action{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px 7px;text-align:center;color:var(--ink);font-size:11px;font-weight:800}.dash-action:hover{border-color:#eab6bb;background:#fff8f8}.dash-action span{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#fff0f1;color:var(--red);margin:0 auto 9px}.dash-action svg{width:20px;height:20px}.dash-disclaimer{font-size:11px;color:var(--muted);padding:12px 14px;border-radius:12px;background:#fff;border:1px dashed #e8c8cb;margin-top:18px}.dash-mobile-menu{display:none}
+@media(max-width:900px){.dashboard-shell{grid-template-columns:1fr}.dash-sidebar{position:static;padding:12px}.dash-brand{display:none}.dash-nav{display:flex;overflow-x:auto;margin:0}.dash-nav button{white-space:nowrap}.dash-sidebar-note{display:none}.dash-lower{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.dashboard-view{padding-top:18px}.dashboard-shell{width:calc(100% - 22px);gap:14px}.dash-topbar{align-items:flex-start;margin-bottom:18px}.dash-topbar h1{font-size:27px}.dash-user{max-width:150px;padding:6px}.dash-user small{max-width:85px}.dash-banner{padding:23px 19px;align-items:flex-start;flex-direction:column}.dash-banner .btn{padding:10px 14px}.dash-stats{grid-template-columns:1fr 1fr;gap:10px}.dash-stat{padding:14px}.dash-stat:last-child{grid-column:1/-1}.dash-lower{grid-template-columns:1fr}.dash-panel{padding:17px}.dash-actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.dash-action{font-size:10px;padding:10px 3px}.dash-action span{width:34px;height:34px}.dash-nav button{padding:10px;font-size:11px}.dash-nav button svg{width:16px;height:16px}}
+
 </style>
 </head>
 <body>
@@ -212,6 +226,49 @@ footer a:not(.brand){display:block;font-size:13px;margin:9px 0;color:#d9c8cb}foo
   <div class="nav-actions"><button class="btn btn-outline" type="button" data-open="login">Log in</button><button class="btn btn-primary" type="button" data-open="signup">Get started <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="menu-toggle" type="button" id="menuToggle" aria-label="Open navigation" aria-controls="navlinks" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
  </div>
 </header>
+
+<section class="dashboard-view" id="dashboardView" aria-label="Cashflowbank account dashboard">
+ <div class="dashboard-shell">
+  <aside class="dash-sidebar">
+   <div class="dash-brand"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8.5 12 4l8 4.5M6 10v7m4-7v7m4-7v7m4-7v7M4 19h16M3 21h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Cashflow<span>bank</span></span></div>
+   <nav class="dash-nav" aria-label="Dashboard navigation">
+    <button type="button" class="active" data-dash-tab="overview"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="5" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="10" width="8" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>Overview</button>
+    <button type="button" data-dash-tab="activity"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16M4 12h16M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="5" r="2" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="12" r="2" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>Transactions</button>
+    <button type="button" data-dash-tab="cards"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18m-13 5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>My cards</button>
+    <button type="button" data-dash-tab="profile"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c.7-3.5 3.1-5.5 7-5.5s6.3 2 7 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Profile</button>
+    <button type="button" data-dash-tab="support"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 13H3v4h4v-4H4Zm16 0h1v4h-4v-4h3ZM17 19c-1 1-2.5 1.5-5 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Support / Live chat</button>
+   </nav>
+   <div class="dash-sidebar-note"><strong>Prototype dashboard</strong>Displayed balances and activity are sample data only. No real money is held or moved here.</div>
+  </aside>
+  <div class="dash-main">
+   <div class="dash-topbar"><div><h1 id="dashGreeting">Welcome back!</h1><p>Here’s your Cashflowbank overview.</p></div><div class="dash-user"><span class="dash-avatar" id="dashAvatar">C</span><span><strong id="dashUserName">Cashflowbank User</strong><small id="dashUserEmail">Demo account</small></span></div></div>
+   <div class="dash-banner"><div><small>AVAILABLE BALANCE · SAMPLE DATA</small><div class="dash-balance">₦1,284,500.00</div><p>Illustrative balance — not a real bank balance.</p></div><button type="button" class="btn" data-dash-action="account">Account details <span aria-hidden="true">→</span></button></div>
+   <div class="dash-actions" aria-label="Quick actions">
+    <button class="dash-action" type="button" data-dash-action="transfer"><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h15m-5-4 5 4-5 4M20 17H5m5-4-5 4 5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Transfer</button>
+    <button class="dash-action" type="button" data-dash-action="payments"><span><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4zM4 9h16m-12 5h4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>Pay bills</button>
+    <button class="dash-action" type="button" data-dash-action="cards"><span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/></svg></span>Cards</button>
+    <button class="dash-action" type="button" data-dash-action="statements"><span><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7m-7 4h7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Statements</button>
+   </div>
+   <div class="dash-stats">
+    <article class="dash-stat"><div class="dash-stat-head">Money in <span class="dash-stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><strong>₦450,000</strong><small class="dash-positive">Sample monthly total</small></article>
+    <article class="dash-stat"><div class="dash-stat-head">Money out <span class="dash-stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-6-6 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><strong>₦182,450</strong><small>Sample monthly total</small></article>
+    <article class="dash-stat"><div class="dash-stat-head">Savings goal <span class="dash-stat-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 14c1 2 7 2 8-1 .8-3-7-2-7-5 0-2 4-3 7-1M12 5v14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div><strong>68% reached</strong><small>Illustrative savings progress</small></article>
+   </div>
+   <div class="dash-lower">
+    <section class="dash-panel" id="dashActivityPanel" style="padding-top:22px;padding-bottom:14px"><div class="dash-panel-head"><h2>Recent activity</h2><button type="button" data-dash-tab="activity">View all →</button></div>
+     <div class="dash-activity"><span class="dash-activity-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h15m-5-4 5 4-5 4M20 17H5m5-4-5 4 5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dash-activity-copy"><strong>Transfer to Alex Morgan</strong><small>Yesterday · Sample activity</small></span><span class="dash-amount out">−₦25,000</span></div>
+     <div class="dash-activity"><span class="dash-activity-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/></svg></span><span class="dash-activity-copy"><strong>Online purchase</strong><small>Oct 10 · Sample activity</small></span><span class="dash-amount out">−₦8,450</span></div>
+     <div class="dash-activity"><span class="dash-activity-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dash-activity-copy"><strong>Salary payment</strong><small>Oct 08 · Sample activity</small></span><span class="dash-amount in">+₦350,000</span></div>
+     <div class="dash-activity"><span class="dash-activity-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5zM8 8h8m-8 4h8m-8 4h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="dash-activity-copy"><strong>Electricity bill</strong><small>Oct 06 · Sample activity</small></span><span class="dash-amount out">−₦12,000</span></div>
+    </section>
+    <section class="dash-panel" style="padding-top:22px"><div class="dash-panel-head"><h2>Spending overview</h2><span class="demo-tag">DEMO</span></div><p style="color:var(--muted);font-size:11px;margin:-9px 0 0">Sample spending across recent months</p><div class="dash-chart" aria-label="Illustrative bar chart of spending"><span style="--bar:42%"></span><span style="--bar:65%"></span><span style="--bar:52%"></span><span style="--bar:78%"></span><span style="--bar:58%"></span><span style="--bar:90%"></span><span style="--bar:68%"></span></div><div class="dash-chart-labels"><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div><div class="dash-chart-legend"><i></i>Illustrative spending</div></section>
+   </div>
+   <div class="dash-disclaimer">Demo only: this dashboard is a visual prototype. Firebase sign-in verifies a login, but account balances, transfers, bill payments, cards, and transaction history are not connected to real banking services.</div>
+   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn btn-outline" type="button" id="dashboardHomeButton">Back to website</button><button class="btn btn-primary" type="button" id="dashboardSignOut">Sign out</button></div>
+  </div>
+ </div>
+</section>
+
 <main id="main">
 <section class="hero" id="home">
  <div class="wrap hero-grid">
@@ -350,6 +407,11 @@ footer a:not(.brand){display:block;font-size:13px;margin:9px 0;color:#d9c8cb}foo
  const menu=document.getElementById('menuToggle'), links=document.getElementById('navlinks');
  const modal=document.getElementById('authModal'), close=document.getElementById('closeModal'), form=document.getElementById('demoForm');
  const message=document.getElementById('formMessage'), toast=document.getElementById('toast');
+ const dashboard=document.getElementById('dashboardView'), notice=document.querySelector('.notice'), header=document.querySelector('header'), main=document.querySelector('main'), footer=document.querySelector('footer');
+ let dashboardMode=false;
+ function showDashboard(user=null){dashboardMode=true;dashboard.classList.add('active');notice.hidden=true;header.hidden=true;main.hidden=true;footer.hidden=true;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.classList.remove('lock');document.body.style.background='#fff8f8';const name=user?.displayName||'Demo User';document.getElementById('dashGreeting').textContent='Welcome back, '+(name.split(' ')[0]||'there')+'!';document.getElementById('dashUserName').textContent=name;document.getElementById('dashUserEmail').textContent=user?.email||'Demo preview';document.getElementById('dashAvatar').textContent=(name.trim()[0]||'C').toUpperCase();window.scrollTo({top:0,behavior:'instant'});}
+ function hideDashboard(){dashboardMode=false;dashboard.classList.remove('active');notice.hidden=false;header.hidden=false;main.hidden=false;footer.hidden=false;document.body.style.background='var(--paper)';window.scrollTo({top:0,behavior:'instant'});}
+ window.cashflowShowDashboard=showDashboard;
  let lastFocus=null, toastTimer=null, currentAuthMode='signup';
  const menuIconOpen='<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
  const menuIconClose='<path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
@@ -374,6 +436,20 @@ footer a:not(.brand){display:block;font-size:13px;margin:9px 0;color:#d9c8cb}foo
  // Firebase Authentication form submission is handled by the module script below.
  document.getElementById('signOutButton').addEventListener('click',()=>window.cashflowSignOut&&window.cashflowSignOut());
  function showToast(text){toast.textContent=text;toast.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.display='none',4000)}
+ document.querySelectorAll('a[href="#experience"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();showDashboard();}));
+ function openTawkChat(){
+   if(window.Tawk_API && typeof window.Tawk_API.maximize==='function'){
+     window.Tawk_API.maximize();
+   } else {
+     window.Tawk_API=window.Tawk_API||{};
+     window.Tawk_API.onLoad=function(){if(typeof window.Tawk_API.maximize==='function')window.Tawk_API.maximize();};
+     showToast('Opening live chat… If it does not appear, please try again in a moment.');
+   }
+ }
+ document.querySelectorAll('[data-dash-tab]').forEach(button=>button.addEventListener('click',()=>{const tab=button.dataset.dashTab;document.querySelectorAll('.dash-nav button').forEach(item=>item.classList.toggle('active',item.dataset.dashTab===tab));if(tab==='support'){openTawkChat();return;}const messages={overview:'You are viewing the dashboard overview.',activity:'Your recent activity is sample data only; real transaction history is not connected.',cards:'Card controls are a design preview and are not connected to a real payment card.',profile:'Your profile preview uses the name and email from your sign-in.'};showToast(messages[tab]||'This section is part of the dashboard prototype.');}));
+ document.querySelectorAll('[data-dash-action]').forEach(button=>button.addEventListener('click',()=>{const actions={transfer:'Transfers are not active in this prototype. No money has been moved.',payments:'Bill payments are not connected to a payment provider.',cards:'This is a sample card section. No real payment card is connected.',statements:'Statements are sample-only and cannot be downloaded yet.',account:'Account details are illustrative. No real bank account is connected.'};showToast(actions[button.dataset.dashAction]||'This demo action is not connected to a banking service.');}));
+ document.getElementById('dashboardHomeButton').addEventListener('click',hideDashboard);
+ document.getElementById('dashboardSignOut').addEventListener('click',()=>{if(window.cashflowSignOut)window.cashflowSignOut();hideDashboard();});
 })();
 </script>
 
@@ -448,8 +524,10 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     signedInText.textContent = `Signed in as ${user.displayName || user.email || 'Cashflowbank user'}.`;
     form.hidden = true; signedInPanel.hidden = false;
+    if (typeof window.cashflowShowDashboard === 'function') window.cashflowShowDashboard(user);
   } else {
     form.hidden = false; signedInPanel.hidden = true;
+    if (document.getElementById('dashboardView')?.classList.contains('active')) { document.getElementById('dashboardView').classList.remove('active'); document.querySelector('.notice').hidden=false; document.querySelector('header').hidden=false; document.querySelector('main').hidden=false; document.querySelector('footer').hidden=false; document.body.style.background='var(--paper)'; }
   }
 });
 
